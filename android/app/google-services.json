@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "337324865218",
+    "project_id": "sunrise-a2153",
+    "storage_bucket": "sunrise-a2153.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:337324865218:android:a8c69c10a51b07facded5b",
+        "android_client_info": {
+          "package_name": "com.inora.sunrise"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "337324865218-1al594ccr7jpgs9anc0h54q1do565b6d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxtFodBblwdm_DZTULjj04JJ3K-U7_aYQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "337324865218-1al594ccr7jpgs9anc0h54q1do565b6d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

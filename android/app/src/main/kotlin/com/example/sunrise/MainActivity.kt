@@ -1,0 +1,6 @@
+package com.inora.sunrise
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity: FlutterActivity() {
+}
