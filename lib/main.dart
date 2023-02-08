@@ -1,9 +1,11 @@
 import 'dart:math';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:sunrise/application/providers/lover_provider.dart';
 import 'package:sunrise/application/screens/screen_lobby.dart';
+import 'package:sunrise/domain/bloc_lobby.dart';
 import 'package:sunrise/firebase_options.dart';
 import 'package:sunrise/model/model_lover.dart';
 
@@ -22,8 +24,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Provider(
       create: (context) => ProviderLover(),
-      child: const MaterialApp(
-        home: Home(),
+      child: BlocProvider(
+        create: (context) => LobbyBloc(),
+        child: const MaterialApp(
+          home: Home(),
+        ),
       ),
     );
   }

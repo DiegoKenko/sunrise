@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sunrise/application/providers/lover_provider.dart';
 import 'package:sunrise/application/screens/screen_relationship.dart';
-import 'package:sunrise/domain/cubit_lobby.dart';
+import 'package:sunrise/domain/bloc_lobby.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LobbyScreen extends StatefulWidget {
   const LobbyScreen({Key? key}) : super(key: key);
@@ -19,7 +20,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await Future.delayed(const Duration(seconds: 1));
-      jumpToRelationShip ? route() : null;
+      //jumpToRelationShip ? route() : null;
     });
   }
 
@@ -32,30 +33,28 @@ class _LobbyScreenState extends State<LobbyScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _lobbyController.text = '87zobTjrk8XQJxUP8GOm';
+    _lobbyController.text = 'I4xk1lTV14cgn3Pm7O5F';
     return Consumer<ProviderLover>(
       builder: (context, providerLover, child) {
-        final lobbyCubit = LobbyCubit(providerLover.lover);
         return SafeArea(
           child: Scaffold(
             body: SingleChildScrollView(
               child: Center(
-                child: StreamBuilder<LobbyState?>(
-                  stream: lobbyCubit.stream,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
+                child: BlocBuilder<LobbyBloc, LobbyState?>(
+                  builder: (context, lobbyState) {
+                    if (lobbyState != null) {
                       jumpToRelationShip =
-                          snapshot.data!.status == LobbyStatus.sucessReady;
+                          lobbyState.status == LobbyStatus.sucessReady;
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text('lobby:${snapshot.data!.lobby.id}'),
-                          Text('lover1:${snapshot.data!.lobby.lover1.name}'),
+                          Text('lobby:${lobbyState.lobby.id}'),
+                          Text('lover1:${lobbyState.lobby.lover1.name}'),
                           Text(
-                            snapshot.data!.lobby.lover2 == null
+                            lobbyState.lobby.lover2 == null
                                 ? 'lover2:'
-                                : 'lover2:${snapshot.data!.lobby.lover2!.name}',
+                                : 'lover2:${lobbyState.lobby.lover2!.name}',
                           ),
                           TextField(
                             controller: _lobbyController,
@@ -65,17 +64,36 @@ class _LobbyScreenState extends State<LobbyScreen> {
                           ),
                           TextButton(
                             onPressed: () {
-                              lobbyCubit.joinLobby(
-                                _lobbyController.text,
-                                providerLover.lover,
-                              );
+                              context.read<LobbyBloc>().add(
+                                    LobbyEventJoin(
+                                      lobbyId: _lobbyController.text,
+                                      lover: providerLover.lover,
+                                    ),
+                                  );
                             },
                             child: const Text('join'),
                           ),
-                          Text(snapshot.data!.status.description)
+                          Text(lobbyState.status.description),
+                          TextButton(
+                            onPressed: () {
+                              context.read<LobbyBloc>().add(
+                                    LobbyEventLeave(
+                                      lobbyId: _lobbyController.text,
+                                      lover: providerLover.lover,
+                                    ),
+                                  );
+                            },
+                            child: const Text('leave'),
+                          ),
                         ],
                       );
                     } else {
+                      context.read<LobbyBloc>().add(
+                            LobbyEventLoad(
+                              lobbyId: providerLover.lover.lobbyId,
+                              lover: providerLover.lover,
+                            ),
+                          );
                       return const Text('Loading...');
                     }
                   },

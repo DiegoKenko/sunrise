@@ -3,6 +3,7 @@ class Lover {
   String id = '';
   int age;
   String lobbyId = '';
+
   Lover({
     this.name = '',
     this.age = 0,

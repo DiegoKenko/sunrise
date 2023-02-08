@@ -36,6 +36,16 @@ class Lobby {
     }
   }
 
+  void removeLover(Lover lover) {
+    if (lover1.id == lover.id) {
+      lover1 = Lover(id: '');
+    } else if (lover2 != null) {
+      if (lover2!.id == lover.id) {
+        lover2 = Lover(id: '');
+      }
+    }
+  }
+
   Lobby.fromJson(Map<String, dynamic> json)
       : lover1 = Lover(id: json['lover1']),
         lover2 = Lover(id: json['lover2']);
