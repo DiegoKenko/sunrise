@@ -51,38 +51,28 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState?> {
     on<LobbyEventJoin>(
       (event, emit) async {
         Lobby? lobby = await DataProviderLobby().get(event.lobbyId);
-        if (lobby != null) {
-          if (lobby.haveRoom()) {
-            lobby.addLover(event.lover);
-            DataProviderLobby().update(lobby);
-            DataProviderLover().update(lobby.lover1);
-            if (lobby.lover2 != null) {
-              lobby.lover2!.lobbyId = lobby.id;
-              DataProviderLover().update(lobby.lover2!);
-              emit(LobbyState(lobby: lobby, status: LobbyStatus.sucessReady));
-              return;
-            }
-            emit(LobbyState(lobby: lobby, status: LobbyStatus.sucessNoReady));
-          } else {
-            if (state!.lobby.lover1.id == event.lover.id ||
-                state!.lobby.lover2!.id == event.lover.id) {
-              emit(LobbyState(lobby: lobby, status: LobbyStatus.sucessReady));
-            } else {
-              emit(
-                LobbyState(
-                  lobby: state!.lobby,
-                  status: LobbyStatus.failureNoRoom,
-                ),
-              );
-            }
-          }
+        if (lobby.isLoverInLobby(event.lover)) {
+          emit(LobbyState(lobby: lobby, status: LobbyStatus.failureNoRoom));
+          return;
+        }
+        if (lobby.haveRoom()) {
+          lobby.addLover(event.lover);
+          DataProviderLobby().update(lobby);
+          event.lover.lobbyId = lobby.id;
+          DataProviderLover().update(event.lover);
+          emit(LobbyState(lobby: lobby, status: LobbyStatus.sucessReady));
         } else {
-          emit(
-            LobbyState(
-              lobby: state!.lobby,
-              status: LobbyStatus.failureNoLobby,
-            ),
-          );
+          if (state!.lobby.lovers[0].id == event.lover.id ||
+              state!.lobby.lovers[1].id == event.lover.id) {
+            emit(LobbyState(lobby: lobby, status: LobbyStatus.sucessReady));
+          } else {
+            emit(
+              LobbyState(
+                lobby: state!.lobby,
+                status: LobbyStatus.failureNoRoom,
+              ),
+            );
+          }
         }
       },
     );
@@ -92,9 +82,9 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState?> {
         Lobby? lobby = state!.lobby;
         lobby.removeLover(event.lover);
         event.lover.lobbyId = '';
-        emit(LobbyState(lobby: lobby, status: LobbyStatus.sucessNoReady));
         DataProviderLobby().update(lobby);
         DataProviderLover().update(event.lover);
+        emit(LobbyState(lobby: lobby, status: LobbyStatus.initial));
       },
     );
 
@@ -112,18 +102,16 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState?> {
           emit(LobbyState(lobby: lobby, status: LobbyStatus.sucessNoReady));
         } else {
           Lobby? lobby = await DataProviderLobby().get(event.lover.lobbyId);
-          if (lobby != null) {
-            if (lobby.lover1.id == event.lover.id ||
-                lobby.lover2!.id == event.lover.id) {
+          if (lobby.haveRoom()) {
+            emit(LobbyState(lobby: lobby, status: LobbyStatus.sucessNoReady));
+          } else {
+            if (lobby.isLoverInLobby(event.lover)) {
               emit(LobbyState(lobby: lobby, status: LobbyStatus.sucessReady));
             } else {
-              emit(LobbyState(lobby: lobby, status: LobbyStatus.sucessNoReady));
+              emit(
+                LobbyState(lobby: lobby, status: LobbyStatus.failureNoRoom),
+              );
             }
-          } else {
-            lobby = await createLobby(event.lover);
-            emit(
-              LobbyState(lobby: lobby, status: LobbyStatus.failureNoLobby),
-            );
           }
         }
       },
@@ -131,11 +119,11 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState?> {
   }
 
   Future<Lobby> createLobby(Lover lover) async {
-    Lobby lobby = Lobby(lover1: lover);
+    Lobby lobby = Lobby.empty();
+    lobby.addLover(lover);
     lobby = await DataProviderLobby().create(lobby);
     lover.lobbyId = lobby.id;
     DataProviderLover().update(lover);
-
     return lobby;
   }
 }

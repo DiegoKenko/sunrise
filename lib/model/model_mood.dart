@@ -1,9 +1,12 @@
 class Mood {
   String name;
-  //Image icon;
+  String iconName;
+  final String iconPath = 'assets/moods/';
+
+  get icon => iconPath + iconName;
 
   Mood({
     required this.name,
-    //required this.icon,
+    this.iconName = '',
   });
 }

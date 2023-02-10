@@ -3,8 +3,14 @@ import 'package:sunrise/model/model_mood.dart';
 class MoodMatching {
   Mood mood1;
   Mood mood2;
+  double matching; // minimun of 1 to maximun of 10
   String get matchId => mood1.name.toLowerCase() + mood2.name.toLowerCase();
-  int matching; // minimun of 1 to maximun of 10
+  /*  double get mood1scale => 1 - (matching * 0.1);
+  double get mood2scale => 1 + (matching * 0.1); */
+  double get mood1scale => 1;
+  double get mood2scale => 1;
+  double get max => 10;
+  double get min => 1;
 
   MoodMatching({
     required this.mood1,
@@ -15,17 +21,30 @@ class MoodMatching {
   Map<String, dynamic> toJson() {
     return {
       'mood1': mood1.name,
+      'mood1Icon': mood1.iconName,
       'mood2': mood2.name,
+      'mood2Icon': mood2.iconName,
       'matching': matching,
     };
   }
 
   MoodMatching.fromJson(Map<String, dynamic> json)
-      : mood1 = Mood(name: json['mood1']),
-        mood2 = Mood(name: json['mood2']),
+      : mood1 = Mood(
+          name: json['mood1'],
+          iconName: json['mood1Icon'],
+        ),
+        mood2 = Mood(
+          name: json['mood2'],
+          iconName: json['mood2Icon'],
+        ),
         matching = json['matching'];
 
-  set setMatching(int match) {
+  @override
+  String toString() {
+    return 'MoodMatching{mood1: $mood1, mood2: $mood2, matching: $matching}';
+  }
+
+  set setMatching(double match) {
     matching = match;
   }
 }

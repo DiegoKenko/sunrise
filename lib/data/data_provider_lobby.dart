@@ -11,6 +11,7 @@ class DataProviderLobby {
     DocumentReference<Map<String, dynamic>> docRef =
         await _firestore.collection('lobby').add(lobby.toJson());
     lobby.id = docRef.id;
+    docRef.update(lobby.toJson());
     return lobby;
   }
 
@@ -25,28 +26,32 @@ class DataProviderLobby {
   }
 
   //get lobby
-  Future<Lobby?> get(String id) async {
-    DocumentSnapshot<Map<String, dynamic>> snapshot =
-        await _firestore.collection('lobby').doc(id).get();
-    if (snapshot.exists) {
-      Lobby lobby = Lobby.fromJson(snapshot.data()!);
-      lobby.id = id;
-      lobby.lover1 = await DataProviderLover().get(lobby.lover1.id);
-      if (lobby.lover2 != null) {
-        lobby.lover2 = await DataProviderLover().get(lobby.lover2!.id);
+  Future<Lobby> get(String simpleID) async {
+    QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
+        .collection('lobby')
+        .where('simpleID', isEqualTo: simpleID)
+        .get();
+    Lobby lobby = Lobby.empty();
+    QueryDocumentSnapshot<Map<String, dynamic>> doc = snapshot.docs.first;
+    if (doc.exists) {
+      lobby = Lobby.fromJson(doc.data());
+      lobby.id = simpleID;
+      if (lobby.lovers[0].id.isNotEmpty) {
+        lobby.lovers[0] = await DataProviderLover().get(lobby.lovers[0].id);
       }
-      return lobby;
-    } else {
-      return null;
+      if (lobby.lovers[1].id.isNotEmpty) {
+        lobby.lovers[1] = await DataProviderLover().get(lobby.lovers[1].id);
+      }
     }
+    return lobby;
   }
 
   //remove lover from lobby
   Future<void> removeLover(Lobby lobby, Lover lover) async {
-    if (lobby.lover1.id == lover.id) {
-      lobby.lover1.lobbyId = '';
+    if (lobby.lovers[0].id == lover.id) {
+      lobby.lovers[0].lobbyId = '';
     } else {
-      lobby.lover2!.lobbyId = '';
+      lobby.lovers[1].lobbyId = '';
     }
     await update(lobby);
   }

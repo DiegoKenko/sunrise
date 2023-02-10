@@ -1,11 +1,10 @@
 import 'dart:math';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:sunrise/application/providers/lover_provider.dart';
 import 'package:sunrise/application/screens/screen_lobby.dart';
-import 'package:sunrise/domain/bloc_lobby.dart';
+import 'package:sunrise/domain/authentication.dart';
 import 'package:sunrise/firebase_options.dart';
 import 'package:sunrise/model/model_lover.dart';
 
@@ -24,11 +23,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Provider(
       create: (context) => ProviderLover(),
-      child: BlocProvider(
-        create: (context) => LobbyBloc(),
-        child: const MaterialApp(
-          home: Home(),
+      child: MaterialApp(
+        theme: ThemeData(
+          tabBarTheme: const TabBarTheme(
+            labelColor: Colors.black,
+            unselectedLabelColor: Colors.grey,
+            labelStyle: TextStyle(color: Colors.white),
+          ),
         ),
+        home: const Home(),
       ),
     );
   }
@@ -48,26 +51,17 @@ class _HomeState extends State<Home> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(
-                height: 500,
-                width: 100,
-                child: Center(
-                  child: TextButton(
-                    onPressed: () async {
-                      context
-                          .read<ProviderLover>()
-                          .setLover(mockLovers[Random().nextInt(2)])
-                          .then((_) {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const LobbyScreen(),
-                          ),
-                        );
-                      });
-                    },
-                    child: const Text('login'),
-                  ),
-                ),
+              ListTile(
+                leading: Image.asset('assets/google_icon.png'),
+                title: Text('Entrar com Google'),
+                onTap: () {
+                  FirebaseAuthentication().signInWithGoogle();
+                },
+              ),
+              ListTile(
+                leading: Image.asset('assets/apple_icon.png'),
+                title: Text('Entrar com Apple'),
+                onTap: () {},
               ),
             ],
           ),
@@ -76,6 +70,16 @@ class _HomeState extends State<Home> {
     );
   }
 }
+/*      context
+                          .read<ProviderLover>()
+                          .setLover(mockLovers[Random().nextInt(2)])
+                          .then((_) {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const LobbyScreen(),
+                          ),
+                        );
+                      }); */
 
 List<Lover> mockLovers = [
   Lover(id: 'ela', name: 'She', age: 20),
