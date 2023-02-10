@@ -11,7 +11,7 @@ class DataProviderLobby {
     DocumentReference<Map<String, dynamic>> docRef =
         await _firestore.collection('lobby').add(lobby.toJson());
     lobby.id = docRef.id;
-    docRef.update(lobby.toJson());
+    await docRef.update(lobby.toJson());
     return lobby;
   }
 
@@ -29,13 +29,16 @@ class DataProviderLobby {
   Future<Lobby> get(String simpleID) async {
     QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
         .collection('lobby')
-        .where('simpleID', isEqualTo: simpleID)
+        .where('simpleID', isEqualTo: simpleID.toUpperCase())
         .get();
     Lobby lobby = Lobby.empty();
+    if (snapshot.docs.isEmpty) {
+      return lobby;
+    }
     QueryDocumentSnapshot<Map<String, dynamic>> doc = snapshot.docs.first;
     if (doc.exists) {
       lobby = Lobby.fromJson(doc.data());
-      lobby.id = simpleID;
+      lobby.id = doc.id;
       if (lobby.lovers[0].id.isNotEmpty) {
         lobby.lovers[0] = await DataProviderLover().get(lobby.lovers[0].id);
       }

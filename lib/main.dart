@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -31,7 +30,22 @@ class MyApp extends StatelessWidget {
             labelStyle: TextStyle(color: Colors.white),
           ),
         ),
-        home: const Home(),
+        home: StreamBuilder(
+          stream: FirebaseAuthentication().authStateChanges(),
+          builder: (context, snap) {
+            if (snap.hasData) {
+              context.read<ProviderLover>().setLover(
+                    Lover(
+                      id: snap.data!.uid,
+                      name: snap.data!.displayName!,
+                    ),
+                  );
+              return const LobbyScreen();
+            } else {
+              return const Home();
+            }
+          },
+        ),
       ),
     );
   }
@@ -47,41 +61,55 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              ListTile(
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListTile(
                 leading: Image.asset('assets/google_icon.png'),
-                title: Text('Entrar com Google'),
+                title: const Text('Entrar com Google'),
                 onTap: () {
-                  FirebaseAuthentication().signInWithGoogle();
+                  FirebaseAuthentication().signInWithGoogle().then(
+                    (value) {
+                      if (value.user != null) {
+                        context
+                            .read<ProviderLover>()
+                            .setLover(
+                              Lover(
+                                id: value.user!.uid,
+                                name: value.user!.displayName!,
+                              ),
+                            )
+                            .then(
+                          (_) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const LobbyScreen(),
+                              ),
+                            );
+                          },
+                        );
+                      }
+                    },
+                  );
                 },
               ),
-              ListTile(
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListTile(
                 leading: Image.asset('assets/apple_icon.png'),
-                title: Text('Entrar com Apple'),
+                title: const Text('Entrar com Apple'),
                 onTap: () {},
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 }
-/*      context
-                          .read<ProviderLover>()
-                          .setLover(mockLovers[Random().nextInt(2)])
-                          .then((_) {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const LobbyScreen(),
-                          ),
-                        );
-                      }); */
-
-List<Lover> mockLovers = [
-  Lover(id: 'ela', name: 'She', age: 20),
-  Lover(id: 'ele', name: 'He', age: 20)
-];

@@ -3,12 +3,19 @@ import 'package:sunrise/model/model_lover.dart';
 class Lobby {
   List<Lover> lovers = [];
   String id = '';
-  String get simpleId => (id.substring(3) +
-          id.substring(6) +
-          id.substring(9) +
-          id.substring(11) +
-          id.substring(13))
-      .toUpperCase();
+  String get simpleId {
+    if (id.isNotEmpty) {
+      var tid = (id.substring(3, 4) +
+              id.substring(6, 7) +
+              id.substring(9, 10) +
+              id.substring(12, 13) +
+              id.substring(15, 16))
+          .toUpperCase();
+      return tid;
+    }
+    return id;
+  }
+
   int maxLovers = 2;
 
   Lobby({

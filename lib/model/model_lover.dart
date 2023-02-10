@@ -1,23 +1,22 @@
 class Lover {
   String name;
   String id = '';
-  int age;
   String lobbyId = '';
+  String email = '';
 
   Lover({
     this.name = '',
-    this.age = 0,
     this.id = '',
   });
 
   Lover.fromJson(Map<String, dynamic> json)
       : name = json['name'],
-        age = json['age'],
+        email = json['email'],
         lobbyId = json['lobbyId'];
 
   Map<String, dynamic> toJson() => {
         'name': name,
-        'age': age,
+        'email': email,
         'lobbyId': lobbyId,
       };
 }

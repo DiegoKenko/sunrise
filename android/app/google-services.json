@@ -14,7 +14,23 @@
       },
       "oauth_client": [
         {
-          "client_id": "337324865218-1al594ccr7jpgs9anc0h54q1do565b6d.apps.googleusercontent.com",
+          "client_id": "337324865218-mm2f4fetr7l8hh61pegvfk7o5lshdvr5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.inora.sunrise",
+            "certificate_hash": "4e1daa44c380dad39d8ff7d77c541719c363c79f"
+          }
+        },
+        {
+          "client_id": "337324865218-ol4sbfdv2vfi2g8t4d9ldm6uupqcv60l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.inora.sunrise",
+            "certificate_hash": "07d806a0f1ccab6bcb4c329b55987cc8a1b9eb89"
+          }
+        },
+        {
+          "client_id": "337324865218-1kmvcncf03j0se1b8k70149hvhcp37t0.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -29,6 +45,13 @@
             {
               "client_id": "337324865218-1al594ccr7jpgs9anc0h54q1do565b6d.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "337324865218-vpm6oua6nn6nbslp2g52l2n0srn7i2gk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.inora.sunrise"
+              }
             }
           ]
         }
