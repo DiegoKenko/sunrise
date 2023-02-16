@@ -6,6 +6,18 @@ import 'package:sunrise/model/model_lover.dart';
 class DataProviderLobby {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  Stream<Lobby> watch(Lobby lobby) {
+    return _firestore
+        .collection('lobby')
+        .doc(lobby.id)
+        .snapshots()
+        .map((event) {
+      Lobby lobby = Lobby.fromJson(event.data()!);
+      lobby.id = event.id;
+      return lobby;
+    });
+  }
+
   //create lobby
   Future<Lobby> create(Lobby lobby) async {
     DocumentReference<Map<String, dynamic>> docRef =
@@ -16,8 +28,14 @@ class DataProviderLobby {
   }
 
   //update lobby
-  Future<void> update(Lobby lobby) async {
+  Future<void> _update(Lobby lobby) async {
     await _firestore.collection('lobby').doc(lobby.id).update(lobby.toJson());
+  }
+
+  //update lobby
+  Future<void> updateLobbyLover(Lobby lobby, Lover lover) async {
+    _update(lobby);
+    DataProviderLover().update(lover);
   }
 
   //delete lobby
@@ -26,7 +44,7 @@ class DataProviderLobby {
   }
 
   //get lobby
-  Future<Lobby> get(String simpleID) async {
+  Future<Lobby> getSimpleId(String simpleID) async {
     QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
         .collection('lobby')
         .where('simpleID', isEqualTo: simpleID.toUpperCase())
@@ -40,22 +58,30 @@ class DataProviderLobby {
       lobby = Lobby.fromJson(doc.data());
       lobby.id = doc.id;
       if (lobby.lovers[0].id.isNotEmpty) {
-        lobby.lovers[0] = await DataProviderLover().get(lobby.lovers[0].id);
+        lobby.lovers[0] = await DataProviderLover().getId(lobby.lovers[0].id);
       }
       if (lobby.lovers[1].id.isNotEmpty) {
-        lobby.lovers[1] = await DataProviderLover().get(lobby.lovers[1].id);
+        lobby.lovers[1] = await DataProviderLover().getId(lobby.lovers[1].id);
       }
     }
     return lobby;
   }
 
-  //remove lover from lobby
-  Future<void> removeLover(Lobby lobby, Lover lover) async {
-    if (lobby.lovers[0].id == lover.id) {
-      lobby.lovers[0].lobbyId = '';
-    } else {
-      lobby.lovers[1].lobbyId = '';
+  Future<Lobby> get(String id) async {
+    DocumentSnapshot<Map<String, dynamic>> snapshot =
+        await _firestore.collection('lobby').doc(id).get();
+    Lobby lobby = Lobby.empty();
+
+    if (snapshot.data() != null) {
+      lobby = Lobby.fromJson(snapshot.data()!);
+      lobby.id = snapshot.id;
+      if (lobby.lovers[0].id.isNotEmpty) {
+        lobby.lovers[0] = await DataProviderLover().getId(lobby.lovers[0].id);
+      }
+      if (lobby.lovers[1].id.isNotEmpty) {
+        lobby.lovers[1] = await DataProviderLover().getId(lobby.lovers[1].id);
+      }
     }
-    await update(lobby);
+    return lobby;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sunrise/model/model_lover.dart';
 
 class DataProviderLover {
@@ -7,35 +8,50 @@ class DataProviderLover {
   //create lover
   Future<Lover> create(Lover lover) async {
     DocumentReference<Map<String, dynamic>> docRef =
-        await _firestore.collection('lover').add(lover.toJson());
+        await _firestore.collection('lovers').add(lover.toJson());
     lover.id = docRef.id;
+    return lover;
+  }
+
+  //set
+  Future<Lover> set(Lover lover) async {
+    await _firestore.collection('lovers').doc(lover.id).set(lover.toJson());
     return lover;
   }
 
   //update lover
   Future<void> update(Lover lover) async {
-    await _firestore.collection('lover').doc(lover.id).update(lover.toJson());
+    await _firestore.collection('lovers').doc(lover.id).update(lover.toJson());
   }
 
   //delete lover
   Future<void> delete(Lover lover) async {
-    await _firestore.collection('lover').doc(lover.id).delete();
+    await _firestore.collection('lovers').doc(lover.id).delete();
   }
 
   //get lover
-  Future<Lover> get(String id) async {
-    if (id.isEmpty) {
-      return Lover(id: id);
-    }
+  Future<Lover> getUser(User user) async {
     DocumentSnapshot<Map<String, dynamic>> snapshot =
-        await _firestore.collection('lover').doc(id).get();
+        await _firestore.collection('lovers').doc(user.uid).get();
     if (snapshot.exists) {
       Lover lover = Lover.fromJson(snapshot.data()!);
-      lover.id = id;
+      lover.id = snapshot.id;
       return lover;
     } else {
-      return Lover(id: id);
+      Lover lover = await set(Lover.fromUser(user));
+      return lover;
     }
+  }
+
+  Future<Lover> getId(String id) async {
+    DocumentSnapshot<Map<String, dynamic>> snapshot =
+        await _firestore.collection('lovers').doc(id).get();
+    if (snapshot.exists) {
+      Lover lover = Lover.fromJson(snapshot.data()!);
+      lover.id = snapshot.id;
+      return lover;
+    }
+    return Lover.empty();
   }
 
   //remove lobby

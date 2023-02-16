@@ -77,12 +77,20 @@ class Lobby {
 
   Lobby.fromJson(Map<String, dynamic> json)
       : lovers = [
-          Lover(id: json['lover1'] ?? ''),
-          Lover(id: json['lover2'] ?? ''),
+          Lover(
+            id: json['lover1'] ?? '',
+            name: json['lover1name'] ?? '',
+          ),
+          Lover(
+            id: json['lover2'] ?? '',
+            name: json['lover2name'] ?? '',
+          ),
         ];
 
   Map<String, dynamic> toJson() => {
         for (var i = 0; i < lovers.length; i++) 'lover${i + 1}': lovers[i].id,
+        for (var i = 0; i < lovers.length; i++)
+          'lover${i + 1}name': lovers[i].name,
         'simpleID': simpleId.toUpperCase(),
       };
 }

@@ -1,11 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:sunrise/application/providers/lover_provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sunrise/application/screens/screen_lobby.dart';
-import 'package:sunrise/domain/authentication.dart';
+import 'package:sunrise/domain/bloc_auth.dart';
 import 'package:sunrise/firebase_options.dart';
-import 'package:sunrise/model/model_lover.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,8 +18,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Provider(
-      create: (context) => ProviderLover(),
+    return BlocProvider(
+      create: (context) => AuthBloc(),
       child: MaterialApp(
         theme: ThemeData(
           tabBarTheme: const TabBarTheme(
@@ -30,17 +28,23 @@ class MyApp extends StatelessWidget {
             labelStyle: TextStyle(color: Colors.white),
           ),
         ),
-        home: StreamBuilder(
-          stream: FirebaseAuthentication().authStateChanges(),
-          builder: (context, snap) {
-            if (snap.hasData) {
-              context.read<ProviderLover>().setLover(
-                    Lover(
-                      id: snap.data!.uid,
-                      name: snap.data!.displayName!,
-                    ),
-                  );
-              return const LobbyScreen();
+        home: BlocConsumer<AuthBloc, AuthState>(
+          listener: (context, AuthState state) {
+            if (state.success) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => BlocProvider.value(
+                    value: BlocProvider.of<AuthBloc>(context),
+                    child: const ScreenLobby(),
+                  ),
+                ),
+              );
+            }
+          },
+          builder: (context, state) {
+            if (state.success) {
+              return Container();
             } else {
               return const Home();
             }
@@ -73,29 +77,7 @@ class _HomeState extends State<Home> {
                 leading: Image.asset('assets/google_icon.png'),
                 title: const Text('Entrar com Google'),
                 onTap: () {
-                  FirebaseAuthentication().signInWithGoogle().then(
-                    (value) {
-                      if (value.user != null) {
-                        context
-                            .read<ProviderLover>()
-                            .setLover(
-                              Lover(
-                                id: value.user!.uid,
-                                name: value.user!.displayName!,
-                              ),
-                            )
-                            .then(
-                          (_) {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const LobbyScreen(),
-                              ),
-                            );
-                          },
-                        );
-                      }
-                    },
-                  );
+                  context.read<AuthBloc>().add(const AuthEventLogin());
                 },
               ),
             ),

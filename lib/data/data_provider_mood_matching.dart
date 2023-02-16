@@ -12,7 +12,7 @@ class DataProviderMoodMatching {
     DocumentSnapshot<Map<String, dynamic>> doc = await _firestore
         .collection('lobby')
         .doc(lobbyId)
-        .collection('lover')
+        .collection('lovers')
         .doc(loverId)
         .collection('moodMatching')
         .doc(moodMatching.matchId)
@@ -33,7 +33,7 @@ class DataProviderMoodMatching {
     return _firestore
         .collection('lobby')
         .doc(lobbyId)
-        .collection('lover')
+        .collection('lovers')
         .doc(loverId)
         .collection('moodMatching')
         .doc(moodId)

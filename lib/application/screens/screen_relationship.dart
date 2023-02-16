@@ -25,7 +25,7 @@ class _RelationshipScreenState extends State<RelationshipScreen>
   @override
   Widget build(BuildContext context) {
     final LobbyBloc blocProviderLobby = context.watch<LobbyBloc>();
-    final LobbyState state = blocProviderLobby.state!;
+    final LobbyState state = blocProviderLobby.state;
 
     return SafeArea(
       child: Scaffold(
@@ -140,7 +140,7 @@ class _CouplePanelState extends State<CouplePanel>
   @override
   Widget build(BuildContext context) {
     final LobbyBloc blocProviderLobby = context.watch<LobbyBloc>();
-    final LobbyState state = blocProviderLobby.state!;
+    final LobbyState state = blocProviderLobby.state;
 
     return Column(
       children: [
