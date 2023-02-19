@@ -103,7 +103,7 @@ class _ScreenLobbyState extends State<ScreenLobby> {
                 ),
                 TextButton(
                   onPressed: () {
-                    if (_lobbyController.text.length != 6) {
+                    if (_lobbyController.text.length != 5) {
                       return;
                     }
                     lobbyBLoc.add(
