@@ -4,6 +4,7 @@ import 'package:sunrise/application/screens/screen_relationship.dart';
 import 'package:sunrise/domain/bloc_auth.dart';
 import 'package:sunrise/domain/bloc_lobby.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sunrise/main.dart';
 
 class ScreenLobby extends StatefulWidget {
   const ScreenLobby({Key? key}) : super(key: key);
@@ -40,7 +41,19 @@ class _ScreenLobbyState extends State<ScreenLobby> {
               ),
             ),
           listener: (context, state) {
-            if (state is LobbyStateSucessNoReady) {}
+            if (state.status == LobbyStatus.waiting) {
+              lobbyBLoc.add(LobbyEventWatch(lobby: state.lobby));
+            }
+            if (state.status == LobbyStatus.sucessReady) {
+              /*     Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => BlocProvider<LobbyBloc>.value(
+                    value: lobbyBLoc,
+                    child: const RelationshipScreen(),
+                  ),
+                ),
+              ); */
+            }
           },
           builder: (context, lobbyState) {
             return Column(
@@ -90,12 +103,15 @@ class _ScreenLobbyState extends State<ScreenLobby> {
                 ),
                 TextButton(
                   onPressed: () {
-                    context.read<LobbyBloc>().add(
-                          LobbyEventJoin(
-                            lobbyId: _lobbyController.text,
-                            lover: context.read<AuthBloc>().state.lover,
-                          ),
-                        );
+                    if (_lobbyController.text.length != 6) {
+                      return;
+                    }
+                    lobbyBLoc.add(
+                      LobbyEventJoin(
+                        lobbyId: _lobbyController.text,
+                        lover: context.read<AuthBloc>().state.lover,
+                      ),
+                    );
                   },
                   child: const Text('join'),
                 ),
@@ -106,17 +122,22 @@ class _ScreenLobbyState extends State<ScreenLobby> {
                     TextButton(
                       onPressed: () {
                         context.read<AuthBloc>().add(const AuthEventLogout());
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => const Home(),
+                          ),
+                        );
                       },
                       child: const Text('sign out'),
                     ),
                     TextButton(
                       onPressed: () {
-                        context.read<LobbyBloc>().add(
-                              LobbyEventLeave(
-                                lobbyId: _lobbyController.text,
-                                lover: context.read<AuthBloc>().state.lover,
-                              ),
-                            );
+                        lobbyBLoc.add(
+                          LobbyEventLeave(
+                            lobbyId: _lobbyController.text,
+                            lover: context.read<AuthBloc>().state.lover,
+                          ),
+                        );
                       },
                       child: const Text('leave'),
                     ),
@@ -124,11 +145,10 @@ class _ScreenLobbyState extends State<ScreenLobby> {
                 ),
                 TextButton(
                   onPressed: () {
-                    LobbyBloc bloc = BlocProvider.of<LobbyBloc>(context);
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (context) => BlocProvider<LobbyBloc>.value(
-                          value: bloc,
+                          value: lobbyBLoc,
                           child: const RelationshipScreen(),
                         ),
                       ),

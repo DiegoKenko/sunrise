@@ -13,12 +13,13 @@ class MoodState {
 }
 
 class ViewModelMood {
-  MoodState state;
-  ViewModelMood(this.state);
+  final MoodState state;
+  final String lobbyID;
+  ViewModelMood({required this.state, required this.lobbyID});
 
   Stream<MoodMatching> listenMood() {
     return DataProviderMoodMatching().listenMood(
-      lobbyId: state.lover.lobbyId,
+      lobbyId: lobbyID,
       moodId: state.moodMatching.matchId,
       loverId: state.lover.id,
     );
@@ -36,7 +37,7 @@ class ViewModelMood {
 
     DataProviderMoodMatching().update(
       moodMatching: moodMatching,
-      lobbyId: state.lover.lobbyId,
+      lobbyId: lobbyID,
       loverId: state.lover.id,
     );
   }

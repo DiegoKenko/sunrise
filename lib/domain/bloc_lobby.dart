@@ -59,8 +59,16 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
   LobbyBloc() : super(LobbyStateInitial()) {
     on<LobbyEventJoin>(
       (event, emit) async {
+        if (event.lobbyId.isEmpty) {
+          emit(LobbyStateFailureNoLobby());
+          return;
+        }
         emit(LobbyStateLoading());
-        Lobby? lobby = await DataProviderLobby().get(event.lobbyId);
+        Lobby? lobby = await DataProviderLobby().getSimpleId(event.lobbyId);
+        if (lobby.id.isEmpty) {
+          emit(LobbyStateFailureNoLobby());
+          return;
+        }
         if (lobby.isLoverInLobby(event.lover)) {
           emit(LobbyStateFailureNoRoom(lobby));
           return;
@@ -69,11 +77,11 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
           lobby.addLover(event.lover);
           event.lover.lobbyId = lobby.id;
           DataProviderLobby().updateLobbyLover(lobby, event.lover);
-          emit(LobbyStateSucessReady(lobby));
+          emit(LobbyStateSucessNoReady(lobby, LobbyStatus.waiting));
         } else {
           if (state.lobby.lovers[0].id == event.lover.id ||
               state.lobby.lovers[1].id == event.lover.id) {
-            emit(LobbyStateSucessReady(lobby));
+            emit(LobbyStateSucessNoReady(lobby, LobbyStatus.waiting));
           } else {
             emit(
               LobbyStateFailureNoRoom(state.lobby),
@@ -97,7 +105,7 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
       (event, emit) async {
         emit(LobbyStateLoading());
         Lobby lobby = await createLobby(event.lover);
-        emit(LobbyStateSucessNoReady(lobby));
+        emit(LobbyStateSucessNoReady(lobby, LobbyStatus.waiting));
       },
     );
 
@@ -106,10 +114,11 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
         emit(LobbyStateLoading());
         if (event.lover.lobbyId.isEmpty) {
           Lobby lobby = await createLobby(event.lover);
-          emit(LobbyStateSucessNoReady(lobby));
+
+          emit(LobbyStateSucessNoReady(lobby, LobbyStatus.waiting));
         } else {
           Lobby lobby = await DataProviderLobby().get(event.lover.lobbyId);
-          emit(LobbyStateSucessNoReady(lobby));
+          emit(LobbyStateSucessNoReady(lobby, LobbyStatus.waiting));
         }
       },
     );
@@ -123,7 +132,10 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
               if (dataLobby.isFull()) {
                 return LobbyStateSucessReady(dataLobby);
               } else {
-                return LobbyStateSucessNoReady(dataLobby);
+                return LobbyStateSucessNoReady(
+                  dataLobby,
+                  LobbyStatus.sucessNoReady,
+                );
               }
             },
           );
@@ -144,7 +156,6 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
 
 abstract class LobbyState {
   Lobby lobby;
-
   LobbyStatus status = LobbyStatus.initial;
 
   LobbyState({required this.lobby, required this.status});
@@ -166,8 +177,8 @@ class LobbyStateSucessReady extends LobbyState {
 }
 
 class LobbyStateSucessNoReady extends LobbyState {
-  LobbyStateSucessNoReady(Lobby lobby)
-      : super(lobby: lobby, status: LobbyStatus.sucessNoReady);
+  LobbyStateSucessNoReady(Lobby lobby, LobbyStatus status)
+      : super(lobby: lobby, status: status);
 }
 
 class LobbyStateFailureNoLobby extends LobbyState {
@@ -183,6 +194,7 @@ class LobbyStateFailureNoRoom extends LobbyState {
 enum LobbyStatus {
   initial,
   loading,
+  waiting,
   sucessReady,
   sucessNoReady,
   failureNoLobby,
@@ -196,6 +208,8 @@ extension LobbyStatusDescription on LobbyStatus {
         return 'initial';
       case LobbyStatus.loading:
         return 'loading';
+      case LobbyStatus.waiting:
+        return 'watching';
       case LobbyStatus.sucessReady:
         return 'sucessReady';
       case LobbyStatus.sucessNoReady:

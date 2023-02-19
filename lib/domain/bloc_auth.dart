@@ -92,7 +92,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     });
     on<AuthEventRegister>((event, emit) async {
       emit(AuthStateLoading());
-      Lover lover = await DataProviderLover().create(
+      await DataProviderLover().create(
         Lover(
           email: event.userCredencial.user!.email!,
           name: event.userCredencial.user!.displayName!,
