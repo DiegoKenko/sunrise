@@ -5,17 +5,33 @@ class MoodMatching {
   Mood mood2;
   double matching; // minimun of 1 to maximun of 10
   String get matchId => mood1.name.toLowerCase() + mood2.name.toLowerCase();
-  /*  double get mood1scale => 1 - (matching * 0.1);
-  double get mood2scale => 1 + (matching * 0.1); */
+
   double get mood1scale => 1;
   double get mood2scale => 1;
   double get max => 10;
   double get min => 1;
+  MoodMatchingPack pack;
+  bool packAllowed(MoodMatchingPack userPack) {
+    if (userPack == pack || userPack == MoodMatchingPack.goldPack) {
+      return true;
+    }
+    if ((userPack == MoodMatchingPack.silverPack ||
+            userPack == MoodMatchingPack.defaultPack) &&
+        pack == MoodMatchingPack.goldPack) {
+      return false;
+    }
+    if (userPack == MoodMatchingPack.silverPack &&
+        pack == MoodMatchingPack.defaultPack) {
+      return true;
+    }
+    return false;
+  }
 
   MoodMatching({
     required this.mood1,
     required this.mood2,
     this.matching = 5,
+    required this.pack,
   });
 
   Map<String, dynamic> toJson() {
@@ -37,6 +53,7 @@ class MoodMatching {
           name: json['mood2'],
           iconName: json['mood2Icon'],
         ),
+        pack = MoodMatchingPack.defaultPack,
         matching = json['matching'];
 
   @override
@@ -47,4 +64,10 @@ class MoodMatching {
   set setMatching(double match) {
     matching = match;
   }
+}
+
+enum MoodMatchingPack {
+  defaultPack,
+  silverPack,
+  goldPack,
 }

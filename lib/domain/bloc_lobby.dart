@@ -77,11 +77,11 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
           lobby.addLover(event.lover);
           event.lover.lobbyId = lobby.id;
           DataProviderLobby().updateLobbyLover(lobby, event.lover);
-          emit(LobbyStateSucessNoReady(lobby, LobbyStatus.waiting));
+          emit(LobbyStateStandby(lobby));
         } else {
           if (state.lobby.lovers[0].id == event.lover.id ||
               state.lobby.lovers[1].id == event.lover.id) {
-            emit(LobbyStateSucessNoReady(lobby, LobbyStatus.waiting));
+            emit(LobbyStateStandby(lobby));
           } else {
             emit(
               LobbyStateFailureNoRoom(state.lobby),
@@ -93,11 +93,13 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
 
     on<LobbyEventLeave>(
       (event, emit) async {
+        emit(LobbyStateInitial());
         Lobby? lobby = state.lobby;
         lobby.removeLover(event.lover);
-        event.lover.lobbyId = '';
-        DataProviderLobby().updateLobbyLover(lobby, event.lover);
-        emit(LobbyStateInitial());
+        Lobby newlobby = await createLobby(event.lover);
+        event.lover.lobbyId = newlobby.id;
+        await DataProviderLobby().updateLobbyLover(newlobby, event.lover);
+        emit(LobbyStateSucessNoReady(newlobby));
       },
     );
 
@@ -105,7 +107,7 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
       (event, emit) async {
         emit(LobbyStateLoading());
         Lobby lobby = await createLobby(event.lover);
-        emit(LobbyStateSucessNoReady(lobby, LobbyStatus.waiting));
+        emit(LobbyStateStandby(lobby));
       },
     );
 
@@ -114,11 +116,10 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
         emit(LobbyStateLoading());
         if (event.lover.lobbyId.isEmpty) {
           Lobby lobby = await createLobby(event.lover);
-
-          emit(LobbyStateSucessNoReady(lobby, LobbyStatus.waiting));
+          emit(LobbyStateSucessNoReady(lobby));
         } else {
           Lobby lobby = await DataProviderLobby().get(event.lover.lobbyId);
-          emit(LobbyStateSucessNoReady(lobby, LobbyStatus.waiting));
+          emit(LobbyStateStandby(lobby));
         }
       },
     );
@@ -134,7 +135,6 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
               } else {
                 return LobbyStateSucessNoReady(
                   dataLobby,
-                  LobbyStatus.sucessNoReady,
                 );
               }
             },
@@ -177,8 +177,13 @@ class LobbyStateSucessReady extends LobbyState {
 }
 
 class LobbyStateSucessNoReady extends LobbyState {
-  LobbyStateSucessNoReady(Lobby lobby, LobbyStatus status)
-      : super(lobby: lobby, status: status);
+  LobbyStateSucessNoReady(Lobby lobby)
+      : super(lobby: lobby, status: LobbyStatus.sucessNoReady);
+}
+
+class LobbyStateStandby extends LobbyState {
+  LobbyStateStandby(Lobby lobby)
+      : super(lobby: lobby, status: LobbyStatus.sucessNoReady);
 }
 
 class LobbyStateFailureNoLobby extends LobbyState {
@@ -194,7 +199,7 @@ class LobbyStateFailureNoRoom extends LobbyState {
 enum LobbyStatus {
   initial,
   loading,
-  waiting,
+  standBy,
   sucessReady,
   sucessNoReady,
   failureNoLobby,
@@ -208,8 +213,8 @@ extension LobbyStatusDescription on LobbyStatus {
         return 'initial';
       case LobbyStatus.loading:
         return 'loading';
-      case LobbyStatus.waiting:
-        return 'watching';
+      case LobbyStatus.standBy:
+        return 'standBy';
       case LobbyStatus.sucessReady:
         return 'sucessReady';
       case LobbyStatus.sucessNoReady:

@@ -20,19 +20,17 @@ class TabMood extends StatefulWidget {
 class _TabMoodState extends State<TabMood> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: ListView.builder(
-        shrinkWrap: true,
-        padding: const EdgeInsets.all(20),
-        itemBuilder: (context, index) {
-          return MoodMatchingSlider(
-            edit: context.watch<AuthBloc>().state.lover.id == widget.lover.id,
-            lover: widget.lover,
-            moodMatch: mockMoodMatching[index],
-          );
-        },
-        itemCount: mockMoodMatching.length,
-      ),
+    return ListView.builder(
+      shrinkWrap: true,
+      padding: const EdgeInsets.all(20),
+      itemBuilder: (context, index) {
+        return MoodMatchingSlider(
+          edit: context.watch<AuthBloc>().state.lover.id == widget.lover.id,
+          lover: widget.lover,
+          moodMatch: mockMoodMatching[index],
+        );
+      },
+      itemCount: mockMoodMatching.length,
     );
   }
 }
@@ -70,6 +68,7 @@ class _MoodMatchingSliderState extends State<MoodMatchingSlider> {
             mood1: widget.moodMatch.mood1,
             mood2: widget.moodMatch.mood2,
             matching: 5,
+            pack: widget.moodMatch.pack,
           );
         } else {
           viewModelMoodMatching.state.moodMatching = snap.data!;
@@ -81,7 +80,7 @@ class _MoodMatchingSliderState extends State<MoodMatchingSlider> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
-                flex: 2,
+                flex: 1,
                 child: Image.asset(
                   viewModelMoodMatching.state.moodMatching.mood1.icon,
                   scale: viewModelMoodMatching.state.moodMatching.mood1scale,
@@ -90,24 +89,47 @@ class _MoodMatchingSliderState extends State<MoodMatchingSlider> {
               Expanded(
                 flex: 6,
                 child: Slider(
+                  activeColor: Color.fromRGBO(
+                    245,
+                    20 +
+                        8 *
+                            viewModelMoodMatching.state.moodMatching.matching
+                                .toInt(),
+                    10 +
+                        10 *
+                            viewModelMoodMatching.state.moodMatching.matching
+                                .toInt(),
+                    1,
+                  ),
+                  inactiveColor: Color.fromRGBO(
+                    20,
+                    150 -
+                        5 *
+                            viewModelMoodMatching.state.moodMatching.matching
+                                .toInt(),
+                    65 -
+                        6 *
+                            viewModelMoodMatching.state.moodMatching.matching
+                                .toInt(),
+                    0.5,
+                  ),
+                  label: viewModelMoodMatching.state.moodMatching.matching
+                      .toString(),
                   value: viewModelMoodMatching.state.moodMatching.matching,
                   min: viewModelMoodMatching.state.moodMatching.min,
                   max: viewModelMoodMatching.state.moodMatching.max,
                   divisions: (viewModelMoodMatching.state.moodMatching.max -
                           viewModelMoodMatching.state.moodMatching.min)
                       .toInt(),
-                  //label: '0.0',
                   onChanged: (double value) {
                     if (widget.edit) {
-                      viewModelMoodMatching.updateMatching(
-                        value,
-                      );
+                      viewModelMoodMatching.updateMatching(value);
                     }
                   },
                 ),
               ),
               Expanded(
-                flex: 2,
+                flex: 1,
                 child: Image.asset(
                   viewModelMoodMatching.state.moodMatching.mood2.icon,
                   scale: viewModelMoodMatching.state.moodMatching.mood2scale,

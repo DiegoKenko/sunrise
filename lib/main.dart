@@ -65,31 +65,57 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ListTile(
-                leading: Image.asset('assets/google_icon.png'),
-                title: const Text('Entrar com Google'),
-                onTap: () {
-                  context.read<AuthBloc>().add(const AuthEventLogin());
-                },
-              ),
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/main.jpg'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                InkWell(
+                  child: Container(
+                    width: 70,
+                    height: 120,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Image.asset('assets/google_icon.png'),
+                        ),
+                        const Expanded(
+                          child: Center(
+                            child: Text('Entrar'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  onTap: () {
+                    context.read<AuthBloc>().add(const AuthEventLogin());
+                  },
+                ),
+                /*    Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListTile(
+                    leading: Image.asset('assets/apple_icon.png'),
+                    title: const Text('Entrar com Apple'),
+                    onTap: () {},
+                  ),
+                ), */
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ListTile(
-                leading: Image.asset('assets/apple_icon.png'),
-                title: const Text('Entrar com Apple'),
-                onTap: () {},
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
