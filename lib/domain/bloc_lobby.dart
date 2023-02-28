@@ -21,11 +21,9 @@ class LobbyEventJoin extends LobbyEvent {
 }
 
 class LobbyEventLeave extends LobbyEvent {
-  final String lobbyId;
   final Lover lover;
 
   const LobbyEventLeave({
-    required this.lobbyId,
     required this.lover,
   });
 }
@@ -53,6 +51,48 @@ class LobbyEventWatch extends LobbyEvent {
   const LobbyEventWatch({
     required this.lobby,
   });
+}
+
+abstract class LobbyState {
+  Lobby lobby;
+  LobbyStatus status = LobbyStatus.initial;
+
+  LobbyState({required this.lobby, required this.status});
+}
+
+class LobbyStateInitial extends LobbyState {
+  LobbyStateInitial()
+      : super(lobby: Lobby.empty(), status: LobbyStatus.initial);
+}
+
+class LobbyStateLoading extends LobbyState {
+  LobbyStateLoading()
+      : super(lobby: Lobby.empty(), status: LobbyStatus.loading);
+}
+
+class LobbyStateSucessReady extends LobbyState {
+  LobbyStateSucessReady(Lobby lobby)
+      : super(lobby: lobby, status: LobbyStatus.sucessReady);
+}
+
+class LobbyStateSucessNoReady extends LobbyState {
+  LobbyStateSucessNoReady(Lobby lobby)
+      : super(lobby: lobby, status: LobbyStatus.sucessNoReady);
+}
+
+class LobbyStateStandby extends LobbyState {
+  LobbyStateStandby(Lobby lobby)
+      : super(lobby: lobby, status: LobbyStatus.sucessNoReady);
+}
+
+class LobbyStateFailureNoLobby extends LobbyState {
+  LobbyStateFailureNoLobby()
+      : super(lobby: Lobby.empty(), status: LobbyStatus.failureNoLobby);
+}
+
+class LobbyStateFailureNoRoom extends LobbyState {
+  LobbyStateFailureNoRoom(Lobby lobby)
+      : super(lobby: lobby, status: LobbyStatus.failureNoRoom);
 }
 
 class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
@@ -152,48 +192,6 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
     DataProviderLover().set(lover);
     return lobby;
   }
-}
-
-abstract class LobbyState {
-  Lobby lobby;
-  LobbyStatus status = LobbyStatus.initial;
-
-  LobbyState({required this.lobby, required this.status});
-}
-
-class LobbyStateInitial extends LobbyState {
-  LobbyStateInitial()
-      : super(lobby: Lobby.empty(), status: LobbyStatus.initial);
-}
-
-class LobbyStateLoading extends LobbyState {
-  LobbyStateLoading()
-      : super(lobby: Lobby.empty(), status: LobbyStatus.loading);
-}
-
-class LobbyStateSucessReady extends LobbyState {
-  LobbyStateSucessReady(Lobby lobby)
-      : super(lobby: lobby, status: LobbyStatus.sucessReady);
-}
-
-class LobbyStateSucessNoReady extends LobbyState {
-  LobbyStateSucessNoReady(Lobby lobby)
-      : super(lobby: lobby, status: LobbyStatus.sucessNoReady);
-}
-
-class LobbyStateStandby extends LobbyState {
-  LobbyStateStandby(Lobby lobby)
-      : super(lobby: lobby, status: LobbyStatus.sucessNoReady);
-}
-
-class LobbyStateFailureNoLobby extends LobbyState {
-  LobbyStateFailureNoLobby()
-      : super(lobby: Lobby.empty(), status: LobbyStatus.failureNoLobby);
-}
-
-class LobbyStateFailureNoRoom extends LobbyState {
-  LobbyStateFailureNoRoom(Lobby lobby)
-      : super(lobby: lobby, status: LobbyStatus.failureNoRoom);
 }
 
 enum LobbyStatus {

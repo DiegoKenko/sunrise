@@ -1,27 +1,26 @@
 import 'package:flutter/material.dart';
 
-final kTextLobbyStyle = TextStyle(
-  fontSize: 40.0,
+const kTextLobbyStyle = TextStyle(
+  fontSize: 30.0,
   fontWeight: FontWeight.bold,
   letterSpacing: 8,
-  foreground: Paint()
-    ..style = PaintingStyle.stroke
-    ..strokeWidth = 0.5
-    ..color = Colors.black,
+  color: Colors.orange,
 );
 
-final kTextLoverLobbyStyle = TextStyle(
-  fontSize: 20.0,
-  letterSpacing: 3,
-  foreground: Paint()
-    ..style = PaintingStyle.stroke
-    ..strokeWidth = 0.5
-    ..color = Colors.black,
+const kTextLoverLobbyStyle = TextStyle(
+  fontSize: 18.0,
+  letterSpacing: 2,
+  color: Colors.black,
 );
 
 const kTextFormFieldLobbyStyle = TextStyle(
   fontSize: 20.0,
   fontWeight: FontWeight.bold,
-  letterSpacing: 20,
-  color: Colors.orange,
+  letterSpacing: 15,
+  color: Colors.black,
+);
+
+const kTextLeaveLobbyStyle = TextStyle(
+  fontSize: 12.0,
+  color: Colors.red,
 );
