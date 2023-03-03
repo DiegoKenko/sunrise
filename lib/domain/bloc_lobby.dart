@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 // ignore: unused_import
 import 'package:firebase_core/firebase_core.dart';
@@ -47,10 +49,7 @@ class LobbyEventLoad extends LobbyEvent {
 }
 
 class LobbyEventWatch extends LobbyEvent {
-  final Lobby lobby;
-  const LobbyEventWatch({
-    required this.lobby,
-  });
+  const LobbyEventWatch();
 }
 
 abstract class LobbyState {
@@ -82,7 +81,7 @@ class LobbyStateSucessNoReady extends LobbyState {
 
 class LobbyStateStandby extends LobbyState {
   LobbyStateStandby(Lobby lobby)
-      : super(lobby: lobby, status: LobbyStatus.sucessNoReady);
+      : super(lobby: lobby, status: LobbyStatus.standBy);
 }
 
 class LobbyStateFailureNoLobby extends LobbyState {
@@ -96,6 +95,7 @@ class LobbyStateFailureNoRoom extends LobbyState {
 }
 
 class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
+  Stream streamLobby = const Stream.empty();
   LobbyBloc() : super(LobbyStateInitial()) {
     on<LobbyEventJoin>(
       (event, emit) async {
@@ -110,18 +110,18 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
           return;
         }
         if (lobby.isLoverInLobby(event.lover)) {
-          emit(LobbyStateFailureNoRoom(lobby));
+          emit(LobbyStateSucessNoReady(lobby));
           return;
         }
         if (lobby.haveRoom()) {
           lobby.addLover(event.lover);
           event.lover.lobbyId = lobby.id;
-          DataProviderLobby().updateLobbyLover(lobby, event.lover);
-          emit(LobbyStateStandby(lobby));
+          await DataProviderLobby().updateLobbyLover(lobby, event.lover);
+          emit(LobbyStateSucessNoReady(lobby));
         } else {
           if (state.lobby.lovers[0].id == event.lover.id ||
               state.lobby.lovers[1].id == event.lover.id) {
-            emit(LobbyStateStandby(lobby));
+            emit(LobbyStateSucessNoReady(lobby));
           } else {
             emit(
               LobbyStateFailureNoRoom(state.lobby),
@@ -133,12 +133,16 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
 
     on<LobbyEventLeave>(
       (event, emit) async {
-        emit(LobbyStateInitial());
+        // previous lobby
         Lobby? lobby = state.lobby;
         lobby.removeLover(event.lover);
+        await DataProviderLobby().updateLobbyLover(lobby, event.lover);
+
+        // new lobby
         Lobby newlobby = await createLobby(event.lover);
         event.lover.lobbyId = newlobby.id;
         await DataProviderLobby().updateLobbyLover(newlobby, event.lover);
+        streamLobby = const Stream.empty();
         emit(LobbyStateSucessNoReady(newlobby));
       },
     );
@@ -147,7 +151,7 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
       (event, emit) async {
         emit(LobbyStateLoading());
         Lobby lobby = await createLobby(event.lover);
-        emit(LobbyStateStandby(lobby));
+        emit(LobbyStateSucessNoReady(lobby));
       },
     );
 
@@ -159,21 +163,22 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
           emit(LobbyStateSucessNoReady(lobby));
         } else {
           Lobby lobby = await DataProviderLobby().get(event.lover.lobbyId);
-          emit(LobbyStateStandby(lobby));
+          emit(LobbyStateSucessNoReady(lobby));
         }
       },
     );
 
     on<LobbyEventWatch>(
       (event, emit) async {
-        if (event.lobby.id.isNotEmpty) {
+        if (state.lobby.id.isNotEmpty) {
+          streamLobby = DataProviderLobby().watch(state.lobby);
           await emit.forEach(
-            DataProviderLobby().watch(event.lobby),
+            streamLobby,
             onData: (dataLobby) {
               if (dataLobby.isFull()) {
                 return LobbyStateSucessReady(dataLobby);
               } else {
-                return LobbyStateSucessNoReady(
+                return LobbyStateStandby(
                   dataLobby,
                 );
               }

@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sunrise/data/data_provider_lover.dart';
 import 'package:sunrise/domain/authentication.dart';
+import 'package:sunrise/domain/notification.dart';
 import 'package:sunrise/model/model_lover.dart';
 
 abstract class AuthEvent {
@@ -83,6 +85,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           await FirebaseAuthentication().signInWithGoogle();
       if (userCredencial.user != null) {
         Lover lover = await DataProviderLover().getUser(userCredencial.user!);
+        await NotificationService().requestPermissions();
         emit(AuthStateSuccess('User logged', lover));
       } else {
         add(
@@ -92,14 +95,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     });
     on<AuthEventRegister>((event, emit) async {
       emit(AuthStateLoading());
-      await DataProviderLover().create(
-        Lover(
-          email: event.userCredencial.user!.email!,
-          name: event.userCredencial.user!.displayName!,
-          id: event.userCredencial.user!.uid,
-          photoURL: event.userCredencial.user!.photoURL!,
-        ),
+      String? token = await NotificationService().getToken();
+      Lover lover = Lover(
+        email: event.userCredencial.user!.email!,
+        name: event.userCredencial.user!.displayName!,
+        id: event.userCredencial.user!.uid,
+        photoURL: event.userCredencial.user!.photoURL!,
       );
+      lover.token = token!;
+      await DataProviderLover().create(lover);
+      await NotificationService().requestPermissions();
       add(const AuthEventLogin());
     });
     on<AuthEventLogout>((event, emit) async {

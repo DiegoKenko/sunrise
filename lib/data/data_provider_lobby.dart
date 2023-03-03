@@ -29,13 +29,17 @@ class DataProviderLobby {
 
   //update lobby
   Future<void> _update(Lobby lobby) async {
-    await _firestore.collection('lobby').doc(lobby.id).update(lobby.toJson());
+    if (lobby.isEmpty()) {
+      delete(lobby);
+    } else {
+      await _firestore.collection('lobby').doc(lobby.id).update(lobby.toJson());
+    }
   }
 
   //update lobby
   Future<void> updateLobbyLover(Lobby lobby, Lover lover) async {
     _update(lobby);
-    DataProviderLover().update(lover);
+    await DataProviderLover().update(lover);
   }
 
   //delete lobby

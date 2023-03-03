@@ -6,10 +6,9 @@ class MoodMatching {
   double matching; // minimun of 1 to maximun of 10
   String get matchId => mood1.name.toLowerCase() + mood2.name.toLowerCase();
 
-  double get mood1scale => 1;
-  double get mood2scale => 1;
   double get max => 10;
   double get min => 1;
+  bool get isLessThanHalf => matching < 5.5;
   MoodMatchingPack pack;
   bool packAllowed(MoodMatchingPack userPack) {
     if (userPack == pack || userPack == MoodMatchingPack.goldPack) {

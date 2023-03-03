@@ -37,6 +37,15 @@ class Lobby {
     return true;
   }
 
+  bool isEmpty() {
+    for (var i = 0; i < lovers.length; i++) {
+      if (lovers[i].id.isNotEmpty) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   bool haveRoom() {
     for (var i = 0; i < lovers.length; i++) {
       if (lovers[i].id.isEmpty) {

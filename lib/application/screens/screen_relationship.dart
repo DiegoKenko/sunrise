@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sunrise/application/components/tab_chat.dart';
 import 'package:sunrise/application/components/tab_mood.dart';
+import 'package:sunrise/application/styles.dart';
+import 'package:sunrise/domain/bloc_chat.dart';
 import 'package:sunrise/domain/bloc_lobby.dart';
 
 class RelationshipScreen extends StatefulWidget {
@@ -32,9 +34,8 @@ class _RelationshipScreenState extends State<RelationshipScreen>
           child: ListView(
             children: [
               DrawerHeader(
-                child: TextButton(
-                  onPressed: () {},
-                  child: const Text('leave'),
+                child: Container(
+                  color: kPrimaryColor,
                 ),
               ),
             ],
@@ -76,9 +77,14 @@ class _RelationshipScreenState extends State<RelationshipScreen>
               flex: 18,
               child: TabBarView(
                 controller: _tabController,
-                children: const [
-                  Tab(child: MoodRelationship()),
-                  Tab(child: TabChat()),
+                children: [
+                  const Tab(child: MoodRelationship()),
+                  Tab(
+                    child: BlocProvider<ChatBloc>(
+                      create: (context) => ChatBloc(),
+                      child: const TabChat(),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -102,6 +108,7 @@ class _MoodRelationshipState extends State<MoodRelationship>
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
+
     super.initState();
   }
 
@@ -112,6 +119,40 @@ class _MoodRelationshipState extends State<MoodRelationship>
 
     return Column(
       children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 5),
+          child: DecoratedBox(
+            decoration: const BoxDecoration(
+              color: Colors.black,
+            ),
+            child: TabBar(
+              labelColor: Colors.white,
+              labelStyle: const TextStyle(
+                fontSize: 15,
+              ),
+              indicator: BoxDecoration(
+                color: kPrimaryColor,
+                border: Border.all(color: Colors.black, width: 4),
+                borderRadius: BorderRadius.circular(30),
+              ),
+              tabs: [
+                Tab(
+                  child: Text(
+                    state.lobby.lovers[0].name,
+                    style: kTextLoverRelationshipStyle,
+                  ),
+                ),
+                Tab(
+                  child: Text(
+                    state.lobby.lovers[1].name,
+                    style: kTextLoverRelationshipStyle,
+                  ),
+                )
+              ],
+              controller: _tabController,
+            ),
+          ),
+        ),
         Expanded(
           child: TabBarView(
             controller: _tabController,
@@ -123,27 +164,6 @@ class _MoodRelationshipState extends State<MoodRelationship>
                 child: TabMood(lover: state.lobby.lovers[1]),
               )
             ],
-          ),
-        ),
-        DecoratedBox(
-          decoration: const BoxDecoration(
-            color: Colors.black,
-          ),
-          child: TabBar(
-            labelColor: Colors.white,
-            labelStyle: const TextStyle(
-              fontSize: 15,
-            ),
-            indicatorColor: Colors.orange,
-            tabs: [
-              Tab(
-                child: Text(state.lobby.lovers[0].name),
-              ),
-              Tab(
-                child: Text(state.lobby.lovers[1].name),
-              )
-            ],
-            controller: _tabController,
           ),
         ),
       ],

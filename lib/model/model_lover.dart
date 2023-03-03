@@ -6,6 +6,7 @@ class Lover {
   String lobbyId = '';
   String email = '';
   String photoURL = '';
+  String notficationToken = '';
 
   Lover({
     this.name = '',
@@ -32,12 +33,18 @@ class Lover {
       : name = json['name'],
         email = json['email'],
         photoURL = json['photoURL'],
-        lobbyId = json['lobbyId'];
+        lobbyId = json['lobbyId'],
+        notficationToken = json['notficationToken'];
 
   Map<String, dynamic> toJson() => {
         'name': name,
         'email': email,
         'photoURL': photoURL,
         'lobbyId': lobbyId,
+        'notficationToken': notficationToken,
       };
+
+  set token(String token) {
+    notficationToken = token;
+  }
 }
