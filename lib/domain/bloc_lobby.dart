@@ -158,12 +158,16 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
     on<LobbyEventLoad>(
       (event, emit) async {
         emit(LobbyStateLoading());
-        if (event.lover.lobbyId.isEmpty) {
-          Lobby lobby = await createLobby(event.lover);
-          emit(LobbyStateSucessNoReady(lobby));
+        if (event.lobbyId.isEmpty) {
+          emit(LobbyStateInitial());
         } else {
-          Lobby lobby = await DataProviderLobby().get(event.lover.lobbyId);
-          emit(LobbyStateSucessNoReady(lobby));
+          if (event.lover.lobbyId.isEmpty) {
+            Lobby lobby = await createLobby(event.lover);
+            emit(LobbyStateSucessNoReady(lobby));
+          } else {
+            Lobby lobby = await DataProviderLobby().get(event.lover.lobbyId);
+            emit(LobbyStateSucessNoReady(lobby));
+          }
         }
       },
     );

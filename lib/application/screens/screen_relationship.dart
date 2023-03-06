@@ -27,68 +27,127 @@ class _RelationshipScreenState extends State<RelationshipScreen>
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        key: _key,
-        drawer: Drawer(
-          child: ListView(
-            children: [
-              DrawerHeader(
-                child: Container(
-                  color: kPrimaryColor,
-                ),
-              ),
-            ],
-          ),
-        ),
-        body: Column(
-          children: [
-            Row(
+      child: WillPopScope(
+        onWillPop: () async => false,
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          key: _key,
+          drawer: Drawer(
+            backgroundColor: Colors.black.withOpacity(0.7),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(
-                  flex: 1,
-                  child: DecoratedBox(
-                    decoration: const BoxDecoration(
-                      color: Colors.black,
-                    ),
-                    child: IconButton(
-                      onPressed: () => _key.currentState!.openDrawer(),
-                      icon: const Icon(
-                        Icons.menu,
-                        color: Colors.white,
-                      ),
+                const DrawerHeader(
+                  child: Text(
+                    'Sunrise',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
                     ),
                   ),
                 ),
-                Expanded(
-                  flex: 3,
-                  child: TabBar(
-                    indicatorColor: Colors.black,
-                    controller: _tabController,
-                    tabs: const [
-                      Tab(text: 'humor'),
-                      Tab(text: 'chat'),
-                    ],
+                ListTile(
+                  title: const Text(
+                    'Sair',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                    ),
                   ),
+                  onTap: () {
+                    Navigator.of(context).pushReplacementNamed(
+                      '/login',
+                    );
+                  },
                 ),
               ],
             ),
-            Expanded(
-              flex: 18,
-              child: TabBarView(
-                controller: _tabController,
+          ),
+          body: Column(
+            children: [
+              Row(
                 children: [
-                  const Tab(child: MoodRelationship()),
-                  Tab(
-                    child: BlocProvider<ChatBloc>(
-                      create: (context) => ChatBloc(),
-                      child: const TabChat(),
+                  Expanded(
+                    flex: 1,
+                    child: DecoratedBox(
+                      decoration: const BoxDecoration(
+                        color: Colors.black,
+                      ),
+                      child: IconButton(
+                        onPressed: () => _key.currentState!.openDrawer(),
+                        icon: const Icon(
+                          Icons.menu,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: TabBar(
+                      indicatorColor: Colors.black,
+                      controller: _tabController,
+                      tabs: [
+                        Tab(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: const [
+                              Text(
+                                'Emoções',
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.face,
+                                  color: Colors.black,
+                                  size: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Tab(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: const [
+                              Text(
+                                'Mensagens',
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.chat,
+                                  color: Colors.black,
+                                  size: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
-            ),
-          ],
+              Expanded(
+                flex: 18,
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    const Tab(child: MoodRelationship()),
+                    Tab(
+                      child: BlocProvider<ChatBloc>(
+                        create: (context) => ChatBloc(),
+                        child: const TabChat(),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -117,56 +176,59 @@ class _MoodRelationshipState extends State<MoodRelationship>
     final LobbyBloc blocProviderLobby = context.watch<LobbyBloc>();
     final LobbyState state = blocProviderLobby.state;
 
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 5),
-          child: DecoratedBox(
-            decoration: const BoxDecoration(
-              color: Colors.black,
-            ),
-            child: TabBar(
-              labelColor: Colors.white,
-              labelStyle: const TextStyle(
-                fontSize: 15,
+    return Container(
+      decoration: kBackgroundDecoration,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 5),
+            child: DecoratedBox(
+              decoration: const BoxDecoration(
+                color: Colors.black,
               ),
-              indicator: BoxDecoration(
-                color: kPrimaryColor,
-                border: Border.all(color: Colors.black, width: 4),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              tabs: [
-                Tab(
-                  child: Text(
-                    state.lobby.lovers[0].name,
-                    style: kTextLoverRelationshipStyle,
+              child: TabBar(
+                labelColor: Colors.white,
+                labelStyle: const TextStyle(
+                  fontSize: 15,
+                ),
+                indicator: BoxDecoration(
+                  color: Colors.black,
+                  border: Border.all(color: Colors.orange, width: 2),
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                tabs: [
+                  Tab(
+                    child: Text(
+                      state.lobby.lovers[0].name,
+                      style: kTextLoverRelationshipStyle,
+                    ),
                   ),
+                  Tab(
+                    child: Text(
+                      state.lobby.lovers[1].name,
+                      style: kTextLoverRelationshipStyle,
+                    ),
+                  )
+                ],
+                controller: _tabController,
+              ),
+            ),
+          ),
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                Tab(
+                  child: TabMood(lover: state.lobby.lovers[0]),
                 ),
                 Tab(
-                  child: Text(
-                    state.lobby.lovers[1].name,
-                    style: kTextLoverRelationshipStyle,
-                  ),
+                  child: TabMood(lover: state.lobby.lovers[1]),
                 )
               ],
-              controller: _tabController,
             ),
           ),
-        ),
-        Expanded(
-          child: TabBarView(
-            controller: _tabController,
-            children: [
-              Tab(
-                child: TabMood(lover: state.lobby.lovers[0]),
-              ),
-              Tab(
-                child: TabMood(lover: state.lobby.lovers[1]),
-              )
-            ],
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

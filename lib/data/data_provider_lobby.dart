@@ -62,10 +62,10 @@ class DataProviderLobby {
       lobby = Lobby.fromJson(doc.data());
       lobby.id = doc.id;
       if (lobby.lovers[0].id.isNotEmpty) {
-        lobby.lovers[0] = await DataProviderLover().getId(lobby.lovers[0].id);
+        lobby.lovers[0] = await DataProviderLover().get(lobby.lovers[0].id);
       }
       if (lobby.lovers[1].id.isNotEmpty) {
-        lobby.lovers[1] = await DataProviderLover().getId(lobby.lovers[1].id);
+        lobby.lovers[1] = await DataProviderLover().get(lobby.lovers[1].id);
       }
     }
     return lobby;
@@ -80,10 +80,10 @@ class DataProviderLobby {
       lobby = Lobby.fromJson(snapshot.data()!);
       lobby.id = snapshot.id;
       if (lobby.lovers[0].id.isNotEmpty) {
-        lobby.lovers[0] = await DataProviderLover().getId(lobby.lovers[0].id);
+        lobby.lovers[0] = await DataProviderLover().get(lobby.lovers[0].id);
       }
       if (lobby.lovers[1].id.isNotEmpty) {
-        lobby.lovers[1] = await DataProviderLover().getId(lobby.lovers[1].id);
+        lobby.lovers[1] = await DataProviderLover().get(lobby.lovers[1].id);
       }
     }
     return lobby;

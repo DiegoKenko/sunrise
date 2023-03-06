@@ -19,11 +19,20 @@ const kTextLoverRelationshipStyle = TextStyle(
   letterSpacing: 2,
   color: Colors.white,
 );
-
 const kTextFormFieldLobbyStyle = TextStyle(
   fontSize: 20.0,
   fontWeight: FontWeight.bold,
   letterSpacing: 15,
+  color: Colors.white,
+);
+
+const kTextFormFieldChatStyle = TextStyle(
+  fontSize: 16.0,
+  color: Colors.white,
+);
+const kTextFormFieldLobbyLabelStyle = TextStyle(
+  fontSize: 18.0,
+  letterSpacing: 1,
   color: Colors.white,
 );
 
@@ -74,9 +83,29 @@ const List<Color> sliderGradientColors = <Color>[
   Color.fromRGBO(190, 90, 75, 1),
   Color.fromRGBO(170, 80, 100, 1),
   Color.fromRGBO(150, 70, 125, 1),
-  Color.fromRGBO(130, 60, 150, 1),
-  Color.fromRGBO(110, 50, 175, 1),
-  Color.fromRGBO(90, 40, 200, 1),
-  Color.fromRGBO(70, 30, 225, 1),
-  Color.fromRGBO(50, 20, 250, 1),
+  Color.fromRGBO(138, 115, 185, 1),
+  Color.fromRGBO(57, 100, 143, 1),
+  Color.fromRGBO(60, 120, 120, 1),
+  Color.fromRGBO(50, 150, 150, 1),
+  Color.fromRGBO(40, 180, 180, 1),
 ];
+
+const kBackgroundDecoration = BoxDecoration(
+  gradient: RadialGradient(
+    colors: [
+      Color.fromARGB(255, 81, 81, 97),
+      Color.fromARGB(255, 0, 0, 0),
+    ],
+    radius: 1.4,
+  ),
+);
+
+final kOutlineInputBorder = OutlineInputBorder(
+  borderSide: const BorderSide(
+    color: Colors.white,
+    width: 4,
+  ),
+  borderRadius: BorderRadius.circular(
+    10,
+  ),
+);

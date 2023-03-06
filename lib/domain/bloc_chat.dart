@@ -1,14 +1,16 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sunrise/data/data_provider_chat.dart';
-import 'package:sunrise/domain/notification.dart';
+import 'package:sunrise/data/data_provider_lover.dart';
 import 'package:sunrise/model/model_chat_message.dart';
+import 'package:sunrise/model/model_lobby.dart';
+import 'package:sunrise/model/model_lover.dart';
 
 abstract class ChatEvent {}
 
 class ChatEventAdd extends ChatEvent {
   final ChatMessage message;
-  final String lobbyId;
-  ChatEventAdd(this.message, this.lobbyId);
+  final Lobby lobby;
+  ChatEventAdd(this.message, this.lobby);
 }
 
 class ChatEventWatch extends ChatEvent {
@@ -35,10 +37,7 @@ class ChatStateWatching extends ChatState {
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
   ChatBloc() : super(ChatStateInitial()) {
     on<ChatEventAdd>((event, emit) async {
-      await NotificationService().sendPushMessage(
-        'frORrJUiSZGKlT2Dm-ZOdw:APA91bEC7o2volnPTs7sw9IwtctcLZnyfc0ly2dsyaspMF_eH6Bh98orFXDVt8AE1RUJXcOKBl9JJYIrwo5VxLSH5E89iXXq6GLZ6MeSNyWC2Jx63dlNsfT1Hgiv4lXqHPcm5cq4zSAX',
-      );
-      await DataProviderChat().add(event.lobbyId, event.message);
+      await DataProviderChat().add(event.lobby.id, event.message);
     });
 
     on<ChatEventWatch>((event, emit) async {
@@ -53,5 +52,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         },
       );
     });
+  }
+
+  Future<void> sendPushMessage(ChatMessage message, Lover toLover) async {
+    toLover = await DataProviderLover().get(toLover.id);
   }
 }

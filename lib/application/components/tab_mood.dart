@@ -77,15 +77,22 @@ class _MoodMatchingSliderState extends State<MoodMatchingSlider> {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 1),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
                   flex: 1,
-                  child: Image.asset(
-                    viewModelMoodMatching.state.moodMatching.mood1.icon,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(60),
+                      color: Colors.white.withOpacity(0.1),
+                    ),
+                    child: Image.asset(
+                      viewModelMoodMatching.state.moodMatching.mood1.icon,
+                    ),
                   ),
                 ),
                 Expanded(
@@ -138,8 +145,15 @@ class _MoodMatchingSliderState extends State<MoodMatchingSlider> {
                 ),
                 Expanded(
                   flex: 1,
-                  child: Image.asset(
-                    viewModelMoodMatching.state.moodMatching.mood2.icon,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(60),
+                      color: Colors.white.withOpacity(0.1),
+                    ),
+                    child: Image.asset(
+                      viewModelMoodMatching.state.moodMatching.mood2.icon,
+                    ),
                   ),
                 ),
               ],

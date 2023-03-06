@@ -13,7 +13,7 @@ class FirebaseAuthentication {
 
     await for (final user in _instance.userChanges()) {
       if (user != null) {
-        lover = await DataProviderLover().getId(user.uid);
+        lover = await DataProviderLover().get(user.uid);
         yield lover;
       }
     }
@@ -22,8 +22,10 @@ class FirebaseAuthentication {
   User? get currentUser => _instance.currentUser;
 
   Future<void> signOut() async {
-    await _instance.signOut();
-    await _googleSignOut();
+    if (currentUser != null) {
+      await _googleSignOut();
+      await _instance.signOut();
+    }
   }
 
   Future<UserCredential> signInWithGoogle() async {

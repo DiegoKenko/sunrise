@@ -84,6 +84,19 @@ class Lobby {
     }
   }
 
+  Lover couple(String myId) {
+    if (lovers.length == 2) {
+      if (lovers[0].id.isNotEmpty && lovers[1].id.isNotEmpty) {
+        if (lovers[0].id == myId) {
+          return lovers[1];
+        } else {
+          return lovers[0];
+        }
+      }
+    }
+    return Lover();
+  }
+
   Lobby.fromJson(Map<String, dynamic> json)
       : lovers = [
           Lover(

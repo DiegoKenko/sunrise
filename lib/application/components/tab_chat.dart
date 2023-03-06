@@ -5,6 +5,7 @@ import 'package:sunrise/application/styles.dart';
 import 'package:sunrise/domain/bloc_auth.dart';
 import 'package:sunrise/domain/bloc_chat.dart';
 import 'package:sunrise/domain/bloc_lobby.dart';
+import 'package:sunrise/domain/firebase_messaging_service.dart';
 import 'package:sunrise/model/model_chat_message.dart';
 
 class TabChat extends StatefulWidget {
@@ -43,73 +44,112 @@ class _TabChatState extends State<TabChat> {
           ),
         ),
       builder: (context, state) {
-        if (state is ChatStateWatching) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    controller: _listChatController,
-                    shrinkWrap: true,
-                    itemCount: state.messages.length,
-                    itemBuilder: (context, index) {
-                      if (context.read<AuthBloc>().state.lover.id ==
-                          state.messages[index].sentBy) {
-                        return ChatBaloonRight(message: state.messages[index]);
-                      } else {
-                        return ChatBaloonLeft(message: state.messages[index]);
-                      }
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: SizedBox(
-                    height: 50,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Message',
-                            ),
-                            controller: _textChatController,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            if (_textChatController.text.isNotEmpty) {
-                              context.read<ChatBloc>().add(
-                                    ChatEventAdd(
-                                      // ignore: require_trailing_commas
-                                      ChatMessage(
-                                        _textChatController.text,
-                                        context.read<AuthBloc>().state.lover.id,
-                                        DateTime.now(),
-                                      ),
-                                      context.read<LobbyBloc>().state.lobby.id,
-                                    ),
-                                  );
-                              _textChatController.clear();
-                              _listChatController.jumpTo(
-                                _listChatController.position.maxScrollExtent,
+        return Container(
+          decoration: kBackgroundDecoration,
+          child: state is ChatStateWatching
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: ListView.builder(
+                          controller: _listChatController,
+                          shrinkWrap: true,
+                          itemCount: state.messages.length,
+                          itemBuilder: (context, index) {
+                            if (context.read<AuthBloc>().state.lover.id ==
+                                state.messages[index].sentBy) {
+                              return ChatBaloonRight(
+                                message: state.messages[index],
+                              );
+                            } else {
+                              return ChatBaloonLeft(
+                                message: state.messages[index],
                               );
                             }
                           },
-                          icon: const Icon(Icons.send),
                         ),
-                      ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: SizedBox(
+                          height: 50,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: TextField(
+                                  decoration: InputDecoration(
+                                    enabledBorder: kOutlineInputBorder,
+                                    focusedBorder: kOutlineInputBorder,
+                                    label: const Text(
+                                      '',
+                                      style: kTextFormFieldLobbyLabelStyle,
+                                    ),
+                                  ),
+                                  style: kTextFormFieldChatStyle,
+                                  controller: _textChatController,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  if (_textChatController.text.isNotEmpty) {
+                                    context.read<ChatBloc>().add(
+                                          ChatEventAdd(
+                                            // ignore: require_trailing_commas
+                                            ChatMessage(
+                                              _textChatController.text,
+                                              context
+                                                  .read<AuthBloc>()
+                                                  .state
+                                                  .lover
+                                                  .id,
+                                              DateTime.now(),
+                                            ),
+                                            context
+                                                .read<LobbyBloc>()
+                                                .state
+                                                .lobby,
+                                          ),
+                                        );
+                                    context
+                                        .read<FirebaseMessagingService>()
+                                        .sendMessage(
+                                          context
+                                              .read<AuthBloc>()
+                                              .state
+                                              .lover
+                                              .id,
+                                        );
+
+                                    _textChatController.clear();
+                                    _listChatController.jumpTo(
+                                      _listChatController
+                                          .position.maxScrollExtent,
+                                    );
+                                  }
+                                },
+                                icon: const Icon(
+                                  Icons.send,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : Center(
+                  child: Text(
+                    'No messages yet',
+                    style: kTextChatMessageStyle.copyWith(
+                      fontSize: 20,
+                      color: Colors.white,
                     ),
                   ),
                 ),
-              ],
-            ),
-          );
-        } else {
-          return const Center(child: Text('No messages yet'));
-        }
+        );
       },
     );
   }
@@ -162,7 +202,7 @@ class ChatBaloonRight extends StatelessWidget {
           margin: const EdgeInsets.all(10),
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: Colors.blue,
+            color: kPrimaryColor.withOpacity(0.8),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Text(
