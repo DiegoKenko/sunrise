@@ -93,18 +93,15 @@ class _TabChatState extends State<TabChat> {
                               IconButton(
                                 onPressed: () {
                                   if (_textChatController.text.isNotEmpty) {
+                                    final ChatMessage chatMessage = ChatMessage(
+                                      _textChatController.text,
+                                      context.read<AuthBloc>().state.lover.id,
+                                      DateTime.now(),
+                                    );
                                     context.read<ChatBloc>().add(
                                           ChatEventAdd(
                                             // ignore: require_trailing_commas
-                                            ChatMessage(
-                                              _textChatController.text,
-                                              context
-                                                  .read<AuthBloc>()
-                                                  .state
-                                                  .lover
-                                                  .id,
-                                              DateTime.now(),
-                                            ),
+                                            chatMessage,
                                             context
                                                 .read<LobbyBloc>()
                                                 .state
@@ -115,10 +112,18 @@ class _TabChatState extends State<TabChat> {
                                         .read<FirebaseMessagingService>()
                                         .sendMessage(
                                           context
-                                              .read<AuthBloc>()
+                                              .read<LobbyBloc>()
                                               .state
-                                              .lover
-                                              .id,
+                                              .lobby
+                                              .couple(
+                                                context
+                                                    .read<AuthBloc>()
+                                                    .state
+                                                    .lover
+                                                    .id,
+                                              )
+                                              .notificationToken,
+                                          chatMessage,
                                         );
 
                                     _textChatController.clear();
@@ -172,7 +177,7 @@ class ChatBaloonLeft extends StatelessWidget {
           margin: const EdgeInsets.all(10),
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: Colors.blue,
+            color: k2LevelColor,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Text(

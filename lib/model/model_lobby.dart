@@ -102,10 +102,14 @@ class Lobby {
           Lover(
             id: json['lover1'] ?? '',
             name: json['lover1name'] ?? '',
+            photoURL: json['lover1photoURL'] ?? '',
+            email: json['lover1email'] ?? '',
           ),
           Lover(
             id: json['lover2'] ?? '',
             name: json['lover2name'] ?? '',
+            photoURL: json['lover2photoURL'] ?? '',
+            email: json['lover2email'] ?? '',
           ),
         ];
 
@@ -114,5 +118,9 @@ class Lobby {
         for (var i = 0; i < lovers.length; i++)
           'lover${i + 1}name': lovers[i].name,
         'simpleID': simpleId.toUpperCase(),
+        for (var i = 0; i < lovers.length; i++)
+          'lover${i + 1}photoURL': lovers[i].photoURL,
+        for (var i = 0; i < lovers.length; i++)
+          'lover${i + 1}email': lovers[i].email,
       };
 }

@@ -7,7 +7,21 @@ const kTextLobbyStyle = TextStyle(
   color: kPrimaryColor,
 );
 
+const kPrimarySwatch = MaterialColor(100, {
+  50: Color(0xFFEB7900),
+  100: Color(0xFFEB7900),
+  200: Color(0xFFEB7900),
+  300: Color(0xFFEB7900),
+  400: Color(0xFFEB7900),
+  500: Color(0xFFEB7900),
+  600: Color(0xFFEB7900),
+  700: Color(0xFFEB7900),
+  800: Color(0xFFEB7900),
+  900: Color(0xFFEB7900),
+});
 const kPrimaryColor = Color(0xFFEB7900);
+
+const k2LevelColor = Color(0xFF16a9c7);
 
 const kTextLoverLobbyStyle = TextStyle(
   fontSize: 18.0,

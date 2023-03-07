@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sunrise/application/components/drawer_sunrise.dart';
 import 'package:sunrise/application/components/tab_chat.dart';
 import 'package:sunrise/application/components/tab_mood.dart';
 import 'package:sunrise/application/styles.dart';
@@ -32,37 +33,7 @@ class _RelationshipScreenState extends State<RelationshipScreen>
         child: Scaffold(
           backgroundColor: Colors.white,
           key: _key,
-          drawer: Drawer(
-            backgroundColor: Colors.black.withOpacity(0.7),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const DrawerHeader(
-                  child: Text(
-                    'Sunrise',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                    ),
-                  ),
-                ),
-                ListTile(
-                  title: const Text(
-                    'Sair',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.of(context).pushReplacementNamed(
-                      '/login',
-                    );
-                  },
-                ),
-              ],
-            ),
-          ),
+          drawer: const SunriseDrawer(),
           body: Column(
             children: [
               Row(
@@ -83,7 +54,7 @@ class _RelationshipScreenState extends State<RelationshipScreen>
                     ),
                   ),
                   Expanded(
-                    flex: 3,
+                    flex: 5,
                     child: TabBar(
                       indicatorColor: Colors.black,
                       controller: _tabController,
@@ -92,16 +63,16 @@ class _RelationshipScreenState extends State<RelationshipScreen>
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            children: const [
-                              Text(
+                            children: [
+                              const Text(
                                 'Emoções',
                               ),
                               Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Icon(
-                                  Icons.face,
-                                  color: Colors.black,
-                                  size: 16,
+                                padding: const EdgeInsets.only(left: 2),
+                                child: Image.asset(
+                                  'assets/emotions_icon.gif',
+                                  width: 40,
+                                  height: 40,
                                 ),
                               ),
                             ],
@@ -111,16 +82,16 @@ class _RelationshipScreenState extends State<RelationshipScreen>
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            children: const [
-                              Text(
+                            children: [
+                              const Text(
                                 'Mensagens',
                               ),
                               Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Icon(
-                                  Icons.chat,
-                                  color: Colors.black,
-                                  size: 16,
+                                padding: const EdgeInsets.only(left: 2),
+                                child: Image.asset(
+                                  'assets/chat_icon.gif',
+                                  width: 40,
+                                  height: 40,
                                 ),
                               ),
                             ],
@@ -181,37 +152,39 @@ class _MoodRelationshipState extends State<MoodRelationship>
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 5),
-            child: DecoratedBox(
-              decoration: const BoxDecoration(
-                color: Colors.black,
+            padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 10),
+            child: TabBar(
+              isScrollable: true,
+              labelColor: Colors.white,
+              labelStyle: const TextStyle(
+                fontSize: 15,
               ),
-              child: TabBar(
-                labelColor: Colors.white,
-                labelStyle: const TextStyle(
-                  fontSize: 15,
-                ),
-                indicator: BoxDecoration(
-                  color: Colors.black,
-                  border: Border.all(color: Colors.orange, width: 2),
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                tabs: [
-                  Tab(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              indicator: BoxDecoration(
+                color: Colors.orange,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              tabs: [
+                Tab(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
                     child: Text(
                       state.lobby.lovers[0].name,
                       style: kTextLoverRelationshipStyle,
                     ),
                   ),
-                  Tab(
+                ),
+                Tab(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
                     child: Text(
                       state.lobby.lovers[1].name,
                       style: kTextLoverRelationshipStyle,
                     ),
-                  )
-                ],
-                controller: _tabController,
-              ),
+                  ),
+                )
+              ],
+              controller: _tabController,
             ),
           ),
           Expanded(

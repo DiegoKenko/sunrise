@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:sunrise/data/data_provider_lover.dart';
 import 'package:sunrise/model/model_lobby.dart';
 import 'package:sunrise/model/model_lover.dart';
@@ -6,16 +7,20 @@ import 'package:sunrise/model/model_lover.dart';
 class DataProviderLobby {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Stream<Lobby> watch(Lobby lobby) {
-    return _firestore
-        .collection('lobby')
-        .doc(lobby.id)
-        .snapshots()
-        .map((event) {
-      Lobby lobby = Lobby.fromJson(event.data()!);
-      lobby.id = event.id;
-      return lobby;
+  Stream<Lobby> watch(Lobby lobby) async* {
+    Stream<Lobby> lobbyStream = Stream<Lobby>.value(lobby);
+    Stream<DocumentSnapshot<Map<String, dynamic>>> stream =
+        _firestore.collection('lobby').doc(lobby.id).snapshots();
+    stream.listen((event) async {
+      if (event.exists) {
+        lobby = Lobby.fromJson(event.data()!);
+        lobby.id = event.id;
+        lobby.lovers[0] = await DataProviderLover().get(lobby.lovers[0].id);
+        lobby.lovers[1] = await DataProviderLover().get(lobby.lovers[1].id);
+        lobbyStream = Stream<Lobby>.value(lobby);
+      }
     });
+    yield* lobbyStream;
   }
 
   //create lobby

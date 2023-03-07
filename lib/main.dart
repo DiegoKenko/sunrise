@@ -1,9 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sunrise/application/components/animated__page_transition.dart';
 import 'package:sunrise/application/screens/screen_lobby.dart';
+import 'package:sunrise/application/styles.dart';
 import 'package:sunrise/domain/bloc_auth.dart';
 import 'package:sunrise/domain/firebase_messaging_service.dart';
 import 'package:sunrise/domain/notification_service.dart';
@@ -42,6 +44,20 @@ class MyApp extends StatelessWidget {
                 ),
           },
           theme: ThemeData(
+            pageTransitionsTheme: const PageTransitionsTheme(
+              builders: {
+                TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+                TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+              },
+            ),
+            splashColor: kPrimaryColor,
+            useMaterial3: true,
+            primarySwatch: kPrimarySwatch,
+            colorScheme: const ColorScheme.light(
+              primary: kPrimaryColor,
+              secondary: Colors.black,
+            ),
+            fontFamily: GoogleFonts.sono().fontFamily,
             tabBarTheme: const TabBarTheme(
               labelColor: Colors.black,
               unselectedLabelColor: Colors.grey,

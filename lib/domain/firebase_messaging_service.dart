@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sunrise/data/data_provider_lover.dart';
 import 'package:sunrise/domain/notification_service.dart';
+import 'package:sunrise/model/model_chat_message.dart';
 import 'package:sunrise/model/model_chat_notification.dart';
 import 'package:sunrise/model/model_lover.dart';
 import 'package:http/http.dart' as http;
@@ -68,25 +69,31 @@ class FirebaseMessagingService {
     await DataProviderLover().update(lover);
   }
 
-  sendMessage(String token) async {
+  Future<void> sendMessage(String token, ChatMessage chatMessage) async {
     try {
-      var m = await http.post(
+      var x = await http.post(
         Uri.parse('https://fcm.googleapis.com/fcm/send'),
         headers: {
-          'contentType': 'application/json',
-          'authorization':
+          'Content-Type': 'application/json',
+          'Authorization':
               'key=AAAAToog9sI:APA91bFEH9AYqRGClyyAjVb-1jUA9yIzGfF47SkYdRooq3i2oAvon8r33EXkr9OMGsnwpo9NgGgwLkiInjj7OAorKvLINf0XljZaJPiZk-6ClisUCrHkKnwUMeDoHCgGWjYsTfGq-mTq',
         },
         body: jsonEncode({
           'to': token,
-          'notification': {
-            'title': 'title',
-            'body': 'body',
+          'data': {
+            'message': chatMessage.message,
           },
+          'notification': {
+            'title': chatMessage.sentBy,
+            'body': chatMessage.message,
+          },
+          'content_available': true
         }),
       );
+
       if (kDebugMode) {
         print('done');
+        print(x.toString());
       }
     } catch (e) {
       if (kDebugMode) {

@@ -53,8 +53,4 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       );
     });
   }
-
-  Future<void> sendPushMessage(ChatMessage message, Lover toLover) async {
-    toLover = await DataProviderLover().get(toLover.id);
-  }
 }

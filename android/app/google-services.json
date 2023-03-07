@@ -14,11 +14,19 @@
       },
       "oauth_client": [
         {
-          "client_id": "337324865218-mm2f4fetr7l8hh61pegvfk7o5lshdvr5.apps.googleusercontent.com",
+          "client_id": "337324865218-725i6uq6bs7ohl85c110k706g673jsue.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.inora.sunrise",
-            "certificate_hash": "4e1daa44c380dad39d8ff7d77c541719c363c79f"
+            "certificate_hash": "ad416dfb8307debf63b32dbec5622a9f1fb575b6"
+          }
+        },
+        {
+          "client_id": "337324865218-jrl6c1htd4mgududsf6n0rnpakehttts.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.inora.sunrise",
+            "certificate_hash": "0123fb1a1c0f5e2aeeb1bf969101236a36e710ed"
           }
         },
         {
@@ -27,6 +35,14 @@
           "android_info": {
             "package_name": "com.inora.sunrise",
             "certificate_hash": "07d806a0f1ccab6bcb4c329b55987cc8a1b9eb89"
+          }
+        },
+        {
+          "client_id": "337324865218-r468avtb4oj293qlrsmcdgvj4pb9j2f3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.inora.sunrise",
+            "certificate_hash": "498327a3e7868546da7abcef252aa5fd1309726c"
           }
         },
         {

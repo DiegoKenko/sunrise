@@ -56,7 +56,6 @@ class _ScreenLobbyState extends State<ScreenLobby>
             listener: (context, state) {
               if (state.status == LobbyStatus.sucessNoReady) {
                 String? token = context.read<FirebaseMessagingService>().token;
-
                 if (token != null) {
                   context.read<FirebaseMessagingService>().updateLoverWithToken(
                         context.read<AuthBloc>().state.lover,
@@ -233,7 +232,7 @@ class _ScreenLobbyState extends State<ScreenLobby>
                                               Navigator.pushReplacement(
                                                 context,
                                                 AnimatedPageTransition(
-                                                  page: Home(),
+                                                  page: const Home(),
                                                 ),
                                               );
                                             },
@@ -278,7 +277,8 @@ class _ScreenLobbyState extends State<ScreenLobby>
                                               page: BlocProvider.value(
                                                 value:
                                                     BlocProvider.of<AuthBloc>(
-                                                        context),
+                                                  context,
+                                                ),
                                                 child: BlocProvider<
                                                     LobbyBloc>.value(
                                                   value: lobbyBloc,
@@ -459,10 +459,11 @@ class _LoversLobbyAtualState extends State<LoversLobbyAtual> {
                       borderRadius: BorderRadius.circular(100),
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
-                        child: CircleAvatar(
-                          radius: 50,
-                          child: Image.asset('assets/avatar.png'),
-                        ),
+                        child: state.lobby.lovers[0].photoURL.isEmpty
+                            ? Image.asset('assets/avatar.png')
+                            : Image.network(
+                                state.lobby.lovers[0].photoURL,
+                              ),
                       ),
                     ),
                     Text(
@@ -482,10 +483,11 @@ class _LoversLobbyAtualState extends State<LoversLobbyAtual> {
                       borderRadius: BorderRadius.circular(100),
                       child: Padding(
                         padding: const EdgeInsets.all(10),
-                        child: CircleAvatar(
-                          radius: 50,
-                          child: Image.asset('assets/avatar.png'),
-                        ),
+                        child: state.lobby.lovers[1].photoURL.isEmpty
+                            ? Image.asset('assets/avatar.png')
+                            : Image.network(
+                                state.lobby.lovers[1].photoURL,
+                              ),
                       ),
                     ),
                     state.lobby.lovers[1].name.isEmpty

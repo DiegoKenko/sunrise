@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -25,7 +28,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -43,16 +49,6 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyByo5-uznasJMj3bcd63xxT62bbv9wHg_M',
-    appId: '1:337324865218:web:69781e3b969a0761cded5b',
-    messagingSenderId: '337324865218',
-    projectId: 'sunrise-a2153',
-    authDomain: 'sunrise-a2153.firebaseapp.com',
-    storageBucket: 'sunrise-a2153.appspot.com',
-    measurementId: 'G-QTQLZYQHJ5',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAxtFodBblwdm_DZTULjj04JJ3K-U7_aYQ',
     appId: '1:337324865218:android:a8c69c10a51b07facded5b',
@@ -67,16 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '337324865218',
     projectId: 'sunrise-a2153',
     storageBucket: 'sunrise-a2153.appspot.com',
-    iosClientId: '337324865218-vpm6oua6nn6nbslp2g52l2n0srn7i2gk.apps.googleusercontent.com',
-    iosBundleId: 'com.inora.sunrise',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyC698JgY95fw5CyCCsqhSVeC_ptLq5T-Y8',
-    appId: '1:337324865218:ios:b5da56bcf9e9ccdacded5b',
-    messagingSenderId: '337324865218',
-    projectId: 'sunrise-a2153',
-    storageBucket: 'sunrise-a2153.appspot.com',
+    androidClientId: '337324865218-725i6uq6bs7ohl85c110k706g673jsue.apps.googleusercontent.com',
     iosClientId: '337324865218-vpm6oua6nn6nbslp2g52l2n0srn7i2gk.apps.googleusercontent.com',
     iosBundleId: 'com.inora.sunrise',
   );
