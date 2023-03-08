@@ -4,7 +4,7 @@ import 'package:sunrise/application/components/drawer_sunrise.dart';
 import 'package:sunrise/application/components/tab_chat.dart';
 import 'package:sunrise/application/components/tab_mood.dart';
 import 'package:sunrise/application/styles.dart';
-import 'package:sunrise/domain/bloc_chat.dart';
+import 'package:sunrise/domain/chat/bloc_chat.dart';
 import 'package:sunrise/domain/bloc_lobby.dart';
 
 class RelationshipScreen extends StatefulWidget {

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sunrise/application/constants.dart';
 import 'package:sunrise/application/styles.dart';
-import 'package:sunrise/domain/bloc_auth.dart';
-import 'package:sunrise/domain/bloc_chat.dart';
+import 'package:sunrise/domain/auth/bloc_auth.dart';
+import 'package:sunrise/domain/chat/bloc_chat.dart';
 import 'package:sunrise/domain/bloc_lobby.dart';
-import 'package:sunrise/domain/firebase_messaging_service.dart';
+import 'package:sunrise/domain/notification/firebase_messaging_service.dart';
 import 'package:sunrise/model/model_chat_message.dart';
 
 class TabChat extends StatefulWidget {

@@ -7,6 +7,10 @@ class Lover {
   String email = '';
   String photoURL = '';
   String notificationToken = '';
+  int suns = 0;
+
+  int get sunsCount => suns;
+  set sunsCount(int suns) => this.suns = suns;
 
   Lover({
     this.name = '',

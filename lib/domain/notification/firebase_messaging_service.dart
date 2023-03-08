@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sunrise/data/data_provider_lover.dart';
-import 'package:sunrise/domain/notification_service.dart';
+import 'package:sunrise/domain/notification/notification_service.dart';
 import 'package:sunrise/model/model_chat_message.dart';
 import 'package:sunrise/model/model_chat_notification.dart';
 import 'package:sunrise/model/model_lover.dart';

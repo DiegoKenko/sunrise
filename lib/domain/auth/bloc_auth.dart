@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sunrise/data/data_provider_lover.dart';
-import 'package:sunrise/domain/authentication.dart';
+import 'package:sunrise/domain/auth/authentication.dart';
 import 'package:sunrise/model/model_lover.dart';
 
 abstract class AuthEvent {

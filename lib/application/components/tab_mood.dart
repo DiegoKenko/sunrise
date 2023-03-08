@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sunrise/application/styles.dart';
 import 'package:sunrise/data/mock_moods.dart';
-import 'package:sunrise/domain/bloc_auth.dart';
+import 'package:sunrise/domain/auth/bloc_auth.dart';
 import 'package:sunrise/domain/bloc_lobby.dart';
 import 'package:sunrise/domain/viewmodel_mood.dart';
 import 'package:sunrise/model/model_lover.dart';
