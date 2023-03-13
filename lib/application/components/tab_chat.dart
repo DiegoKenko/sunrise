@@ -45,7 +45,7 @@ class _TabChatState extends State<TabChat> {
         ),
       builder: (context, state) {
         return Container(
-          decoration: kBackgroundDecoration,
+          decoration: kBackgroundDecorationDark,
           child: state is ChatStateWatching
               ? Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),

@@ -1,9 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sunrise/data/data_provider_chat.dart';
-import 'package:sunrise/data/data_provider_lover.dart';
 import 'package:sunrise/model/model_chat_message.dart';
 import 'package:sunrise/model/model_lobby.dart';
-import 'package:sunrise/model/model_lover.dart';
 
 abstract class ChatEvent {}
 

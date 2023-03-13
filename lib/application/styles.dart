@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 
 const kTextLobbyStyle = TextStyle(
   fontSize: 30.0,
@@ -104,11 +105,20 @@ const List<Color> sliderGradientColors = <Color>[
   Color.fromRGBO(40, 180, 180, 1),
 ];
 
-const kBackgroundDecoration = BoxDecoration(
+const kBackgroundDecorationDark = BoxDecoration(
   gradient: RadialGradient(
     colors: [
       Color.fromARGB(255, 81, 81, 97),
       Color.fromARGB(255, 0, 0, 0),
+    ],
+    radius: 1.4,
+  ),
+);
+const kBackgroundDecorationLight = BoxDecoration(
+  gradient: RadialGradient(
+    colors: [
+      Color.fromARGB(255, 183, 183, 184),
+      Color.fromARGB(255, 113, 112, 112),
     ],
     radius: 1.4,
   ),

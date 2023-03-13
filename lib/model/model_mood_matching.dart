@@ -1,3 +1,4 @@
+import 'package:sunrise/application/constants.dart';
 import 'package:sunrise/model/model_mood.dart';
 
 class MoodMatching {
@@ -63,10 +64,4 @@ class MoodMatching {
   set setMatching(double match) {
     matching = match;
   }
-}
-
-enum MoodMatchingPack {
-  defaultPack,
-  silverPack,
-  goldPack,
 }

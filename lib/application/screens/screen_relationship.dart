@@ -7,14 +7,14 @@ import 'package:sunrise/application/styles.dart';
 import 'package:sunrise/domain/chat/bloc_chat.dart';
 import 'package:sunrise/domain/bloc_lobby.dart';
 
-class RelationshipScreen extends StatefulWidget {
-  const RelationshipScreen({Key? key}) : super(key: key);
+class ScreenRelationship extends StatefulWidget {
+  const ScreenRelationship({Key? key}) : super(key: key);
 
   @override
-  State<RelationshipScreen> createState() => _RelationshipScreenState();
+  State<ScreenRelationship> createState() => _ScreenRelationshipState();
 }
 
-class _RelationshipScreenState extends State<RelationshipScreen>
+class _ScreenRelationshipState extends State<ScreenRelationship>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final GlobalKey<ScaffoldState> _key = GlobalKey(); // Create a key
@@ -148,7 +148,7 @@ class _MoodRelationshipState extends State<MoodRelationship>
     final LobbyState state = blocProviderLobby.state;
 
     return Container(
-      decoration: kBackgroundDecoration,
+      decoration: kBackgroundDecorationDark,
       child: Column(
         children: [
           Padding(

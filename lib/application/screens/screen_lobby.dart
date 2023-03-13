@@ -2,6 +2,7 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sunrise/application/components/animated__page_transition.dart';
+import 'package:sunrise/application/constants.dart';
 import 'package:sunrise/application/screens/screen_relationship.dart';
 import 'package:sunrise/application/styles.dart';
 import 'package:sunrise/domain/auth/bloc_auth.dart';
@@ -68,7 +69,7 @@ class _ScreenLobbyState extends State<ScreenLobby>
               return SingleChildScrollView(
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 30),
-                  decoration: kBackgroundDecoration,
+                  decoration: kBackgroundDecorationDark,
                   child: SafeArea(
                     child: Column(
                       children: [
@@ -283,7 +284,7 @@ class _ScreenLobbyState extends State<ScreenLobby>
                                                     LobbyBloc>.value(
                                                   value: lobbyBloc,
                                                   child:
-                                                      const RelationshipScreen(),
+                                                      const ScreenRelationship(),
                                                 ),
                                               ),
                                             ),

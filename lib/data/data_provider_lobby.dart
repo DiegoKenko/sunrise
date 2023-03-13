@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:sunrise/data/data_provider_lover.dart';
 import 'package:sunrise/model/model_lobby.dart';
 import 'package:sunrise/model/model_lover.dart';

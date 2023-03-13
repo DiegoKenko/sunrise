@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 // ignore: unused_import
 import 'package:firebase_core/firebase_core.dart';
+import 'package:sunrise/application/constants.dart';
 import 'package:sunrise/data/data_provider_lobby.dart';
 import 'package:sunrise/data/data_provider_lover.dart';
 import 'package:sunrise/model/model_lobby.dart';
@@ -200,16 +201,6 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
     DataProviderLover().set(lover);
     return lobby;
   }
-}
-
-enum LobbyStatus {
-  initial,
-  loading,
-  standBy,
-  sucessReady,
-  sucessNoReady,
-  failureNoLobby,
-  failureNoRoom,
 }
 
 extension LobbyStatusDescription on LobbyStatus {
