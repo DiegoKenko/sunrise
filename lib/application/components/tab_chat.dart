@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sunrise/application/constants.dart';
-import 'package:sunrise/application/styles.dart';
+import 'package:sunrise/constants/constants.dart';
+import 'package:sunrise/constants/styles.dart';
 import 'package:sunrise/domain/auth/bloc_auth.dart';
 import 'package:sunrise/domain/chat/bloc_chat.dart';
-import 'package:sunrise/domain/bloc_lobby.dart';
-import 'package:sunrise/domain/notification/firebase_messaging_service.dart';
+import 'package:sunrise/domain/lobby/bloc_lobby.dart';
+import 'package:sunrise/services/getIt/get_it_dependencies.dart';
+import 'package:sunrise/services/notification/firebase_messaging_service.dart';
 import 'package:sunrise/model/model_chat_message.dart';
+import 'package:intl/intl.dart';
 
 class TabChat extends StatefulWidget {
   const TabChat({Key? key}) : super(key: key);
@@ -36,6 +38,7 @@ class _TabChatState extends State<TabChat> {
 
   @override
   Widget build(BuildContext context) {
+    final AuthService authService = getIt<AuthService>();
     return BlocBuilder<ChatBloc, ChatState>(
       bloc: context.read<ChatBloc>()
         ..add(
@@ -57,7 +60,7 @@ class _TabChatState extends State<TabChat> {
                           shrinkWrap: true,
                           itemCount: state.messages.length,
                           itemBuilder: (context, index) {
-                            if (context.read<AuthBloc>().state.lover.id ==
+                            if (authService.lover!.id ==
                                 state.messages[index].sentBy) {
                               return ChatBaloonRight(
                                 message: state.messages[index],
@@ -95,7 +98,7 @@ class _TabChatState extends State<TabChat> {
                                   if (_textChatController.text.isNotEmpty) {
                                     final ChatMessage chatMessage = ChatMessage(
                                       _textChatController.text,
-                                      context.read<AuthBloc>().state.lover.id,
+                                      authService.lover!.id,
                                       DateTime.now(),
                                     );
                                     context.read<ChatBloc>().add(
@@ -116,11 +119,7 @@ class _TabChatState extends State<TabChat> {
                                               .state
                                               .lobby
                                               .couple(
-                                                context
-                                                    .read<AuthBloc>()
-                                                    .state
-                                                    .lover
-                                                    .id,
+                                                authService.lover!.id,
                                               )
                                               .notificationToken,
                                           chatMessage,
@@ -147,9 +146,9 @@ class _TabChatState extends State<TabChat> {
                 )
               : Center(
                   child: Text(
-                    'No messages yet',
+                    'não tem nada aqui',
                     style: kTextChatMessageStyle.copyWith(
-                      fontSize: 20,
+                      fontSize: 12,
                       color: Colors.white,
                     ),
                   ),
@@ -180,9 +179,26 @@ class ChatBaloonLeft extends StatelessWidget {
             color: k2LevelColor,
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Text(
-            message.message,
-            style: kTextChatMessageStyle,
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  DateFormat('dd/MM HH:mm').format(message.dateTime),
+                  style: kDateTimeChatTextStyle,
+                ),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  message.message,
+                  style: kTextChatMessageStyle,
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -210,9 +226,26 @@ class ChatBaloonRight extends StatelessWidget {
             color: kPrimaryColor.withOpacity(0.8),
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Text(
-            message.message,
-            style: kTextChatMessageStyle,
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: Text(
+                  DateFormat('dd/MM HH:mm').format(message.dateTime),
+                  style: kDateTimeChatTextStyle,
+                ),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  message.message,
+                  style: kTextChatMessageStyle,
+                ),
+              ),
+            ],
           ),
         ),
       ),

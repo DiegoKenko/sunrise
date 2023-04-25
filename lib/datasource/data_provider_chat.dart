@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:sunrise/application/constants.dart';
+import 'package:sunrise/constants/constants.dart';
 import 'package:sunrise/model/model_chat_message.dart';
 
 class DataProviderChat {

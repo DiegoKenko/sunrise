@@ -12,7 +12,7 @@ class OuDivider extends StatelessWidget {
             color: Colors.grey,
             thickness: 1,
           ),
-        ),
+        ),    
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 8),
           child: Text(

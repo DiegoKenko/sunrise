@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sunrise/model/model_chat_notification.dart';
 import 'package:timezone/timezone.dart' as tz;

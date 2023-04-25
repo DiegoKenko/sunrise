@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 
 const kTextLobbyStyle = TextStyle(
   fontSize: 30.0,
@@ -117,8 +116,8 @@ const kBackgroundDecorationDark = BoxDecoration(
 const kBackgroundDecorationLight = BoxDecoration(
   gradient: RadialGradient(
     colors: [
-      Color.fromARGB(255, 183, 183, 184),
-      Color.fromARGB(255, 113, 112, 112),
+      Color.fromARGB(255, 237, 237, 238),
+      Color.fromARGB(255, 168, 167, 167),
     ],
     radius: 1.4,
   ),
@@ -132,4 +131,9 @@ final kOutlineInputBorder = OutlineInputBorder(
   borderRadius: BorderRadius.circular(
     10,
   ),
+);
+
+const kDateTimeChatTextStyle = TextStyle(
+  fontSize: 12,
+  color: Colors.white,
 );

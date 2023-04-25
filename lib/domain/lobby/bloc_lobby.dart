@@ -1,11 +1,8 @@
 import 'dart:async';
-
 import 'package:bloc/bloc.dart';
-// ignore: unused_import
-import 'package:firebase_core/firebase_core.dart';
-import 'package:sunrise/application/constants.dart';
-import 'package:sunrise/data/data_provider_lobby.dart';
-import 'package:sunrise/data/data_provider_lover.dart';
+import 'package:sunrise/constants/enum.dart';
+import 'package:sunrise/datasource/data_provider_lobby.dart';
+import 'package:sunrise/datasource/data_provider_lover.dart';
 import 'package:sunrise/model/model_lobby.dart';
 import 'package:sunrise/model/model_lover.dart';
 

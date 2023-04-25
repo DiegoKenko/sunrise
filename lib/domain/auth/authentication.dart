@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:sunrise/data/data_provider_lover.dart';
+import 'package:sunrise/datasource/data_provider_lover.dart';
 import 'package:sunrise/model/model_lover.dart';
 
 class FirebaseAuthentication {

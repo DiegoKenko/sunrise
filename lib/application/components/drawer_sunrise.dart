@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sunrise/application/components/animated__page_transition.dart';
-import 'package:sunrise/application/screens/screen_payment.dart';
 import 'package:sunrise/domain/auth/bloc_auth.dart';
+import 'package:sunrise/services/getIt/get_it_dependencies.dart';
 
 class SunriseDrawer extends StatefulWidget {
   const SunriseDrawer({
@@ -16,73 +14,75 @@ class SunriseDrawer extends StatefulWidget {
 class _SunriseDrawerState extends State<SunriseDrawer> {
   @override
   Widget build(BuildContext context) {
+    final AuthService authService = getIt<AuthService>();
     return Drawer(
       backgroundColor: Colors.black.withOpacity(0.7),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          DrawerHeader(
-            child: Column(
-              children: [
-                ListTile(
-                  leading: Image.network(
-                    context.read<AuthBloc>().state.lover.photoURL,
-                    width: 50,
-                    height: 50,
-                  ),
-                  title: Text(
-                    context.read<AuthBloc>().state.lover.name,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                    ),
-                  ),
-                  subtitle: Text(
-                    context.read<AuthBloc>().state.lover.email,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.of(context).pushReplacementNamed(
-                      '/login',
-                    );
-                  },
-                ),
-              ],
+          ListTile(
+            tileColor: Colors.black,
+            leading: Image.network(
+              authService.lover!.photoURL,
+              width: 50,
+              height: 50,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5),
+              side: const BorderSide(
+                color: Colors.white,
+                width: 0.5,
+              ),
+            ),
+            title: Text(
+              authService.lover!.name,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+              ),
+            ),
+            subtitle: Text(
+              authService.lover!.email,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 12,
+              ),
             ),
           ),
           ListTile(
             title: Row(
               children: [
-                Text(
-                  '${context.read<AuthBloc>().state.lover.suns} ',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                  ),
-                ),
                 const Icon(
                   Icons.wb_sunny,
                   color: Colors.white,
                 ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Text(
+                    '${authService.lover!.suns} ',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
               ],
             ),
-            subtitle: FilledButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  AnimatedPageTransition(
-                    page: const ScreenPayment(),
-                  ),
-                );
-              },
-              child: const Text('Comprar suns'),
+            trailing: FilledButton(
+              onPressed: () {},
+              child: const Text('Adicionar'),
             ),
           ),
+          Expanded(child: Container()),
           ListTile(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5),
+              side: const BorderSide(
+                color: Colors.white,
+                width: 0.5,
+              ),
+            ),
+            tileColor: Colors.black,
             title: const Text(
               'Sair',
               style: TextStyle(
@@ -90,14 +90,7 @@ class _SunriseDrawerState extends State<SunriseDrawer> {
                 fontSize: 18,
               ),
             ),
-            onTap: () {
-              Navigator.push(
-                context,
-                AnimatedPageTransition(
-                  page: const ScreenPayment(),
-                ),
-              );
-            },
+            onTap: () {},
           ),
         ],
       ),

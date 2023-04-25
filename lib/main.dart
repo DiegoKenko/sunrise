@@ -1,25 +1,21 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-import 'package:sunrise/application/components/animated__page_transition.dart';
-import 'package:sunrise/application/constants.dart';
-import 'package:sunrise/application/screens/screen_lobby.dart';
-import 'package:sunrise/application/styles.dart';
+import 'package:sunrise/constants/constants.dart';
+import 'package:sunrise/constants/styles.dart';
 import 'package:sunrise/domain/auth/bloc_auth.dart';
-import 'package:sunrise/domain/notification/firebase_messaging_service.dart';
-import 'package:sunrise/domain/notification/notification_service.dart';
+import 'package:sunrise/services/notification/firebase_messaging_service.dart';
+import 'package:sunrise/services/notification/notification_service.dart';
 import 'package:sunrise/firebase_options.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:sunrise/services/getIt/get_it_dependencies.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Stripe.publishableKey = stripePublicKey;
+  Stripe.publishableKey = stripePublicKeyLive;
   await Stripe.instance.applySettings();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  setup();
   runApp(const MyApp());
 }
 
@@ -28,84 +24,32 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        Provider<NotificationService>(
-          create: (context) => NotificationService(),
-        ),
-        Provider<FirebaseMessagingService>(
-          create: (context) =>
-              FirebaseMessagingService(context.read<NotificationService>()),
-        ),
-      ],
-      child: BlocProvider(
-        create: (context) => AuthBloc()..add(const AuthEventLogin()),
-        child: MaterialApp(
-          routes: {
-            '/login': (context) => BlocProvider.value(
-                  value: BlocProvider.of<AuthBloc>(context),
-                  child: const Home(),
-                ),
+    return MaterialApp(
+      routes: {
+        '/login': (context) => const Home(),
+      },
+      theme: ThemeData(
+        pageTransitionsTheme: const PageTransitionsTheme(
+          builders: {
+            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
           },
-          theme: ThemeData(
-            pageTransitionsTheme: const PageTransitionsTheme(
-              builders: {
-                TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-                TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-              },
-            ),
-            splashColor: kPrimaryColor,
-            useMaterial3: true,
-            primarySwatch: kPrimarySwatch,
-            colorScheme: const ColorScheme.light(
-              primary: kPrimaryColor,
-              secondary: Colors.black,
-            ),
-            fontFamily: GoogleFonts.sono().fontFamily,
-            tabBarTheme: const TabBarTheme(
-              labelColor: Colors.black,
-              unselectedLabelColor: Colors.grey,
-              labelStyle: TextStyle(color: Colors.white),
-            ),
-          ),
-          home: BlocConsumer<AuthBloc, AuthState>(
-            listener: (context, AuthState state) {
-              if (state.success) {
-                Navigator.push(
-                  context,
-                  AnimatedPageTransition(
-                    page: BlocProvider.value(
-                      value: BlocProvider.of<AuthBloc>(context),
-                      child: const ScreenLobby(),
-                    ),
-                  ),
-                );
-              }
-            },
-            builder: (context, state) {
-              if (state.success) {
-                return Container();
-              } else if (state.loading) {
-                return Container(
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/main.jpg'),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  child: const Center(
-                    child: CircularProgressIndicator(
-                      color: Colors.black,
-                    ),
-                  ),
-                );
-              } else {
-                return const Home();
-              }
-            },
-          ),
+        ),
+        splashColor: kPrimaryColor,
+        useMaterial3: true,
+        primarySwatch: kPrimarySwatch,
+        colorScheme: const ColorScheme.light(
+          primary: kPrimaryColor,
+          secondary: Colors.black,
+        ),
+        fontFamily: GoogleFonts.sono().fontFamily,
+        tabBarTheme: const TabBarTheme(
+          labelColor: Colors.black,
+          unselectedLabelColor: Colors.grey,
+          labelStyle: TextStyle(color: Colors.white),
         ),
       ),
+      home: const Home(),
     );
   }
 }
@@ -125,17 +69,19 @@ class _HomeState extends State<Home> {
   }
 
   initilizeFirebaseMessaging() async {
-    await Provider.of<FirebaseMessagingService>(context, listen: false)
-        .initialize();
+    FirebaseMessagingService firebaseMessagingService =
+        getIt<FirebaseMessagingService>();
+    firebaseMessagingService.initialize();
   }
 
   checkNotifications() async {
-    await Provider.of<NotificationService>(context, listen: false)
-        .checkForNotifications();
+    NotificationService notificationService = getIt<NotificationService>();
+    notificationService.checkForNotifications();
   }
 
   @override
   Widget build(BuildContext context) {
+    final AuthService authService = getIt<AuthService>();
     return Scaffold(
       body: Container(
         key: const Key('loginGoogleButton '),
@@ -175,7 +121,7 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                   onTap: () {
-                    context.read<AuthBloc>().add(const AuthEventLogin());
+                    authService.authenticate();
                   },
                 ),
               ],

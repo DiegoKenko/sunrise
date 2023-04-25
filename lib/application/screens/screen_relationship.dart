@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sunrise/application/components/drawer_sunrise.dart';
 import 'package:sunrise/application/components/tab_chat.dart';
 import 'package:sunrise/application/components/tab_mood.dart';
-import 'package:sunrise/application/styles.dart';
+import 'package:sunrise/constants/styles.dart';
 import 'package:sunrise/domain/chat/bloc_chat.dart';
-import 'package:sunrise/domain/bloc_lobby.dart';
+import 'package:sunrise/domain/lobby/bloc_lobby.dart';
 
 class ScreenRelationship extends StatefulWidget {
   const ScreenRelationship({Key? key}) : super(key: key);

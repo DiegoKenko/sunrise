@@ -4,8 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
-import 'package:sunrise/application/constants.dart';
+import 'package:sunrise/constants/enum.dart';
 
 class PaymentState extends Equatable {
   final PaymentStatus status;

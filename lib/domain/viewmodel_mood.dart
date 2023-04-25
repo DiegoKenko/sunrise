@@ -1,4 +1,4 @@
-import 'package:sunrise/data/data_provider_mood_matching.dart';
+import 'package:sunrise/datasource/data_provider_mood_matching.dart';
 import 'package:sunrise/model/model_lover.dart';
 import 'package:sunrise/model/model_mood_matching.dart';
 

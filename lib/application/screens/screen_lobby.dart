@@ -1,14 +1,15 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:sunrise/application/components/animated__page_transition.dart';
-import 'package:sunrise/application/constants.dart';
+import 'package:sunrise/application/components/animated_page_transition.dart';
 import 'package:sunrise/application/screens/screen_relationship.dart';
-import 'package:sunrise/application/styles.dart';
+import 'package:sunrise/constants/enum.dart';
+import 'package:sunrise/constants/styles.dart';
 import 'package:sunrise/domain/auth/bloc_auth.dart';
-import 'package:sunrise/domain/bloc_lobby.dart';
+import 'package:sunrise/domain/lobby/bloc_lobby.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sunrise/domain/notification/firebase_messaging_service.dart';
+import 'package:sunrise/services/getIt/get_it_dependencies.dart';
+import 'package:sunrise/services/notification/firebase_messaging_service.dart';
 import 'package:sunrise/main.dart';
 
 class ScreenLobby extends StatefulWidget {
@@ -41,12 +42,13 @@ class _ScreenLobbyState extends State<ScreenLobby>
 
   @override
   Widget build(BuildContext context) {
+    final AuthService authService = getIt<AuthService>();
     return BlocProvider<LobbyBloc>(
       create: (context) => LobbyBloc()
         ..add(
           LobbyEventLoad(
-            lover: context.read<AuthBloc>().state.lover,
-            lobbyId: context.read<AuthBloc>().state.lover.lobbyId,
+            lover: authService.lover!,
+            lobbyId: authService.lover!.lobbyId,
           ),
         ),
       child: WillPopScope(
@@ -59,7 +61,7 @@ class _ScreenLobbyState extends State<ScreenLobby>
                 String? token = context.read<FirebaseMessagingService>().token;
                 if (token != null) {
                   context.read<FirebaseMessagingService>().updateLoverWithToken(
-                        context.read<AuthBloc>().state.lover,
+                        authService.lover!,
                       );
                 }
                 context.read<LobbyBloc>().add(const LobbyEventWatch());
@@ -76,7 +78,6 @@ class _ScreenLobbyState extends State<ScreenLobby>
                         Expandable(
                           controller: _salaAtualController,
                           expanded: SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.9,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -190,10 +191,7 @@ class _ScreenLobbyState extends State<ScreenLobby>
                                             onPressed: () {
                                               context.read<LobbyBloc>().add(
                                                     LobbyEventLeave(
-                                                      lover: context
-                                                          .read<AuthBloc>()
-                                                          .state
-                                                          .lover,
+                                                      lover: authService.lover!,
                                                     ),
                                                   );
                                             },
@@ -224,12 +222,7 @@ class _ScreenLobbyState extends State<ScreenLobby>
                                               ),
                                             ),
                                             onPressed: () {
-                                              context.read<AuthBloc>().add(
-                                                    const AuthEventLogout(),
-                                                  );
-                                              context.read<AuthBloc>().add(
-                                                    const AuthEventLogout(),
-                                                  );
+                                              authService.logout();
                                               Navigator.pushReplacement(
                                                 context,
                                                 AnimatedPageTransition(
@@ -275,17 +268,11 @@ class _ScreenLobbyState extends State<ScreenLobby>
                                           Navigator.pushReplacement(
                                             context,
                                             AnimatedPageTransition(
-                                              page: BlocProvider.value(
-                                                value:
-                                                    BlocProvider.of<AuthBloc>(
-                                                  context,
-                                                ),
-                                                child: BlocProvider<
-                                                    LobbyBloc>.value(
-                                                  value: lobbyBloc,
-                                                  child:
-                                                      const ScreenRelationship(),
-                                                ),
+                                              page:
+                                                  BlocProvider<LobbyBloc>.value(
+                                                value: lobbyBloc,
+                                                child:
+                                                    const ScreenRelationship(),
                                               ),
                                             ),
                                           );
@@ -396,10 +383,7 @@ class _ScreenLobbyState extends State<ScreenLobby>
                                         context.read<LobbyBloc>().add(
                                               LobbyEventJoin(
                                                 lobbyId: _lobbyController.text,
-                                                lover: context
-                                                    .read<AuthBloc>()
-                                                    .state
-                                                    .lover,
+                                                lover: authService.lover!,
                                               ),
                                             );
                                       },
@@ -452,59 +436,65 @@ class _LoversLobbyAtualState extends State<LoversLobbyAtual> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: state.lobby.lovers[0].photoURL.isEmpty
-                            ? Image.asset('assets/avatar.png')
-                            : Image.network(
-                                state.lobby.lovers[0].photoURL,
-                              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.5,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(50),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: state.lobby.lovers[0].photoURL.isEmpty
+                              ? Image.asset('assets/avatar.png')
+                              : Image.network(
+                                  state.lobby.lovers[0].photoURL,
+                                ),
+                        ),
                       ),
-                    ),
-                    Text(
-                      state.lobby.lovers[0].name,
-                      style: kTextLoverLobbyStyle,
-                    ),
-                  ],
+                      Text(
+                        state.lobby.lovers[0].name,
+                        style: kTextLoverLobbyStyle,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: state.lobby.lovers[1].photoURL.isEmpty
-                            ? Image.asset('assets/avatar.png')
-                            : Image.network(
-                                state.lobby.lovers[1].photoURL,
-                              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.5,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(50),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: state.lobby.lovers[1].photoURL.isEmpty
+                              ? Image.asset('assets/avatar.png')
+                              : Image.network(
+                                  state.lobby.lovers[1].photoURL,
+                                ),
+                        ),
                       ),
-                    ),
-                    state.lobby.lovers[1].name.isEmpty
-                        ? RichText(
-                            text: TextSpan(
-                              text: '           convidar',
-                              style: kTextLoverLobbyStyle.copyWith(
-                                color: Colors.white,
+                      state.lobby.lovers[1].name.isEmpty
+                          ? RichText(
+                              text: TextSpan(
+                                text: 'convidar',
+                                style: kTextLoverLobbyStyle.copyWith(
+                                  color: Colors.white,
+                                ),
                               ),
+                            )
+                          : Text(
+                              state.lobby.lovers[1].name,
+                              style: kTextLoverLobbyStyle,
                             ),
-                          )
-                        : Text(
-                            state.lobby.lovers[1].name,
-                            style: kTextLoverLobbyStyle,
-                          ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ],

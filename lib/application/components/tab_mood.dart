@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sunrise/application/styles.dart';
-import 'package:sunrise/data/mock_moods.dart';
+import 'package:sunrise/constants/styles.dart';
+import 'package:sunrise/datasource/mock_moods.dart';
 import 'package:sunrise/domain/auth/bloc_auth.dart';
-import 'package:sunrise/domain/bloc_lobby.dart';
+import 'package:sunrise/domain/lobby/bloc_lobby.dart';
 import 'package:sunrise/domain/viewmodel_mood.dart';
 import 'package:sunrise/model/model_lover.dart';
 import 'package:sunrise/model/model_mood_matching.dart';
+import 'package:sunrise/services/getIt/get_it_dependencies.dart';
 
 class TabMood extends StatefulWidget {
   const TabMood({
@@ -21,11 +22,12 @@ class TabMood extends StatefulWidget {
 class _TabMoodState extends State<TabMood> {
   @override
   Widget build(BuildContext context) {
+    final AuthService authService = getIt<AuthService>();
     return ListView.builder(
       shrinkWrap: true,
       itemBuilder: (context, index) {
         return MoodMatchingSlider(
-          edit: context.watch<AuthBloc>().state.lover.id == widget.lover.id,
+          edit: authService.lover!.id == widget.lover.id,
           lover: widget.lover,
           moodMatch: mockMoodMatching[index],
         );

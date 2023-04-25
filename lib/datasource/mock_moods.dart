@@ -1,4 +1,4 @@
-import 'package:sunrise/application/constants.dart';
+import 'package:sunrise/constants/enum.dart';
 import 'package:sunrise/model/model_mood.dart';
 import 'package:sunrise/model/model_mood_matching.dart';
 

@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sunrise/data/data_provider_chat.dart';
+import 'package:sunrise/datasource/data_provider_chat.dart';
 import 'package:sunrise/model/model_chat_message.dart';
 import 'package:sunrise/model/model_lobby.dart';
 
