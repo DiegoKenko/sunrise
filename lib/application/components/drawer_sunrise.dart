@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sunrise/application/components/animated__page_transition.dart';
+import 'package:sunrise/application/screens/screen_payment.dart';
 import 'package:sunrise/domain/auth/bloc_auth.dart';
 
 class SunriseDrawer extends StatefulWidget {
@@ -53,6 +55,34 @@ class _SunriseDrawerState extends State<SunriseDrawer> {
             ),
           ),
           ListTile(
+            title: Row(
+              children: [
+                Text(
+                  '${context.read<AuthBloc>().state.lover.suns} ',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                  ),
+                ),
+                const Icon(
+                  Icons.wb_sunny,
+                  color: Colors.white,
+                ),
+              ],
+            ),
+            subtitle: FilledButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  AnimatedPageTransition(
+                    page: const ScreenPayment(),
+                  ),
+                );
+              },
+              child: const Text('Comprar suns'),
+            ),
+          ),
+          ListTile(
             title: const Text(
               'Sair',
               style: TextStyle(
@@ -61,8 +91,11 @@ class _SunriseDrawerState extends State<SunriseDrawer> {
               ),
             ),
             onTap: () {
-              Navigator.of(context).pushReplacementNamed(
-                '/login',
+              Navigator.push(
+                context,
+                AnimatedPageTransition(
+                  page: const ScreenPayment(),
+                ),
               );
             },
           ),

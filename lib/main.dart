@@ -4,15 +4,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sunrise/application/components/animated__page_transition.dart';
+import 'package:sunrise/application/constants.dart';
 import 'package:sunrise/application/screens/screen_lobby.dart';
 import 'package:sunrise/application/styles.dart';
 import 'package:sunrise/domain/auth/bloc_auth.dart';
 import 'package:sunrise/domain/notification/firebase_messaging_service.dart';
 import 'package:sunrise/domain/notification/notification_service.dart';
 import 'package:sunrise/firebase_options.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey = stripePublicKey;
+  await Stripe.instance.applySettings();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -134,7 +138,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        key: const Key('homeContainer'),
+        key: const Key('loginGoogleButton '),
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/main.jpg'),

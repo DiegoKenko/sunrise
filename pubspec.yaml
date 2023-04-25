@@ -21,8 +21,10 @@ dependencies:
   http: ^0.13.5
   flutter_native_timezone: ^2.0.0
   google_fonts: ^4.0.3
-  pay: ^1.1.0
   firebase_crashlytics: ^3.0.15
+  flutter_stripe: ^9.0.0+1
+  equatable: ^2.0.5
+  flutter_credit_card: ^3.0.6
 dev_dependencies:
   flutter_test:
     sdk: flutter
