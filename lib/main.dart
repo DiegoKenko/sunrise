@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sunrise/application/components/animated_page_transition.dart';
+import 'package:sunrise/application/screens/screen_lobby.dart';
 import 'package:sunrise/constants/constants.dart';
 import 'package:sunrise/constants/styles.dart';
 import 'package:sunrise/domain/auth/bloc_auth.dart';
@@ -27,6 +29,17 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       routes: {
         '/login': (context) => const Home(),
+      },
+      onGenerateRoute: (settings) {
+        final AuthService authService = getIt<AuthService>();
+        if (!authService.isAuth()) {
+          Navigator.pushReplacement(
+            context,
+            AnimatedPageTransition(
+              page: const Home(),
+            ),
+          );
+        }
       },
       theme: ThemeData(
         pageTransitionsTheme: const PageTransitionsTheme(
@@ -61,8 +74,11 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final AuthService authService = getIt<AuthService>();
+
   @override
   void initState() {
+    authService.authenticate();
     initilizeFirebaseMessaging();
     checkNotifications();
     super.initState();
@@ -81,15 +97,11 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    final AuthService authService = getIt<AuthService>();
     return Scaffold(
       body: Container(
         key: const Key('loginGoogleButton '),
         decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/main.jpg'),
-            fit: BoxFit.cover,
-          ),
+          color: Colors.grey,
         ),
         child: Center(
           child: Padding(
@@ -98,7 +110,7 @@ class _HomeState extends State<Home> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                InkWell(
+                GestureDetector(
                   child: Container(
                     width: 70,
                     height: 120,
@@ -120,8 +132,13 @@ class _HomeState extends State<Home> {
                       ],
                     ),
                   ),
-                  onTap: () {
-                    authService.authenticate();
+                  onTap: () async {
+                    Navigator.pushReplacement(
+                      context,
+                      AnimatedPageTransition(
+                        page: const ScreenLobby(),
+                      ),
+                    );
                   },
                 ),
               ],

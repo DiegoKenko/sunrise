@@ -258,25 +258,17 @@ class _ScreenLobbyState extends State<ScreenLobby>
                                     padding: const EdgeInsets.all(8.0),
                                     child: InkWell(
                                       onTap: () {
-                                        if (context
-                                                .read<LobbyBloc>()
-                                                .state
-                                                .status ==
-                                            LobbyStatus.sucessReady) {
-                                          var lobbyBloc =
-                                              context.read<LobbyBloc>();
-                                          Navigator.pushReplacement(
-                                            context,
-                                            AnimatedPageTransition(
-                                              page:
-                                                  BlocProvider<LobbyBloc>.value(
-                                                value: lobbyBloc,
-                                                child:
-                                                    const ScreenRelationship(),
-                                              ),
+                                        var lobbyBloc =
+                                            context.read<LobbyBloc>();
+                                        Navigator.pushReplacement(
+                                          context,
+                                          AnimatedPageTransition(
+                                            page: BlocProvider<LobbyBloc>.value(
+                                              value: lobbyBloc,
+                                              child: const ScreenRelationship(),
                                             ),
-                                          );
-                                        }
+                                          ),
+                                        );
                                       },
                                       child: Row(
                                         mainAxisAlignment:

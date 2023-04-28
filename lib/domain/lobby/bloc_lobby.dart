@@ -98,7 +98,11 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
     on<LobbyEventJoin>(_join);
     on<LobbyEventLeave>(_leave);
     on<LobbyEventCreate>(_onCreate);
-    on<LobbyEventLoad>(_onLoad);
+    on<LobbyEventLoad>(
+      (event, emit) {
+        _onLoad(event, emit);
+      },
+    );
     on<LobbyEventWatch>(_watch);
   }
 
@@ -124,6 +128,8 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
     emit(LobbyStateLoading());
     if (event.lobbyId.isEmpty) {
       emit(LobbyStateInitial());
+      Lobby lobby = await createLobby(event.lover);
+      emit(LobbyStateSucessNoReady(lobby));
     } else {
       if (event.lover.lobbyId.isEmpty) {
         Lobby lobby = await createLobby(event.lover);

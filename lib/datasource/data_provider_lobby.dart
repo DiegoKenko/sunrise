@@ -48,6 +48,9 @@ class DataProviderLobby {
 
   //delete lobby
   Future<void> delete(Lobby lobby) async {
+    if (lobby.id.isEmpty) {
+      return;
+    }
     await _firestore.collection('lobby').doc(lobby.id).delete();
   }
 
