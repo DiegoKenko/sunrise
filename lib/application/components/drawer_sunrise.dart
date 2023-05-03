@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:sunrise/application/components/animated_page_transition.dart';
+import 'package:sunrise/application/screens/screen_lobby.dart';
 import 'package:sunrise/domain/auth/bloc_auth.dart';
+import 'package:sunrise/main.dart';
 import 'package:sunrise/services/getIt/get_it_dependencies.dart';
 
 class SunriseDrawer extends StatefulWidget {
@@ -90,7 +93,15 @@ class _SunriseDrawerState extends State<SunriseDrawer> {
                 fontSize: 18,
               ),
             ),
-            onTap: () {},
+            onTap: () {
+              authService.logout();
+              Navigator.pushReplacement(
+                context,
+                AnimatedPageTransition(
+                  page: const Home(),
+                ),
+              );
+            },
           ),
         ],
       ),

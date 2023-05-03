@@ -99,8 +99,21 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
     on<LobbyEventLeave>(_leave);
     on<LobbyEventCreate>(_onCreate);
     on<LobbyEventLoad>(
-      (event, emit) {
-        _onLoad(event, emit);
+      (event, emit) async {
+        emit(LobbyStateLoading());
+        if (event.lobbyId.isEmpty) {
+          emit(LobbyStateInitial());
+          Lobby lobby = await createLobby(event.lover);
+          emit(LobbyStateSucessNoReady(lobby));
+        } else {
+          if (event.lover.lobbyId.isEmpty) {
+            Lobby lobby = await createLobby(event.lover);
+            emit(LobbyStateSucessNoReady(lobby));
+          } else {
+            Lobby lobby = await DataProviderLobby().get(event.lover.lobbyId);
+            emit(LobbyStateSucessNoReady(lobby));
+          }
+        }
       },
     );
     on<LobbyEventWatch>(_watch);
@@ -121,23 +134,6 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
           }
         },
       );
-    }
-  }
-
-  FutureOr<void> _onLoad(event, emit) async {
-    emit(LobbyStateLoading());
-    if (event.lobbyId.isEmpty) {
-      emit(LobbyStateInitial());
-      Lobby lobby = await createLobby(event.lover);
-      emit(LobbyStateSucessNoReady(lobby));
-    } else {
-      if (event.lover.lobbyId.isEmpty) {
-        Lobby lobby = await createLobby(event.lover);
-        emit(LobbyStateSucessNoReady(lobby));
-      } else {
-        Lobby lobby = await DataProviderLobby().get(event.lover.lobbyId);
-        emit(LobbyStateSucessNoReady(lobby));
-      }
     }
   }
 

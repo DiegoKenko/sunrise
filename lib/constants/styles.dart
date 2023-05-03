@@ -62,13 +62,13 @@ const kTextChatMessageStyle = TextStyle(
 );
 
 const kLobbyLeftBoxDecoration = BoxDecoration(
-  boxShadow: [
+  /*  boxShadow: [
     BoxShadow(
       color: Colors.white,
       blurRadius: 10,
-      offset: Offset(1, -1),
+  
     ),
-  ],
+  ], */
   borderRadius: BorderRadius.only(
     topRight: Radius.circular(30),
     bottomRight: Radius.circular(30),
@@ -76,13 +76,13 @@ const kLobbyLeftBoxDecoration = BoxDecoration(
   color: Colors.white,
 );
 const kLobbyRightBoxDecoration = BoxDecoration(
-  boxShadow: [
+  /* boxShadow: [
     BoxShadow(
       color: kPrimaryColor,
       blurRadius: 10,
       offset: Offset(1, -1),
     ),
-  ],
+  ], */
   borderRadius: BorderRadius.only(
     topLeft: Radius.circular(30),
     bottomLeft: Radius.circular(30),

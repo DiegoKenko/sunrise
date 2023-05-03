@@ -40,6 +40,7 @@ class MyApp extends StatelessWidget {
             ),
           );
         }
+        return null;
       },
       theme: ThemeData(
         pageTransitionsTheme: const PageTransitionsTheme(
@@ -102,23 +103,28 @@ class _HomeState extends State<Home> {
         key: const Key('loginGoogleButton '),
         decoration: const BoxDecoration(
           color: Colors.grey,
+          image: DecorationImage(
+            image: AssetImage('assets/background_login.png'),
+            fit: BoxFit.cover,
+          ),
         ),
-        child: Center(
+        child: Align(
+          alignment: Alignment.bottomCenter,
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.only(bottom: 50.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 GestureDetector(
                   child: Container(
-                    width: 70,
-                    height: 120,
+                    width: 140,
+                    height: 70,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(50),
                     ),
-                    child: Column(
+                    child: Row(
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
