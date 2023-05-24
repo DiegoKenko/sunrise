@@ -79,14 +79,14 @@ class _ExpandableLogoutAndLeaveState extends State<ExpandableLogoutAndLeave> {
                 child: const Row(
                   children: [
                     Icon(
-                      Icons.exit_to_app,
+                      Icons.refresh_sharp,
                       color: Colors.black,
                     ),
                     SizedBox(
                       width: 10,
                     ),
                     Text(
-                      'Sair da sala',
+                      'Recriar sala',
                       style: kTextLeaveLobbyStyle,
                     ),
                   ],

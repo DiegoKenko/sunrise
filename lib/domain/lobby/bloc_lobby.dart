@@ -96,11 +96,11 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
   Stream streamLobby = const Stream.empty();
   LobbyBloc() : super(LobbyStateInitial()) {
     on<LobbyEventJoin>((event, emit) async {
+      emit(LobbyStateLoading());
       if (event.lobbyId.isEmpty) {
         emit(LobbyStateFailureNoLobby());
         return;
       }
-      emit(LobbyStateLoading());
       Lobby? lobby = await DataProviderLobby().getSimpleId(event.lobbyId);
       if (lobby.id.isEmpty) {
         emit(LobbyStateFailureNoLobby());
@@ -128,6 +128,7 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
     });
     on<LobbyEventLeave>((event, emit) async {
       // previous lobby
+      emit(LobbyStateLoading());
       Lobby? lobby = state.lobby;
       lobby.removeLover(event.lover);
       if (lobby.isEmpty()) {
@@ -142,11 +143,13 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
       streamLobby = const Stream.empty();
       emit(LobbyStateSucessNoReady(newlobby));
     });
+
     on<LobbyEventCreate>((event, emit) async {
       emit(LobbyStateLoading());
       Lobby lobby = await createLobby(event.lover);
       emit(LobbyStateSucessNoReady(lobby));
     });
+
     on<LobbyEventLoad>(
       (event, emit) async {
         emit(LobbyStateLoading());
@@ -159,8 +162,14 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
             Lobby lobby = await createLobby(event.lover);
             emit(LobbyStateSucessNoReady(lobby));
           } else {
-            Lobby lobby = await DataProviderLobby().get(event.lover.lobbyId);
-            emit(LobbyStateSucessNoReady(lobby));
+            try {
+              Lobby lobby = await DataProviderLobby().get(event.lover.lobbyId);
+              emit(LobbyStateSucessNoReady(lobby));
+              if (lobby.id.isEmpty) {
+                lobby = await createLobby(event.lover);
+                emit(LobbyStateSucessNoReady(lobby));
+              }
+            } catch (e) {}
           }
         }
       },
