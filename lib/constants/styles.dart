@@ -52,7 +52,7 @@ const kTextFormFieldLobbyLabelStyle = TextStyle(
 
 const kTextLeaveLobbyStyle = TextStyle(
   fontSize: 12.0,
-  color: Colors.red,
+  color: Colors.black,
 );
 
 const kTextChatMessageStyle = TextStyle(
@@ -62,13 +62,6 @@ const kTextChatMessageStyle = TextStyle(
 );
 
 const kLobbyLeftBoxDecoration = BoxDecoration(
-  /*  boxShadow: [
-    BoxShadow(
-      color: Colors.white,
-      blurRadius: 10,
-  
-    ),
-  ], */
   borderRadius: BorderRadius.only(
     topRight: Radius.circular(30),
     bottomRight: Radius.circular(30),
@@ -76,13 +69,6 @@ const kLobbyLeftBoxDecoration = BoxDecoration(
   color: Colors.white,
 );
 const kLobbyRightBoxDecoration = BoxDecoration(
-  /* boxShadow: [
-    BoxShadow(
-      color: kPrimaryColor,
-      blurRadius: 10,
-      offset: Offset(1, -1),
-    ),
-  ], */
   borderRadius: BorderRadius.only(
     topLeft: Radius.circular(30),
     bottomLeft: Radius.circular(30),

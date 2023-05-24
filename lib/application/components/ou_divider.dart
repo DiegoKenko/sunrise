@@ -5,14 +5,14 @@ class OuDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: const [
+    return const Row(
+      children: [
         Expanded(
           child: Divider(
             color: Colors.grey,
             thickness: 1,
           ),
-        ),    
+        ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 8),
           child: Text(

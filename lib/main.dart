@@ -2,10 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sunrise/application/components/animated_page_transition.dart';
-import 'package:sunrise/application/screens/screen_lobby.dart';
+import 'package:sunrise/application/screens/lobby/screen_lobby.dart';
 import 'package:sunrise/constants/constants.dart';
 import 'package:sunrise/constants/styles.dart';
-import 'package:sunrise/domain/auth/bloc_auth.dart';
+import 'package:sunrise/domain/auth/auth_notifier.dart';
 import 'package:sunrise/services/notification/firebase_messaging_service.dart';
 import 'package:sunrise/services/notification/notification_service.dart';
 import 'package:sunrise/firebase_options.dart';
@@ -26,44 +26,64 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      routes: {
-        '/login': (context) => const Home(),
-      },
-      onGenerateRoute: (settings) {
-        final AuthService authService = getIt<AuthService>();
-        if (!authService.isAuth()) {
-          Navigator.pushReplacement(
-            context,
-            AnimatedPageTransition(
-              page: const Home(),
-            ),
-          );
-        }
-        return null;
-      },
-      theme: ThemeData(
-        pageTransitionsTheme: const PageTransitionsTheme(
-          builders: {
-            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+    final authService = getIt<AuthService>();
+    return ValueListenableBuilder(
+      valueListenable: authService,
+      builder: (context, state, child) {
+        return MaterialApp(
+          routes: {
+            '/login': (context) => const Home(),
           },
-        ),
-        splashColor: kPrimaryColor,
-        useMaterial3: true,
-        primarySwatch: kPrimarySwatch,
-        colorScheme: const ColorScheme.light(
-          primary: kPrimaryColor,
-          secondary: Colors.black,
-        ),
-        fontFamily: GoogleFonts.sono().fontFamily,
-        tabBarTheme: const TabBarTheme(
-          labelColor: Colors.black,
-          unselectedLabelColor: Colors.grey,
-          labelStyle: TextStyle(color: Colors.white),
-        ),
-      ),
-      home: const Home(),
+          onGenerateRoute: (settings) {
+            if (!authService.isAuth()) {
+              Navigator.pushReplacement(
+                context,
+                AnimatedPageTransition(
+                  page: const Home(),
+                ),
+              );
+            }
+            return null;
+          },
+          onGenerateInitialRoutes: (initialRoute) {
+            final AuthService authService = getIt<AuthService>();
+            if (authService.isAuth()) {
+              return [
+                AnimatedPageTransition(
+                  page: const ScreenLobby(),
+                ),
+              ];
+            } else {
+              return [
+                AnimatedPageTransition(
+                  page: const Home(),
+                ),
+              ];
+            }
+          },
+          theme: ThemeData(
+            pageTransitionsTheme: const PageTransitionsTheme(
+              builders: {
+                TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+                TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+              },
+            ),
+            splashColor: kPrimaryColor,
+            useMaterial3: true,
+            primarySwatch: kPrimarySwatch,
+            colorScheme: const ColorScheme.light(
+              primary: kPrimaryColor,
+              secondary: Colors.black,
+            ),
+            fontFamily: GoogleFonts.sono().fontFamily,
+            tabBarTheme: const TabBarTheme(
+              labelColor: Colors.black,
+              unselectedLabelColor: Colors.grey,
+              labelStyle: TextStyle(color: Colors.white),
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -139,6 +159,9 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                   onTap: () async {
+                    if (!authService.isAuth()) {
+                      await authService.authenticate();
+                    }
                     Navigator.pushReplacement(
                       context,
                       AnimatedPageTransition(

@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:sunrise/constants/enum.dart';
+import 'package:sunrise/constants/enum/enum_lobby_status.dart';
 import 'package:sunrise/datasource/data_provider_lobby.dart';
 import 'package:sunrise/datasource/data_provider_lover.dart';
 import 'package:sunrise/model/model_lobby.dart';
@@ -95,9 +95,58 @@ class LobbyStateFailureNoRoom extends LobbyState {
 class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
   Stream streamLobby = const Stream.empty();
   LobbyBloc() : super(LobbyStateInitial()) {
-    on<LobbyEventJoin>(_join);
-    on<LobbyEventLeave>(_leave);
-    on<LobbyEventCreate>(_onCreate);
+    on<LobbyEventJoin>((event, emit) async {
+      if (event.lobbyId.isEmpty) {
+        emit(LobbyStateFailureNoLobby());
+        return;
+      }
+      emit(LobbyStateLoading());
+      Lobby? lobby = await DataProviderLobby().getSimpleId(event.lobbyId);
+      if (lobby.id.isEmpty) {
+        emit(LobbyStateFailureNoLobby());
+        return;
+      }
+      if (lobby.isLoverInLobby(event.lover)) {
+        emit(LobbyStateSucessNoReady(lobby));
+        return;
+      }
+      if (lobby.haveRoom()) {
+        lobby.addLover(event.lover);
+        event.lover.lobbyId = lobby.id;
+        await DataProviderLobby().updateLobbyLover(lobby, event.lover);
+        emit(LobbyStateSucessNoReady(lobby));
+      } else {
+        if (state.lobby.lovers[0].id == event.lover.id ||
+            state.lobby.lovers[1].id == event.lover.id) {
+          emit(LobbyStateSucessNoReady(lobby));
+        } else {
+          emit(
+            LobbyStateFailureNoRoom(state.lobby),
+          );
+        }
+      }
+    });
+    on<LobbyEventLeave>((event, emit) async {
+      // previous lobby
+      Lobby? lobby = state.lobby;
+      lobby.removeLover(event.lover);
+      if (lobby.isEmpty()) {
+        await DataProviderLobby().delete(lobby);
+      }
+      await DataProviderLobby().updateLobbyLover(lobby, event.lover);
+
+      // new lobby
+      Lobby newlobby = await createLobby(event.lover);
+      event.lover.lobbyId = newlobby.id;
+      await DataProviderLobby().updateLobbyLover(newlobby, event.lover);
+      streamLobby = const Stream.empty();
+      emit(LobbyStateSucessNoReady(newlobby));
+    });
+    on<LobbyEventCreate>((event, emit) async {
+      emit(LobbyStateLoading());
+      Lobby lobby = await createLobby(event.lover);
+      emit(LobbyStateSucessNoReady(lobby));
+    });
     on<LobbyEventLoad>(
       (event, emit) async {
         emit(LobbyStateLoading());
@@ -116,80 +165,25 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
         }
       },
     );
-    on<LobbyEventWatch>(_watch);
-  }
-
-  FutureOr<void> _watch(event, emit) async {
-    if (state.lobby.id.isNotEmpty) {
-      streamLobby = DataProviderLobby().watch(state.lobby);
-      await emit.forEach(
-        streamLobby,
-        onData: (dataLobby) {
-          if (dataLobby.isFull()) {
-            return LobbyStateSucessReady(dataLobby);
-          } else {
-            return LobbyStateStandby(
-              dataLobby,
-            );
-          }
-        },
-      );
-    }
-  }
-
-  FutureOr<void> _onCreate(event, emit) async {
-    emit(LobbyStateLoading());
-    Lobby lobby = await createLobby(event.lover);
-    emit(LobbyStateSucessNoReady(lobby));
-  }
-
-  FutureOr<void> _leave(event, emit) async {
-    // previous lobby
-    Lobby? lobby = state.lobby;
-    lobby.removeLover(event.lover);
-    if (lobby.isEmpty()) {
-      await DataProviderLobby().delete(lobby);
-    }
-    await DataProviderLobby().updateLobbyLover(lobby, event.lover);
-
-    // new lobby
-    Lobby newlobby = await createLobby(event.lover);
-    event.lover.lobbyId = newlobby.id;
-    await DataProviderLobby().updateLobbyLover(newlobby, event.lover);
-    streamLobby = const Stream.empty();
-    emit(LobbyStateSucessNoReady(newlobby));
-  }
-
-  FutureOr<void> _join(event, emit) async {
-    if (event.lobbyId.isEmpty) {
-      emit(LobbyStateFailureNoLobby());
-      return;
-    }
-    emit(LobbyStateLoading());
-    Lobby? lobby = await DataProviderLobby().getSimpleId(event.lobbyId);
-    if (lobby.id.isEmpty) {
-      emit(LobbyStateFailureNoLobby());
-      return;
-    }
-    if (lobby.isLoverInLobby(event.lover)) {
-      emit(LobbyStateSucessNoReady(lobby));
-      return;
-    }
-    if (lobby.haveRoom()) {
-      lobby.addLover(event.lover);
-      event.lover.lobbyId = lobby.id;
-      await DataProviderLobby().updateLobbyLover(lobby, event.lover);
-      emit(LobbyStateSucessNoReady(lobby));
-    } else {
-      if (state.lobby.lovers[0].id == event.lover.id ||
-          state.lobby.lovers[1].id == event.lover.id) {
-        emit(LobbyStateSucessNoReady(lobby));
-      } else {
-        emit(
-          LobbyStateFailureNoRoom(state.lobby),
-        );
-      }
-    }
+    on<LobbyEventWatch>(
+      (event, emit) async {
+        if (state.lobby.id.isNotEmpty) {
+          streamLobby = DataProviderLobby().watch(state.lobby);
+          await emit.forEach(
+            streamLobby,
+            onData: (dataLobby) {
+              if (dataLobby.isFull()) {
+                return LobbyStateSucessReady(dataLobby);
+              } else {
+                return LobbyStateStandby(
+                  dataLobby,
+                );
+              }
+            },
+          );
+        }
+      },
+    );
   }
 
   Future<Lobby> createLobby(Lover lover) async {
@@ -199,26 +193,5 @@ class LobbyBloc extends Bloc<LobbyEvent, LobbyState> {
     lover.lobbyId = lobby.id;
     DataProviderLover().set(lover);
     return lobby;
-  }
-}
-
-extension LobbyStatusDescription on LobbyStatus {
-  String get description {
-    switch (this) {
-      case LobbyStatus.initial:
-        return 'initial';
-      case LobbyStatus.loading:
-        return 'loading';
-      case LobbyStatus.standBy:
-        return 'standBy';
-      case LobbyStatus.sucessReady:
-        return 'sucessReady';
-      case LobbyStatus.sucessNoReady:
-        return 'sucessNoReady';
-      case LobbyStatus.failureNoLobby:
-        return 'failureNoLobby';
-      case LobbyStatus.failureNoRoom:
-        return 'failureNoRoom';
-    }
   }
 }

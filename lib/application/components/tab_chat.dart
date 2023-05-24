@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sunrise/constants/constants.dart';
 import 'package:sunrise/constants/styles.dart';
-import 'package:sunrise/domain/auth/bloc_auth.dart';
+import 'package:sunrise/domain/auth/auth_notifier.dart';
 import 'package:sunrise/domain/chat/bloc_chat.dart';
 import 'package:sunrise/domain/lobby/bloc_lobby.dart';
 import 'package:sunrise/services/getIt/get_it_dependencies.dart';
@@ -60,7 +60,7 @@ class _TabChatState extends State<TabChat> {
                           shrinkWrap: true,
                           itemCount: state.messages.length,
                           itemBuilder: (context, index) {
-                            if (authService.lover!.id ==
+                            if (authService.lover.id ==
                                 state.messages[index].sentBy) {
                               return ChatBaloonRight(
                                 message: state.messages[index],
@@ -98,7 +98,7 @@ class _TabChatState extends State<TabChat> {
                                   if (_textChatController.text.isNotEmpty) {
                                     final ChatMessage chatMessage = ChatMessage(
                                       _textChatController.text,
-                                      authService.lover!.id,
+                                      authService.lover.id,
                                       DateTime.now(),
                                     );
                                     context.read<ChatBloc>().add(
@@ -119,7 +119,7 @@ class _TabChatState extends State<TabChat> {
                                               .state
                                               .lobby
                                               .couple(
-                                                authService.lover!.id,
+                                                authService.lover.id,
                                               )
                                               .notificationToken,
                                           chatMessage,

@@ -44,6 +44,7 @@ class DataProviderLover {
   }
 
   Future<Lover> get(String id) async {
+    if (id.isEmpty) return Lover.empty();
     DocumentSnapshot<Map<String, dynamic>> snapshot =
         await _firestore.collection('lovers').doc(id).get();
     if (snapshot.exists) {
