@@ -1,3 +1,5 @@
+// ignore_for_file: sdk_version_since
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sunrise/datasource/data_provider_lover.dart';
 import 'package:sunrise/model/model_lobby.dart';
