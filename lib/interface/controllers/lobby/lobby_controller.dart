@@ -1,14 +1,27 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:sunrise/datasource/data_provider_lobby.dart';
 import 'package:sunrise/datasource/data_provider_lover.dart';
+import 'package:sunrise/datasource/lobby/lobby_create_datasource.dart';
+import 'package:sunrise/datasource/lobby/lobby_delete_datasource.dart';
+import 'package:sunrise/datasource/lobby/lobby_load_datasource.dart';
+import 'package:sunrise/datasource/lobby/lobby_load_simpleid_datasource.dart';
+import 'package:sunrise/datasource/lobby/lobby_watch_datasource.dart';
 import 'package:sunrise/interface/states/lobby_state.dart';
 import 'package:sunrise/entity/lobby_entity.dart';
 import 'package:sunrise/entity/lover_entity.dart';
+import 'package:sunrise/usecase/lobby/lover_join_lobby_usecase.dart';
+import 'package:sunrise/usecase/lobby/lover_leave_lobby_usecase.dart';
 
 class LobbyController extends ValueNotifier<LobbyState> {
   Stream streamLobby = const Stream.empty();
   String lobbyId = '';
+  LobbyLoadSimpleIdDatasource lobbyLoadSimpleIdDatasource =
+      LobbyLoadSimpleIdDatasource();
+  LobbyLoadDatasource lobbyLoadDatasource = LobbyLoadDatasource();
+  LobbyWatchDatasource lobbyWatchDatasource = LobbyWatchDatasource();
+  LobbyDeleteDatasource lobbyDeleteDatasource = LobbyDeleteDatasource();
+  LoverJoinLobbyUsecase lobbyJoinUsecase = LoverJoinLobbyUsecase();
+  LoverLeaveLobbyUsecase lobbyLeaveUsecase = LoverLeaveLobbyUsecase();
 
   LobbyController(super.value);
 
@@ -18,7 +31,7 @@ class LobbyController extends ValueNotifier<LobbyState> {
       value = LobbyStateFailureNoLobby();
       return;
     }
-    LobbyEntity? lobby = await DataProviderLobby().getSimpleId(lobbyId);
+    LobbyEntity? lobby = await lobbyLoadSimpleIdDatasource(lobbyId);
     if (lobby.id.isEmpty) {
       value = LobbyStateFailureNoLobby();
       return;
@@ -30,7 +43,7 @@ class LobbyController extends ValueNotifier<LobbyState> {
     if (lobby.haveRoom()) {
       lobby.addLover(lover);
       lover.lobbyId = lobby.id;
-      await DataProviderLobby().updateLobbyLover(lobby, lover);
+      await lobbyJoinUsecase(lobby, lover);
       value = LobbyStateSuccessNoReady(lobby);
     } else {
       if (lobby.lovers[0].id == lover.id || lobby.lovers[1].id == lover.id) {
@@ -46,14 +59,14 @@ class LobbyController extends ValueNotifier<LobbyState> {
     value = LobbyStateLoading();
     lobby.removeLover(lover);
     if (lobby.isEmpty()) {
-      await DataProviderLobby().delete(lobby);
+      await lobbyDeleteDatasource(lobby);
     }
-    await DataProviderLobby().updateLobbyLover(lobby, lover);
+    await lobbyLeaveUsecase(lobby, lover);
 
     // new lobby
     LobbyEntity newlobby = await createLobby(lover);
     lover.lobbyId = newlobby.id;
-    await DataProviderLobby().updateLobbyLover(newlobby, lover);
+    await lobbyJoinUsecase(newlobby, lover);
     streamLobby = const Stream.empty();
     value = LobbyStateSuccessNoReady(newlobby);
   }
@@ -75,7 +88,7 @@ class LobbyController extends ValueNotifier<LobbyState> {
         LobbyEntity lobby = await createLobby(lover);
         value = LobbyStateSuccessNoReady(lobby);
       } else {
-        LobbyEntity lobby = await DataProviderLobby().get(lover.lobbyId);
+        LobbyEntity lobby = await lobbyLoadDatasource(lover.lobbyId);
         value = LobbyStateSuccessNoReady(lobby);
         if (lobby.id.isEmpty) {
           lobby = await createLobby(lover);
@@ -87,14 +100,15 @@ class LobbyController extends ValueNotifier<LobbyState> {
 
   lobbyWatch(LobbyEntity lobby) async {
     if (lobby.id.isNotEmpty) {
-      streamLobby = DataProviderLobby().watch(lobby);
+      streamLobby = lobbyWatchDatasource(lobby);
     }
   }
 
   Future<LobbyEntity> createLobby(LoverEntity lover) async {
+    LobbyCreateDatasource lobbyCreateDatasource = LobbyCreateDatasource();
     LobbyEntity lobby = LobbyEntity.empty();
     lobby.addLover(lover);
-    lobby = await DataProviderLobby().create(lobby);
+    lobby = await lobbyCreateDatasource(lobby);
     lover.lobbyId = lobby.id;
     DataProviderLover().set(lover);
     return lobby;

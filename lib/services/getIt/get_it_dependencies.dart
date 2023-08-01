@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sunrise/interface/controllers/auth/auth_controller.dart';
 import 'package:sunrise/interface/controllers/lobby/lobby_controller.dart';
@@ -14,5 +15,8 @@ void setup() {
   );
   getIt.registerLazySingleton<AuthController>(() => AuthController());
   getIt.registerLazySingleton<LobbyController>(
-      () => LobbyController(LobbyStateInitial()),);
+    () => LobbyController(LobbyStateInitial()),
+  );
+  getIt.registerLazySingleton<FirebaseFirestore>(
+      () => FirebaseFirestore.instance);
 }
