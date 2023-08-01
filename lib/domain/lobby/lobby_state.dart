@@ -1,5 +1,5 @@
 import 'package:sunrise/constants/enum/enum_lobby_status.dart';
-import 'package:sunrise/model/model_lobby.dart';
+import 'package:sunrise/entity/lobby_entity.dart';
 
 abstract class LobbyState {
   LobbyEntity lobby;

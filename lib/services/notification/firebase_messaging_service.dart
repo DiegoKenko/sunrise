@@ -4,9 +4,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sunrise/datasource/data_provider_lover.dart';
 import 'package:sunrise/services/notification/notification_service.dart';
-import 'package:sunrise/model/model_chat_message.dart';
-import 'package:sunrise/model/model_chat_notification.dart';
-import 'package:sunrise/model/model_lover.dart';
+import 'package:sunrise/entity/chat_message_entity.dart';
+import 'package:sunrise/entity/chat_notification_entity.dart';
+import 'package:sunrise/entity/lover_entity.dart';
 import 'package:http/http.dart' as http;
 
 class FirebaseMessagingService {
@@ -41,7 +41,7 @@ class FirebaseMessagingService {
 
       if (notification != null && android != null) {
         _notificationService.showLocalNotification(
-          ChatNotification(
+          ChatNotificationEntity(
             id: android.hashCode,
             title: notification.title!,
             body: notification.body!,
@@ -61,7 +61,7 @@ class FirebaseMessagingService {
     if (route.isNotEmpty) {}
   }
 
-  updateLoverWithToken(Lover lover) async {
+  updateLoverWithToken(LoverEntity lover) async {
     if (token == null) {
       return;
     }
@@ -69,7 +69,7 @@ class FirebaseMessagingService {
     await DataProviderLover().update(lover);
   }
 
-  Future<void> sendMessage(String token, ChatMessage chatMessage) async {
+  Future<void> sendMessage(String token, ChatMessageEntity chatMessage) async {
     try {
       var x = await http.post(
         Uri.parse('https://fcm.googleapis.com/fcm/send'),

@@ -1,9 +1,9 @@
 import 'package:sunrise/constants/enum/enum_mood_matching_pack.dart';
-import 'package:sunrise/model/model_mood.dart';
+import 'package:sunrise/entity/mood_entity.dart';
 
-class MoodMatching {
-  Mood mood1;
-  Mood mood2;
+class MoodMatchingEntity {
+  MoodEntity mood1;
+  MoodEntity mood2;
   double matching; // minimun of 1 to maximun of 10
   String get matchId => mood1.name.toLowerCase() + mood2.name.toLowerCase();
 
@@ -27,7 +27,7 @@ class MoodMatching {
     return false;
   }
 
-  MoodMatching({
+  MoodMatchingEntity({
     required this.mood1,
     required this.mood2,
     this.matching = 5,
@@ -44,12 +44,12 @@ class MoodMatching {
     };
   }
 
-  MoodMatching.fromJson(Map<String, dynamic> json)
-      : mood1 = Mood(
+  MoodMatchingEntity.fromJson(Map<String, dynamic> json)
+      : mood1 = MoodEntity(
           name: json['mood1'],
           iconName: json['mood1Icon'],
         ),
-        mood2 = Mood(
+        mood2 = MoodEntity(
           name: json['mood2'],
           iconName: json['mood2Icon'],
         ),
@@ -58,7 +58,7 @@ class MoodMatching {
 
   @override
   String toString() {
-    return 'MoodMatching{mood1: $mood1, mood2: $mood2, matching: $matching}';
+    return 'MoodMatchingEntity{mood1: $mood1, mood2: $mood2, matching: $matching}';
   }
 
   set setMatching(double match) {

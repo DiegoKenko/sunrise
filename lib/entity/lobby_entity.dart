@@ -1,7 +1,7 @@
-import 'package:sunrise/model/model_lover.dart';
+import 'package:sunrise/entity/lover_entity.dart';
 
 class LobbyEntity {
-  List<Lover> lovers = [];
+  List<LoverEntity> lovers = [];
   String id = '';
   String get simpleId {
     if (id.isNotEmpty) {
@@ -24,7 +24,7 @@ class LobbyEntity {
 
   LobbyEntity.empty() {
     for (var i = 0; i < maxLovers; i++) {
-      lovers.add(Lover());
+      lovers.add(LoverEntity());
     }
   }
 
@@ -55,9 +55,9 @@ class LobbyEntity {
     return false;
   }
 
-  bool isLoverInLobby(Lover lover) {
+  bool isLoverInLobby(LoverEntity lover) {
     if (lovers.isNotEmpty) {
-      for (Lover l in lovers) {
+      for (LoverEntity l in lovers) {
         if (l.id == lover.id) {
           return true;
         }
@@ -66,7 +66,7 @@ class LobbyEntity {
     return false;
   }
 
-  void addLover(Lover lover) {
+  void addLover(LoverEntity lover) {
     for (var i = 0; i < lovers.length; i++) {
       if (lovers[i].id.isEmpty) {
         lovers[i] = lover;
@@ -75,16 +75,16 @@ class LobbyEntity {
     }
   }
 
-  void removeLover(Lover lover) {
+  void removeLover(LoverEntity lover) {
     for (var i = 0; i < lovers.length; i++) {
       if (lovers[i].id == lover.id) {
-        lovers[i] = Lover();
+        lovers[i] = LoverEntity();
         return;
       }
     }
   }
 
-  Lover couple(String myId) {
+  LoverEntity couple(String myId) {
     if (lovers.length == 2) {
       if (lovers[0].id.isNotEmpty && lovers[1].id.isNotEmpty) {
         if (lovers[0].id == myId) {
@@ -94,18 +94,18 @@ class LobbyEntity {
         }
       }
     }
-    return Lover();
+    return LoverEntity();
   }
 
   LobbyEntity.fromJson(Map<String, dynamic> json)
       : lovers = [
-          Lover(
+          LoverEntity(
             id: json['lover1'] ?? '',
             name: json['lover1name'] ?? '',
             photoURL: json['lover1photoURL'] ?? '',
             email: json['lover1email'] ?? '',
           ),
-          Lover(
+          LoverEntity(
             id: json['lover2'] ?? '',
             name: json['lover2name'] ?? '',
             photoURL: json['lover2photoURL'] ?? '',

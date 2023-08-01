@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sunrise/datasource/data_provider_lover.dart';
-import 'package:sunrise/model/model_lover.dart';
+import 'package:sunrise/entity/lover_entity.dart';
 
 class FirebaseAuthentication {
   final FirebaseAuth _instance = FirebaseAuth.instance;
 
-  Stream<Lover?> authStateChanges() async* {
-    Lover? lover;
+  Stream<LoverEntity?> authStateChanges() async* {
+    LoverEntity? lover;
 
     await for (final user in _instance.userChanges()) {
       if (user != null) {

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:sunrise/application/components/animated_page_transition.dart';
+import 'package:sunrise/interface/components/animated_page_transition.dart';
 import 'package:sunrise/domain/auth/auth_notifier.dart';
 import 'package:sunrise/domain/states/auth_state.dart';
 import 'package:sunrise/main.dart';
-import 'package:sunrise/model/model_lover.dart';
+import 'package:sunrise/entity/lover_entity.dart';
 import 'package:sunrise/services/getIt/get_it_dependencies.dart';
 
 class SunriseDrawer extends StatefulWidget {
@@ -19,7 +19,7 @@ class _SunriseDrawerState extends State<SunriseDrawer> {
   @override
   Widget build(BuildContext context) {
     final AuthService authService = getIt<AuthService>();
-    Lover lover = Lover.empty();
+    LoverEntity lover = LoverEntity.empty();
 
     return ValueListenableBuilder(
       valueListenable: authService,

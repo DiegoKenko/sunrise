@@ -4,8 +4,8 @@ import 'package:sunrise/constants/enum/enum_lobby_status.dart';
 import 'package:sunrise/datasource/data_provider_lobby.dart';
 import 'package:sunrise/datasource/data_provider_lover.dart';
 import 'package:sunrise/domain/lobby/lobby_state.dart';
-import 'package:sunrise/model/model_lobby.dart';
-import 'package:sunrise/model/model_lover.dart';
+import 'package:sunrise/entity/lobby_entity.dart';
+import 'package:sunrise/entity/lover_entity.dart';
 
 class LobbyController extends ValueNotifier<LobbyState> {
   Stream streamLobby = const Stream.empty();
@@ -13,7 +13,7 @@ class LobbyController extends ValueNotifier<LobbyState> {
 
   LobbyController(super.value);
 
-  lobbyJoin(Lover lover) async {
+  lobbyJoin(LoverEntity lover) async {
     value = LobbyStateLoading();
     if (lobbyId.isEmpty) {
       value = LobbyStateFailureNoLobby();
@@ -42,7 +42,7 @@ class LobbyController extends ValueNotifier<LobbyState> {
     }
   }
 
-  lobbyLeave(LobbyEntity lobby, Lover lover) async {
+  lobbyLeave(LobbyEntity lobby, LoverEntity lover) async {
     // previous lobby
     value = LobbyStateLoading();
     lobby.removeLover(lover);
@@ -59,13 +59,13 @@ class LobbyController extends ValueNotifier<LobbyState> {
     value = LobbyStateSuccessNoReady(newlobby);
   }
 
-  lobbyCreate(Lover lover) async {
+  lobbyCreate(LoverEntity lover) async {
     value = LobbyStateLoading();
     LobbyEntity lobby = await createLobby(lover);
     value = LobbyStateSuccessNoReady(lobby);
   }
 
-  lobbyLoad(Lover lover) async {
+  lobbyLoad(LoverEntity lover) async {
     value = LobbyStateLoading();
     if (lobbyId.isEmpty) {
       value = LobbyStateInitial();
@@ -92,7 +92,7 @@ class LobbyController extends ValueNotifier<LobbyState> {
     }
   }
 
-  Future<LobbyEntity> createLobby(Lover lover) async {
+  Future<LobbyEntity> createLobby(LoverEntity lover) async {
     LobbyEntity lobby = LobbyEntity.empty();
     lobby.addLover(lover);
     lobby = await DataProviderLobby().create(lobby);

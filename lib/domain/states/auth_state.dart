@@ -1,11 +1,11 @@
-import 'package:sunrise/model/model_lover.dart';
+import 'package:sunrise/entity/lover_entity.dart';
 
 abstract class AuthState {}
 
 class AuthUninitialized extends AuthState {}
 
 class AuthAuthenticated extends AuthState {
-  final Lover lover;
+  final LoverEntity lover;
   AuthAuthenticated(this.lover);
 }
 

@@ -6,7 +6,7 @@ import 'package:sunrise/domain/chat/bloc_chat.dart';
 import 'package:sunrise/domain/lobby/lobby_controller.dart';
 import 'package:sunrise/services/getIt/get_it_dependencies.dart';
 import 'package:sunrise/services/notification/firebase_messaging_service.dart';
-import 'package:sunrise/model/model_chat_message.dart';
+import 'package:sunrise/entity/chat_message_entity.dart';
 import 'package:intl/intl.dart';
 
 class TabChat extends StatefulWidget {
@@ -84,7 +84,8 @@ class _TabChatState extends State<TabChat> {
                               IconButton(
                                 onPressed: () {
                                   if (_textChatController.text.isNotEmpty) {
-                                    final ChatMessage chatMessage = ChatMessage(
+                                    final ChatMessageEntity chatMessage =
+                                        ChatMessageEntity(
                                       _textChatController.text,
                                       authService.lover.id,
                                       DateTime.now(),
@@ -120,7 +121,7 @@ class _TabChatState extends State<TabChat> {
 
 class ChatBaloonLeft extends StatelessWidget {
   const ChatBaloonLeft({Key? key, required this.message}) : super(key: key);
-  final ChatMessage message;
+  final ChatMessageEntity message;
 
   @override
   Widget build(BuildContext context) {
@@ -167,7 +168,7 @@ class ChatBaloonLeft extends StatelessWidget {
 
 class ChatBaloonRight extends StatelessWidget {
   const ChatBaloonRight({Key? key, required this.message}) : super(key: key);
-  final ChatMessage message;
+  final ChatMessageEntity message;
 
   @override
   Widget build(BuildContext context) {

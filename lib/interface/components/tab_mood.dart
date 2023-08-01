@@ -5,8 +5,8 @@ import 'package:sunrise/datasource/mock_moods.dart';
 import 'package:sunrise/domain/auth/auth_notifier.dart';
 import 'package:sunrise/domain/lobby/lobby_controller.dart';
 import 'package:sunrise/domain/viewmodel_mood.dart';
-import 'package:sunrise/model/model_lover.dart';
-import 'package:sunrise/model/model_mood_matching.dart';
+import 'package:sunrise/entity/lover_entity.dart';
+import 'package:sunrise/entity/mood_matching_entity.dart';
 import 'package:sunrise/services/getIt/get_it_dependencies.dart';
 
 class TabMood extends StatefulWidget {
@@ -14,7 +14,7 @@ class TabMood extends StatefulWidget {
     Key? key,
     required this.lover,
   }) : super(key: key);
-  final Lover lover;
+  final LoverEntity lover;
   @override
   State<TabMood> createState() => _TabMoodState();
 }
@@ -44,8 +44,8 @@ class MoodMatchingSlider extends StatefulWidget {
     required this.moodMatch,
     required this.edit,
   }) : super(key: key);
-  final Lover lover;
-  final MoodMatching moodMatch;
+  final LoverEntity lover;
+  final MoodMatchingEntity moodMatch;
   final bool edit;
 
   @override
@@ -67,9 +67,9 @@ class _MoodMatchingSliderState extends State<MoodMatchingSlider> {
 
     return StreamBuilder(
       stream: viewModelMoodMatching.listenMood(),
-      builder: (context, AsyncSnapshot<MoodMatching> snap) {
+      builder: (context, AsyncSnapshot<MoodMatchingEntity> snap) {
         if (!snap.hasData) {
-          viewModelMoodMatching.state.moodMatching = MoodMatching(
+          viewModelMoodMatching.state.moodMatching = MoodMatchingEntity(
             mood1: widget.moodMatch.mood1,
             mood2: widget.moodMatch.mood2,
             matching: 5,

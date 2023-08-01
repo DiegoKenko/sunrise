@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:sunrise/application/screens/controller/avatar_change_controller.dart';
+import 'package:sunrise/interface/screens/controller/avatar_change_controller.dart';
 import 'package:sunrise/constants/styles.dart';
-import 'package:sunrise/model/model_lover.dart';
+import 'package:sunrise/entity/lover_entity.dart';
 
 class AvatarWidget extends StatefulWidget {
-  final Lover lover;
+  final LoverEntity lover;
   final bool edit;
   const AvatarWidget({
     super.key,
@@ -47,7 +47,7 @@ class _AvatarWidgetState extends State<AvatarWidget> {
 }
 
 class AvatarWidgetEdit extends StatefulWidget {
-  final Lover lover;
+  final LoverEntity lover;
   final bool edit;
   const AvatarWidgetEdit({
     super.key,

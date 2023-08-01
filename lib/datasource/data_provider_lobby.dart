@@ -2,8 +2,8 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sunrise/datasource/data_provider_lover.dart';
-import 'package:sunrise/model/model_lobby.dart';
-import 'package:sunrise/model/model_lover.dart';
+import 'package:sunrise/entity/lobby_entity.dart';
+import 'package:sunrise/entity/lover_entity.dart';
 
 class DataProviderLobby {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -43,7 +43,7 @@ class DataProviderLobby {
   }
 
   //update lobby
-  Future<void> updateLobbyLover(LobbyEntity lobby, Lover lover) async {
+  Future<void> updateLobbyLover(LobbyEntity lobby, LoverEntity lover) async {
     _update(lobby);
     await DataProviderLover().update(lover);
   }

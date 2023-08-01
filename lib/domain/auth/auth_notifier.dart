@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sunrise/datasource/data_provider_lover.dart';
 import 'package:sunrise/domain/auth/authentication.dart';
 import 'package:sunrise/domain/states/auth_state.dart';
-import 'package:sunrise/model/model_lover.dart';
+import 'package:sunrise/entity/lover_entity.dart';
 
 class AuthService extends ValueNotifier<AuthState> {
   AuthService() : super(AuthUninitialized());
@@ -14,7 +14,8 @@ class AuthService extends ValueNotifier<AuthState> {
 
     try {
       if (userCredencial.user != null) {
-        Lover lover = await DataProviderLover().getUser(userCredencial.user!);
+        LoverEntity lover =
+            await DataProviderLover().getUser(userCredencial.user!);
         await DataProviderLover().update(lover);
         value = AuthAuthenticated(lover);
       } else {
@@ -27,7 +28,7 @@ class AuthService extends ValueNotifier<AuthState> {
 
   Future<void> _register(UserCredential userCredencial) async {
     try {
-      Lover lover = Lover(
+      LoverEntity lover = LoverEntity(
         email: userCredencial.user!.email!,
         name: userCredencial.user!.displayName!,
         id: userCredencial.user!.uid,
@@ -49,11 +50,11 @@ class AuthService extends ValueNotifier<AuthState> {
     }
   }
 
-  Lover get lover {
+  LoverEntity get lover {
     if (value is AuthAuthenticated) {
       return (value as AuthAuthenticated).lover;
     } else {
-      return Lover.empty();
+      return LoverEntity.empty();
     }
   }
 

@@ -1,15 +1,15 @@
-class ChatMessage {
+class ChatMessageEntity {
   final String message;
   final String sentBy;
   final DateTime dateTime;
 
-  const ChatMessage(
+  const ChatMessageEntity(
     this.message,
     this.sentBy,
     this.dateTime,
   );
 
-  ChatMessage.fromJson(Map<String, dynamic> json)
+  ChatMessageEntity.fromJson(Map<String, dynamic> json)
       : message = json['message'],
         sentBy = json['sentBy'],
         dateTime = DateTime.parse(json['dateTime']);

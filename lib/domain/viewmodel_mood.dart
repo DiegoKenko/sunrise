@@ -1,10 +1,10 @@
 import 'package:sunrise/datasource/data_provider_mood_matching.dart';
-import 'package:sunrise/model/model_lover.dart';
-import 'package:sunrise/model/model_mood_matching.dart';
+import 'package:sunrise/entity/lover_entity.dart';
+import 'package:sunrise/entity/mood_matching_entity.dart';
 
 class MoodState {
-  MoodMatching moodMatching;
-  Lover lover;
+  MoodMatchingEntity moodMatching;
+  LoverEntity lover;
 
   MoodState({
     required this.lover,
@@ -17,7 +17,7 @@ class ViewModelMood {
   final String lobbyID;
   ViewModelMood({required this.state, required this.lobbyID});
 
-  Stream<MoodMatching> listenMood() {
+  Stream<MoodMatchingEntity> listenMood() {
     return DataProviderMoodMatching().listenMood(
       lobbyId: lobbyID,
       moodId: state.moodMatching.matchId,
@@ -26,7 +26,7 @@ class ViewModelMood {
   }
 
   void updateMatching(double match) {
-    MoodMatching moodMatching = state.moodMatching;
+    MoodMatchingEntity moodMatching = state.moodMatching;
     if (match < 1) {
       moodMatching.matching = 1;
     } else if (match > 10) {

@@ -1,17 +1,17 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:sunrise/application/components/animated_page_transition.dart';
-import 'package:sunrise/application/screens/controller/avatar_change_controller.dart';
-import 'package:sunrise/application/screens/lobby/avatar_widget.dart';
-import 'package:sunrise/application/screens/lobby/expandable_logout_leave.dart';
-import 'package:sunrise/application/screens/relationship/screen_relationship.dart';
+import 'package:sunrise/interface/components/animated_page_transition.dart';
+import 'package:sunrise/interface/screens/controller/avatar_change_controller.dart';
+import 'package:sunrise/interface/screens/lobby/avatar_widget.dart';
+import 'package:sunrise/interface/screens/lobby/expandable_logout_leave.dart';
+import 'package:sunrise/interface/screens/relationship/screen_relationship.dart';
 import 'package:sunrise/constants/enum/enum_lobby_status.dart';
 import 'package:sunrise/constants/styles.dart';
 import 'package:sunrise/domain/auth/auth_notifier.dart';
 import 'package:sunrise/domain/lobby/lobby_controller.dart';
 import 'package:sunrise/domain/lobby/lobby_state.dart';
-import 'package:sunrise/model/model_lobby.dart';
+import 'package:sunrise/entity/lobby_entity.dart';
 
 import 'package:sunrise/services/getIt/get_it_dependencies.dart';
 import 'package:sunrise/services/notification/firebase_messaging_service.dart';

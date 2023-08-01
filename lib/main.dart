@@ -1,8 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:sunrise/application/components/animated_page_transition.dart';
-import 'package:sunrise/application/screens/lobby/screen_lobby.dart';
+import 'package:sunrise/interface/components/animated_page_transition.dart';
+import 'package:sunrise/interface/screens/lobby/screen_lobby.dart';
 import 'package:sunrise/constants/constants.dart';
 import 'package:sunrise/constants/styles.dart';
 import 'package:sunrise/domain/auth/auth_notifier.dart';

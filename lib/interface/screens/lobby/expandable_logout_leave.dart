@@ -1,7 +1,7 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 
-import 'package:sunrise/application/components/animated_page_transition.dart';
+import 'package:sunrise/interface/components/animated_page_transition.dart';
 import 'package:sunrise/constants/styles.dart';
 import 'package:sunrise/domain/auth/auth_notifier.dart';
 import 'package:sunrise/domain/lobby/lobby_controller.dart';

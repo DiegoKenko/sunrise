@@ -1,11 +1,11 @@
-class Mood {
+class MoodEntity {
   String name;
   String iconName;
   final String iconPath = 'assets/moods/';
 
   get icon => iconPath + iconName;
 
-  Mood({
+  MoodEntity({
     required this.name,
     this.iconName = '',
   });
