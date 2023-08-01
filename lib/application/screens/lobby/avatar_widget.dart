@@ -37,34 +37,9 @@ class _AvatarWidgetState extends State<AvatarWidget> {
                   ),
                 ],
               )
-            : GestureDetector(
-                onTap: () {},
-                child: Stack(
-                  children: [
-                    AvatarWidgetEdit(
-                      lover: widget.lover,
-                      edit: widget.edit,
-                    ),
-                    Positioned.fill(
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text(
-                            'convidar',
-                            style: kTextLoverLobbyStyle.copyWith(
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+            : AvatarWidgetEdit(
+                lover: widget.lover,
+                edit: widget.edit,
               ),
       ),
     );

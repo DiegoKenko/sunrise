@@ -1,10 +1,10 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:sunrise/application/components/animated_page_transition.dart';
 import 'package:sunrise/constants/styles.dart';
 import 'package:sunrise/domain/auth/auth_notifier.dart';
-import 'package:sunrise/domain/lobby/bloc_lobby.dart';
+import 'package:sunrise/domain/lobby/lobby_controller.dart';
 import 'package:sunrise/main.dart';
 import 'package:sunrise/services/getIt/get_it_dependencies.dart';
 
@@ -69,13 +69,7 @@ class _ExpandableLogoutAndLeaveState extends State<ExpandableLogoutAndLeave> {
                     kPrimaryColor,
                   ),
                 ),
-                onPressed: () {
-                  context.read<LobbyBloc>().add(
-                        LobbyEventLeave(
-                          lover: _authService.lover,
-                        ),
-                      );
-                },
+                onPressed: () {},
                 child: const Row(
                   children: [
                     Icon(

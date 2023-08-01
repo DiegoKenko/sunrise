@@ -1,4 +1,4 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:sunrise/datasource/data_provider_chat.dart';
 import 'package:sunrise/model/model_chat_message.dart';
 import 'package:sunrise/model/model_lobby.dart';
@@ -7,7 +7,7 @@ abstract class ChatEvent {}
 
 class ChatEventAdd extends ChatEvent {
   final ChatMessage message;
-  final Lobby lobby;
+  final LobbyEntity lobby;
   ChatEventAdd(this.message, this.lobby);
 }
 
@@ -32,23 +32,12 @@ class ChatStateWatching extends ChatState {
       : super(messages, limit: limit);
 }
 
-class ChatBloc extends Bloc<ChatEvent, ChatState> {
-  ChatBloc() : super(ChatStateInitial()) {
-    on<ChatEventAdd>((event, emit) async {
-      await DataProviderChat().add(event.lobby.id, event.message);
-    });
+class ChatController extends ValueNotifier<ChatState> {
+  ChatController(super.value);
 
-    on<ChatEventWatch>((event, emit) async {
-      await emit.forEach(
-        DataProviderChat()
-            .watch(event.lobbyId, limit: state.limit + event.increseLimit),
-        onData: (data) {
-          return ChatStateWatching(
-            data.docs.map((e) => ChatMessage.fromJson(e.data())).toList(),
-            state.limit + event.increseLimit,
-          );
-        },
-      );
-    });
+  onChatEventAdd(LobbyEntity lobby, ChatMessage message) async {
+    await DataProviderChat().add(lobby.id, message);
   }
+
+  onChatEventWatch() async {}
 }

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sunrise/application/components/drawer_sunrise.dart';
 import 'package:sunrise/application/components/tab_chat.dart';
 import 'package:sunrise/application/components/tab_mood.dart';
 import 'package:sunrise/constants/styles.dart';
-import 'package:sunrise/domain/chat/bloc_chat.dart';
-import 'package:sunrise/domain/lobby/bloc_lobby.dart';
+import 'package:sunrise/domain/lobby/lobby_controller.dart';
+import 'package:sunrise/services/getIt/get_it_dependencies.dart';
 
 class ScreenRelationship extends StatefulWidget {
   const ScreenRelationship({Key? key}) : super(key: key);
@@ -109,10 +108,7 @@ class _ScreenRelationshipState extends State<ScreenRelationship>
                   children: [
                     const Tab(child: MoodRelationship()),
                     Tab(
-                      child: BlocProvider<ChatBloc>(
-                        create: (context) => ChatBloc(),
-                        child: const TabChat(),
-                      ),
+                      child: const TabChat(),
                     ),
                   ],
                 ),
@@ -134,6 +130,7 @@ class MoodRelationship extends StatefulWidget {
 class _MoodRelationshipState extends State<MoodRelationship>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  final LobbyController lobbyController = getIt<LobbyController>();
 
   @override
   void initState() {
@@ -144,64 +141,67 @@ class _MoodRelationshipState extends State<MoodRelationship>
 
   @override
   Widget build(BuildContext context) {
-    final LobbyBloc blocProviderLobby = context.watch<LobbyBloc>();
-    final LobbyState state = blocProviderLobby.state;
-
-    return Container(
-      decoration: kBackgroundDecorationDark,
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 10),
-            child: TabBar(
-              isScrollable: true,
-              labelColor: Colors.white,
-              labelStyle: const TextStyle(
-                fontSize: 15,
-              ),
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              indicator: BoxDecoration(
-                color: Colors.orange,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              tabs: [
-                Tab(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      state.lobby.lovers[0].name,
-                      style: kTextLoverRelationshipStyle,
-                    ),
+    return ValueListenableBuilder(
+      valueListenable: lobbyController,
+      builder: (context, state, _) {
+        return Container(
+          decoration: kBackgroundDecorationDark,
+          child: Column(
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 4.0, horizontal: 10),
+                child: TabBar(
+                  isScrollable: true,
+                  labelColor: Colors.white,
+                  labelStyle: const TextStyle(
+                    fontSize: 15,
                   ),
-                ),
-                Tab(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      state.lobby.lovers[1].name,
-                      style: kTextLoverRelationshipStyle,
-                    ),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  indicator: BoxDecoration(
+                    color: Colors.orange,
+                    borderRadius: BorderRadius.circular(15),
                   ),
-                )
-              ],
-              controller: _tabController,
-            ),
-          ),
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                Tab(
-                  child: TabMood(lover: state.lobby.lovers[0]),
+                  tabs: [
+                    Tab(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          state.lobby.lovers[0].name,
+                          style: kTextLoverRelationshipStyle,
+                        ),
+                      ),
+                    ),
+                    Tab(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          state.lobby.lovers[1].name,
+                          style: kTextLoverRelationshipStyle,
+                        ),
+                      ),
+                    )
+                  ],
+                  controller: _tabController,
                 ),
-                Tab(
-                  child: TabMood(lover: state.lobby.lovers[1]),
-                )
-              ],
-            ),
+              ),
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    Tab(
+                      child: TabMood(lover: state.lobby.lovers[0]),
+                    ),
+                    Tab(
+                      child: TabMood(lover: state.lobby.lovers[1]),
+                    )
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:sunrise/model/model_lover.dart';
 
-class Lobby {
+class LobbyEntity {
   List<Lover> lovers = [];
   String id = '';
   String get simpleId {
@@ -18,11 +18,11 @@ class Lobby {
 
   int maxLovers = 2;
 
-  Lobby({
+  LobbyEntity({
     required this.lovers,
   });
 
-  Lobby.empty() {
+  LobbyEntity.empty() {
     for (var i = 0; i < maxLovers; i++) {
       lovers.add(Lover());
     }
@@ -97,7 +97,7 @@ class Lobby {
     return Lover();
   }
 
-  Lobby.fromJson(Map<String, dynamic> json)
+  LobbyEntity.fromJson(Map<String, dynamic> json)
       : lovers = [
           Lover(
             id: json['lover1'] ?? '',

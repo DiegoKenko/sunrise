@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AvatarChangeController extends ValueNotifier<String> {
-  AvatarChangeController() : super('assets/avatar1.png');
+  AvatarChangeController() : super('assets/avatar.png');
   final List<String> avatarsAvailable = [
     'assets/avatar1.png',
     'assets/avatar2.png',

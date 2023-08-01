@@ -8,24 +8,24 @@ import 'package:sunrise/model/model_lover.dart';
 class DataProviderLobby {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Stream<Lobby> watch(Lobby lobby) async* {
-    Stream<Lobby> lobbyStream = Stream<Lobby>.value(lobby);
+  Stream<LobbyEntity> watch(LobbyEntity lobby) async* {
+    Stream<LobbyEntity> lobbyStream = Stream<LobbyEntity>.value(lobby);
     Stream<DocumentSnapshot<Map<String, dynamic>>> stream =
         _firestore.collection('lobby').doc(lobby.id).snapshots();
     stream.listen((event) async {
       if (event.exists) {
-        lobby = Lobby.fromJson(event.data()!);
+        lobby = LobbyEntity.fromJson(event.data()!);
         lobby.id = event.id;
         lobby.lovers[0] = await DataProviderLover().get(lobby.lovers[0].id);
         lobby.lovers[1] = await DataProviderLover().get(lobby.lovers[1].id);
-        lobbyStream = Stream<Lobby>.value(lobby);
+        lobbyStream = Stream<LobbyEntity>.value(lobby);
       }
     });
     yield* lobbyStream;
   }
 
   //create lobby
-  Future<Lobby> create(Lobby lobby) async {
+  Future<LobbyEntity> create(LobbyEntity lobby) async {
     DocumentReference<Map<String, dynamic>> docRef =
         await _firestore.collection('lobby').add(lobby.toJson());
     lobby.id = docRef.id;
@@ -34,7 +34,7 @@ class DataProviderLobby {
   }
 
   //update lobby
-  Future<void> _update(Lobby lobby) async {
+  Future<void> _update(LobbyEntity lobby) async {
     if (lobby.isEmpty()) {
       delete(lobby);
     } else {
@@ -43,13 +43,13 @@ class DataProviderLobby {
   }
 
   //update lobby
-  Future<void> updateLobbyLover(Lobby lobby, Lover lover) async {
+  Future<void> updateLobbyLover(LobbyEntity lobby, Lover lover) async {
     _update(lobby);
     await DataProviderLover().update(lover);
   }
 
   //delete lobby
-  Future<void> delete(Lobby lobby) async {
+  Future<void> delete(LobbyEntity lobby) async {
     if (lobby.id.isEmpty) {
       return;
     }
@@ -57,18 +57,18 @@ class DataProviderLobby {
   }
 
   //get lobby
-  Future<Lobby> getSimpleId(String simpleID) async {
+  Future<LobbyEntity> getSimpleId(String simpleID) async {
     QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
         .collection('lobby')
         .where('simpleID', isEqualTo: simpleID.toUpperCase())
         .get();
-    Lobby lobby = Lobby.empty();
+    LobbyEntity lobby = LobbyEntity.empty();
     if (snapshot.docs.isEmpty) {
       return lobby;
     }
     QueryDocumentSnapshot<Map<String, dynamic>> doc = snapshot.docs.first;
     if (doc.exists) {
-      lobby = Lobby.fromJson(doc.data());
+      lobby = LobbyEntity.fromJson(doc.data());
       lobby.id = doc.id;
       if (lobby.lovers[0].id.isNotEmpty) {
         lobby.lovers[0] = await DataProviderLover().get(lobby.lovers[0].id);
@@ -80,13 +80,13 @@ class DataProviderLobby {
     return lobby;
   }
 
-  Future<Lobby> get(String id) async {
+  Future<LobbyEntity> get(String id) async {
     DocumentSnapshot<Map<String, dynamic>> snapshot =
         await _firestore.collection('lobby').doc(id).get();
-    Lobby lobby = Lobby.empty();
+    LobbyEntity lobby = LobbyEntity.empty();
 
     if (snapshot.data() != null) {
-      lobby = Lobby.fromJson(snapshot.data()!);
+      lobby = LobbyEntity.fromJson(snapshot.data()!);
       lobby.id = snapshot.id;
       if (lobby.lovers[0].id.isNotEmpty) {
         lobby.lovers[0] = await DataProviderLover().get(lobby.lovers[0].id);

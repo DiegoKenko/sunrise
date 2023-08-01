@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/foundation.dart';
+
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -65,24 +66,18 @@ class PaymentConfirmIntentEvent extends PaymentEvent {
   List<Object?> get props => [clientSecret];
 }
 
-class BlocPayment extends Bloc<PaymentEvent, PaymentState> {
-  BlocPayment() : super(const PaymentState()) {
-    on<PaymentStartEvent>(_onPaymentStart);
-
-    on<PaymentCreateIntentEvent>(_onPaymentCreateIntent);
-
-    on<PaymentConfirmIntentEvent>(_onPaymentConfirmIntent);
-  }
+class PaymentController extends ValueNotifier<PaymentState> {
+  PaymentController() : super(const PaymentState());
 
   FutureOr<void> _onPaymentStart(event, emit) {
-    emit(state.copyWith(status: PaymentStatus.initial));
+    value = value.copyWith(status: PaymentStatus.initial);
   }
 
   FutureOr<void> _onPaymentCreateIntent(
     PaymentCreateIntentEvent event,
     emit,
   ) async {
-    emit(state.copyWith(status: PaymentStatus.loading));
+    value = value.copyWith(status: PaymentStatus.loading);
 
     final paymentIntent = await Stripe.instance.createPaymentMethod(
       params: PaymentMethodParams.card(
@@ -97,14 +92,14 @@ class BlocPayment extends Bloc<PaymentEvent, PaymentState> {
     );
 
     if (paymentIntentResults['error'] != null) {
-      emit(state.copyWith(status: PaymentStatus.failure));
+      value = value.copyWith(status: PaymentStatus.failure);
     } else {
       if (paymentIntentResults['clientSecret'] != null) {
         if (paymentIntentResults['requiresAction'] == true) {
           final String clientSecret = paymentIntentResults['clientSecret'];
-          add(PaymentConfirmIntentEvent(clientSecret: clientSecret));
+          PaymentConfirmIntentEvent(clientSecret: clientSecret);
         } else {
-          emit(state.copyWith(status: PaymentStatus.success));
+          value = value.copyWith(status: PaymentStatus.success);
         }
       }
     }
@@ -114,7 +109,7 @@ class BlocPayment extends Bloc<PaymentEvent, PaymentState> {
     PaymentConfirmIntentEvent event,
     emit,
   ) async {
-    emit(state.copyWith(status: PaymentStatus.loading));
+    value = value.copyWith(status: PaymentStatus.loading);
     try {
       final paymentIntent =
           await Stripe.instance.handleNextAction(event.clientSecret);
@@ -122,14 +117,14 @@ class BlocPayment extends Bloc<PaymentEvent, PaymentState> {
         Map<String, dynamic> results =
             await callPayEndpointIntentId(paymentIntentId: paymentIntent.id);
         if (results['error'] != null) {
-          emit(state.copyWith(status: PaymentStatus.failure));
+          value.copyWith(status: PaymentStatus.failure);
         } else {
-          emit(state.copyWith(status: PaymentStatus.success));
+          value.copyWith(status: PaymentStatus.success);
         }
       }
-      emit(state.copyWith(status: PaymentStatus.success));
+      value.copyWith(status: PaymentStatus.success);
     } catch (e) {
-      emit(state.copyWith(status: PaymentStatus.failure));
+      value.copyWith(status: PaymentStatus.failure);
     }
   }
 

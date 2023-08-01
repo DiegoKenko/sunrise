@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:sunrise/constants/styles.dart';
 import 'package:sunrise/datasource/mock_moods.dart';
 import 'package:sunrise/domain/auth/auth_notifier.dart';
-import 'package:sunrise/domain/lobby/bloc_lobby.dart';
+import 'package:sunrise/domain/lobby/lobby_controller.dart';
 import 'package:sunrise/domain/viewmodel_mood.dart';
 import 'package:sunrise/model/model_lover.dart';
 import 'package:sunrise/model/model_mood_matching.dart';
@@ -53,6 +53,8 @@ class MoodMatchingSlider extends StatefulWidget {
 }
 
 class _MoodMatchingSliderState extends State<MoodMatchingSlider> {
+  LobbyController lobbyController = getIt<LobbyController>();
+
   @override
   Widget build(BuildContext context) {
     ViewModelMood viewModelMoodMatching = ViewModelMood(
@@ -60,7 +62,7 @@ class _MoodMatchingSliderState extends State<MoodMatchingSlider> {
         lover: widget.lover,
         moodMatching: widget.moodMatch,
       ),
-      lobbyID: context.read<LobbyBloc>().state.lobby.id,
+      lobbyID: lobbyController.lobbyId,
     );
 
     return StreamBuilder(

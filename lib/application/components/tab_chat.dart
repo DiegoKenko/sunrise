@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sunrise/constants/constants.dart';
 import 'package:sunrise/constants/styles.dart';
 import 'package:sunrise/domain/auth/auth_notifier.dart';
 import 'package:sunrise/domain/chat/bloc_chat.dart';
-import 'package:sunrise/domain/lobby/bloc_lobby.dart';
+import 'package:sunrise/domain/lobby/lobby_controller.dart';
 import 'package:sunrise/services/getIt/get_it_dependencies.dart';
 import 'package:sunrise/services/notification/firebase_messaging_service.dart';
 import 'package:sunrise/model/model_chat_message.dart';
@@ -19,19 +18,13 @@ class TabChat extends StatefulWidget {
 class _TabChatState extends State<TabChat> {
   final _textChatController = TextEditingController();
   final _listChatController = ScrollController();
+  late ChatController chatController;
 
   @override
   void initState() {
     _listChatController.addListener(() {
       if (_listChatController.position.pixels ==
-          _listChatController.position.minScrollExtent) {
-        context.read<ChatBloc>().add(
-              ChatEventWatch(
-                context.read<LobbyBloc>().state.lobby.id,
-                increseLimit: chatMessageLimit,
-              ),
-            );
-      }
+          _listChatController.position.minScrollExtent) {}
     });
     super.initState();
   }
@@ -39,14 +32,9 @@ class _TabChatState extends State<TabChat> {
   @override
   Widget build(BuildContext context) {
     final AuthService authService = getIt<AuthService>();
-    return BlocBuilder<ChatBloc, ChatState>(
-      bloc: context.read<ChatBloc>()
-        ..add(
-          ChatEventWatch(
-            context.read<LobbyBloc>().state.lobby.id,
-          ),
-        ),
-      builder: (context, state) {
+    return ValueListenableBuilder(
+      valueListenable: chatController,
+      builder: (context, state, _) {
         return Container(
           decoration: kBackgroundDecorationDark,
           child: state is ChatStateWatching
@@ -100,35 +88,6 @@ class _TabChatState extends State<TabChat> {
                                       _textChatController.text,
                                       authService.lover.id,
                                       DateTime.now(),
-                                    );
-                                    context.read<ChatBloc>().add(
-                                          ChatEventAdd(
-                                            // ignore: require_trailing_commas
-                                            chatMessage,
-                                            context
-                                                .read<LobbyBloc>()
-                                                .state
-                                                .lobby,
-                                          ),
-                                        );
-                                    context
-                                        .read<FirebaseMessagingService>()
-                                        .sendMessage(
-                                          context
-                                              .read<LobbyBloc>()
-                                              .state
-                                              .lobby
-                                              .couple(
-                                                authService.lover.id,
-                                              )
-                                              .notificationToken,
-                                          chatMessage,
-                                        );
-
-                                    _textChatController.clear();
-                                    _listChatController.jumpTo(
-                                      _listChatController
-                                          .position.maxScrollExtent,
                                     );
                                   }
                                 },
