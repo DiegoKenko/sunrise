@@ -1,16 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sunrise/datasource/data_provider_lover.dart';
-import 'package:sunrise/domain/auth/authentication.dart';
-import 'package:sunrise/domain/states/auth_state.dart';
+import 'package:sunrise/interface/controllers/auth/firebase_auth_controller.dart';
+import 'package:sunrise/interface/states/auth_state.dart';
 import 'package:sunrise/entity/lover_entity.dart';
 
-class AuthService extends ValueNotifier<AuthState> {
-  AuthService() : super(AuthUninitialized());
+class AuthController extends ValueNotifier<AuthState> {
+  AuthController() : super(AuthUninitialized());
 
   Future<void> authenticate() async {
     final UserCredential userCredencial =
-        await FirebaseAuthentication().signInWithGoogle();
+        await FirebaseAuthController().signInWithGoogle();
 
     try {
       if (userCredencial.user != null) {
@@ -43,7 +43,7 @@ class AuthService extends ValueNotifier<AuthState> {
 
   Future<void> logout() async {
     try {
-      await FirebaseAuthentication().signOut();
+      await FirebaseAuthController().signOut();
       value = AuthUnauthenticated();
     } catch (e) {
       value = AuthError(e.toString());

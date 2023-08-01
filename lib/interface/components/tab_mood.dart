@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:sunrise/constants/styles.dart';
 import 'package:sunrise/datasource/mock_moods.dart';
-import 'package:sunrise/domain/auth/auth_notifier.dart';
-import 'package:sunrise/domain/lobby/lobby_controller.dart';
-import 'package:sunrise/domain/viewmodel_mood.dart';
+import 'package:sunrise/interface/controllers/auth/auth_controller.dart';
+import 'package:sunrise/interface/controllers/lobby/lobby_controller.dart';
+import 'package:sunrise/entity/viewmodel_mood.dart';
 import 'package:sunrise/entity/lover_entity.dart';
 import 'package:sunrise/entity/mood_matching_entity.dart';
 import 'package:sunrise/services/getIt/get_it_dependencies.dart';
@@ -22,7 +21,7 @@ class TabMood extends StatefulWidget {
 class _TabMoodState extends State<TabMood> {
   @override
   Widget build(BuildContext context) {
-    final AuthService authService = getIt<AuthService>();
+    final AuthController authService = getIt<AuthController>();
     return ListView.builder(
       shrinkWrap: true,
       itemBuilder: (context, index) {

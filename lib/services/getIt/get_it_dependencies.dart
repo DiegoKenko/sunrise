@@ -1,7 +1,7 @@
 import 'package:get_it/get_it.dart';
-import 'package:sunrise/domain/auth/auth_notifier.dart';
-import 'package:sunrise/domain/lobby/lobby_controller.dart';
-import 'package:sunrise/domain/lobby/lobby_state.dart';
+import 'package:sunrise/interface/controllers/auth/auth_controller.dart';
+import 'package:sunrise/interface/controllers/lobby/lobby_controller.dart';
+import 'package:sunrise/interface/states/lobby_state.dart';
 import 'package:sunrise/services/notification/firebase_messaging_service.dart';
 import 'package:sunrise/services/notification/notification_service.dart';
 
@@ -12,7 +12,7 @@ void setup() {
   getIt.registerLazySingleton<FirebaseMessagingService>(
     () => FirebaseMessagingService(getIt.get<NotificationService>()),
   );
-  getIt.registerLazySingleton<AuthService>(() => AuthService());
+  getIt.registerLazySingleton<AuthController>(() => AuthController());
   getIt.registerLazySingleton<LobbyController>(
-      () => LobbyController(LobbyStateInitial()));
+      () => LobbyController(LobbyStateInitial()),);
 }

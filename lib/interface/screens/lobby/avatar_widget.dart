@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sunrise/interface/screens/controller/avatar_change_controller.dart';
+import 'package:sunrise/interface/controllers/widgets/avatar_change_controller.dart';
 import 'package:sunrise/constants/styles.dart';
 import 'package:sunrise/entity/lover_entity.dart';
 

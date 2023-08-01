@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'package:sunrise/interface/components/animated_page_transition.dart';
 import 'package:sunrise/constants/styles.dart';
-import 'package:sunrise/domain/auth/auth_notifier.dart';
-import 'package:sunrise/domain/lobby/lobby_controller.dart';
-import 'package:sunrise/main.dart';
+import 'package:sunrise/interface/controllers/auth/auth_controller.dart';
+import 'package:sunrise/interface/screens/login/login_page_view.dart';
 import 'package:sunrise/services/getIt/get_it_dependencies.dart';
 
 class ExpandableLogoutAndLeave extends StatefulWidget {
@@ -18,7 +17,7 @@ class ExpandableLogoutAndLeave extends StatefulWidget {
 
 class _ExpandableLogoutAndLeaveState extends State<ExpandableLogoutAndLeave> {
   final _leaveLobbyController = ExpandableController(initialExpanded: false);
-  final AuthService _authService = getIt<AuthService>();
+  final AuthController _authService = getIt<AuthController>();
   @override
   Widget build(BuildContext context) {
     return Expandable(
@@ -103,7 +102,7 @@ class _ExpandableLogoutAndLeaveState extends State<ExpandableLogoutAndLeave> {
                   Navigator.pushReplacement(
                     context,
                     AnimatedPageTransition(
-                      page: const Home(),
+                      page: const LoginScreenView(),
                     ),
                   );
                 },

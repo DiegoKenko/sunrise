@@ -47,7 +47,7 @@ class NotificationService {
   }
 
   showNotificationScheduled(
-      ChatNotificationEntity notification, Duration duration) {
+      ChatNotificationEntity notification, Duration duration,) {
     final date = DateTime.now().add(duration);
 
     localNotificationsPlugin.zonedSchedule(

@@ -5,9 +5,8 @@ import 'package:sunrise/interface/components/animated_page_transition.dart';
 import 'package:sunrise/interface/screens/lobby/screen_lobby.dart';
 import 'package:sunrise/constants/constants.dart';
 import 'package:sunrise/constants/styles.dart';
-import 'package:sunrise/domain/auth/auth_notifier.dart';
-import 'package:sunrise/services/notification/firebase_messaging_service.dart';
-import 'package:sunrise/services/notification/notification_service.dart';
+import 'package:sunrise/interface/controllers/auth/auth_controller.dart';
+import 'package:sunrise/interface/screens/login/login_page_view.dart';
 import 'package:sunrise/firebase_options.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:sunrise/services/getIt/get_it_dependencies.dart';
@@ -26,27 +25,27 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authService = getIt<AuthService>();
+    final authService = getIt<AuthController>();
     return ValueListenableBuilder(
       valueListenable: authService,
       builder: (context, state, child) {
         return MaterialApp(
           routes: {
-            '/login': (context) => const Home(),
+            '/login': (context) => const LoginScreenView(),
           },
           onGenerateRoute: (settings) {
             if (!authService.isAuth()) {
               Navigator.pushReplacement(
                 context,
                 AnimatedPageTransition(
-                  page: const Home(),
+                  page: const LoginScreenView(),
                 ),
               );
             }
             return null;
           },
           onGenerateInitialRoutes: (initialRoute) {
-            final AuthService authService = getIt<AuthService>();
+            final AuthController authService = getIt<AuthController>();
             if (authService.isAuth()) {
               return [
                 AnimatedPageTransition(
@@ -56,7 +55,7 @@ class MyApp extends StatelessWidget {
             } else {
               return [
                 AnimatedPageTransition(
-                  page: const Home(),
+                  page: const LoginScreenView(),
                 ),
               ];
             }
@@ -84,97 +83,6 @@ class MyApp extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-}
-
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
-  @override
-  State<Home> createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  final AuthService authService = getIt<AuthService>();
-
-  @override
-  void initState() {
-    authService.authenticate();
-    initilizeFirebaseMessaging();
-    checkNotifications();
-    super.initState();
-  }
-
-  initilizeFirebaseMessaging() async {
-    FirebaseMessagingService firebaseMessagingService =
-        getIt<FirebaseMessagingService>();
-    firebaseMessagingService.initialize();
-  }
-
-  checkNotifications() async {
-    NotificationService notificationService = getIt<NotificationService>();
-    notificationService.checkForNotifications();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        key: const Key('loginGoogleButton '),
-        decoration: const BoxDecoration(
-          color: Colors.grey,
-          image: DecorationImage(
-            image: AssetImage('assets/background_login.png'),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Align(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 50.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  child: Container(
-                    width: 140,
-                    height: 70,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Image.asset('assets/google_icon.png'),
-                        ),
-                        const Expanded(
-                          child: Center(
-                            child: Text('Entrar'),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  onTap: () async {
-                    if (!authService.isAuth()) {
-                      await authService.authenticate();
-                    }
-                    Navigator.pushReplacement(
-                      context,
-                      AnimatedPageTransition(
-                        page: const ScreenLobby(),
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
     );
   }
 }

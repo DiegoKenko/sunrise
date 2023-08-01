@@ -5,7 +5,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sunrise/datasource/data_provider_lover.dart';
 import 'package:sunrise/entity/lover_entity.dart';
 
-class FirebaseAuthentication {
+class FirebaseAuthController {
   final FirebaseAuth _instance = FirebaseAuth.instance;
 
   Stream<LoverEntity?> authStateChanges() async* {

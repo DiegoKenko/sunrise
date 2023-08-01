@@ -1,9 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:sunrise/constants/enum/enum_lobby_status.dart';
 import 'package:sunrise/datasource/data_provider_lobby.dart';
 import 'package:sunrise/datasource/data_provider_lover.dart';
-import 'package:sunrise/domain/lobby/lobby_state.dart';
+import 'package:sunrise/interface/states/lobby_state.dart';
 import 'package:sunrise/entity/lobby_entity.dart';
 import 'package:sunrise/entity/lover_entity.dart';
 

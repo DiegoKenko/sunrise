@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sunrise/interface/components/animated_page_transition.dart';
-import 'package:sunrise/domain/auth/auth_notifier.dart';
-import 'package:sunrise/domain/states/auth_state.dart';
-import 'package:sunrise/main.dart';
+import 'package:sunrise/interface/controllers/auth/auth_controller.dart';
+import 'package:sunrise/interface/states/auth_state.dart';
+import 'package:sunrise/interface/screens/login/login_page_view.dart';
 import 'package:sunrise/entity/lover_entity.dart';
 import 'package:sunrise/services/getIt/get_it_dependencies.dart';
 
@@ -18,7 +18,7 @@ class SunriseDrawer extends StatefulWidget {
 class _SunriseDrawerState extends State<SunriseDrawer> {
   @override
   Widget build(BuildContext context) {
-    final AuthService authService = getIt<AuthService>();
+    final AuthController authService = getIt<AuthController>();
     LoverEntity lover = LoverEntity.empty();
 
     return ValueListenableBuilder(
@@ -108,7 +108,7 @@ class _SunriseDrawerState extends State<SunriseDrawer> {
                   Navigator.pushReplacement(
                     context,
                     AnimatedPageTransition(
-                      page: const Home(),
+                      page: const LoginScreenView(),
                     ),
                   );
                 },

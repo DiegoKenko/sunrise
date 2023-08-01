@@ -3,7 +3,7 @@ import 'package:sunrise/interface/components/drawer_sunrise.dart';
 import 'package:sunrise/interface/components/tab_chat.dart';
 import 'package:sunrise/interface/components/tab_mood.dart';
 import 'package:sunrise/constants/styles.dart';
-import 'package:sunrise/domain/lobby/lobby_controller.dart';
+import 'package:sunrise/interface/controllers/lobby/lobby_controller.dart';
 import 'package:sunrise/services/getIt/get_it_dependencies.dart';
 
 class ScreenRelationship extends StatefulWidget {
@@ -105,10 +105,10 @@ class _ScreenRelationshipState extends State<ScreenRelationship>
                 flex: 18,
                 child: TabBarView(
                   controller: _tabController,
-                  children: [
-                    const Tab(child: MoodRelationship()),
+                  children: const [
+                    Tab(child: MoodRelationship()),
                     Tab(
-                      child: const TabChat(),
+                      child: TabChat(),
                     ),
                   ],
                 ),

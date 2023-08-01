@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:sunrise/constants/constants.dart';
 import 'package:sunrise/constants/styles.dart';
-import 'package:sunrise/domain/auth/auth_notifier.dart';
-import 'package:sunrise/domain/chat/bloc_chat.dart';
-import 'package:sunrise/domain/lobby/lobby_controller.dart';
+import 'package:sunrise/interface/controllers/auth/auth_controller.dart';
+import 'package:sunrise/interface/controllers/chat/chat_controller.dart';
+import 'package:sunrise/interface/states/chat_state.dart';
 import 'package:sunrise/services/getIt/get_it_dependencies.dart';
-import 'package:sunrise/services/notification/firebase_messaging_service.dart';
 import 'package:sunrise/entity/chat_message_entity.dart';
 import 'package:intl/intl.dart';
 
@@ -31,7 +29,7 @@ class _TabChatState extends State<TabChat> {
 
   @override
   Widget build(BuildContext context) {
-    final AuthService authService = getIt<AuthService>();
+    final AuthController authService = getIt<AuthController>();
     return ValueListenableBuilder(
       valueListenable: chatController,
       builder: (context, state, _) {
@@ -83,14 +81,7 @@ class _TabChatState extends State<TabChat> {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  if (_textChatController.text.isNotEmpty) {
-                                    final ChatMessageEntity chatMessage =
-                                        ChatMessageEntity(
-                                      _textChatController.text,
-                                      authService.lover.id,
-                                      DateTime.now(),
-                                    );
-                                  }
+                                  if (_textChatController.text.isNotEmpty) {}
                                 },
                                 icon: const Icon(
                                   Icons.send,

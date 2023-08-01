@@ -69,11 +69,11 @@ class PaymentConfirmIntentEvent extends PaymentEvent {
 class PaymentController extends ValueNotifier<PaymentState> {
   PaymentController() : super(const PaymentState());
 
-  FutureOr<void> _onPaymentStart(event, emit) {
+  FutureOr<void> onPaymentStart(event, emit) {
     value = value.copyWith(status: PaymentStatus.initial);
   }
 
-  FutureOr<void> _onPaymentCreateIntent(
+  FutureOr<void> onPaymentCreateIntent(
     PaymentCreateIntentEvent event,
     emit,
   ) async {
@@ -105,7 +105,7 @@ class PaymentController extends ValueNotifier<PaymentState> {
     }
   }
 
-  FutureOr<void> _onPaymentConfirmIntent(
+  FutureOr<void> onPaymentConfirmIntent(
     PaymentConfirmIntentEvent event,
     emit,
   ) async {
