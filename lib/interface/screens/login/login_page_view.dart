@@ -9,10 +9,10 @@ import 'package:sunrise/services/notification/notification_service.dart';
 class LoginScreenView extends StatefulWidget {
   const LoginScreenView({Key? key}) : super(key: key);
   @override
-  State<LoginScreenView> createState() => _HomeState();
+  State<LoginScreenView> createState() => _LoginScreenViewState();
 }
 
-class _HomeState extends State<LoginScreenView> {
+class _LoginScreenViewState extends State<LoginScreenView> {
   final AuthController authService = getIt<AuthController>();
 
   @override

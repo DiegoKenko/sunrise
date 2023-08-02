@@ -14,40 +14,46 @@ import 'package:sunrise/usecase/lobby/lover_leave_lobby_usecase.dart';
 
 class LobbyController extends ValueNotifier<LobbyState> {
   Stream streamLobby = const Stream.empty();
-  String lobbyId = '';
-  LobbyLoadSimpleIdDatasource lobbyLoadSimpleIdDatasource =
+  final LobbyLoadSimpleIdDatasource _lobbyLoadSimpleIdDatasource =
       LobbyLoadSimpleIdDatasource();
-  LobbyLoadDatasource lobbyLoadDatasource = LobbyLoadDatasource();
-  LobbyWatchDatasource lobbyWatchDatasource = LobbyWatchDatasource();
-  LobbyDeleteDatasource lobbyDeleteDatasource = LobbyDeleteDatasource();
-  LoverJoinLobbyUsecase lobbyJoinUsecase = LoverJoinLobbyUsecase();
-  LoverLeaveLobbyUsecase lobbyLeaveUsecase = LoverLeaveLobbyUsecase();
+  final LobbyLoadDatasource _lobbyLoadDatasource = LobbyLoadDatasource();
+  final LobbyWatchDatasource _lobbyWatchDatasource = LobbyWatchDatasource();
+  final LobbyDeleteDatasource _lobbyDeleteDatasource = LobbyDeleteDatasource();
+  final LoverJoinLobbyUsecase _lobbyJoinUsecase = LoverJoinLobbyUsecase();
+  final LoverLeaveLobbyUsecase _lobbyLeaveUsecase = LoverLeaveLobbyUsecase();
 
   LobbyController(super.value);
 
+  Future<void> init(LoverEntity lover) async {
+    await _lobbyLoad(lover);
+  }
+
   lobbyJoin(LoverEntity lover) async {
     value = LobbyStateLoading();
-    if (lobbyId.isEmpty) {
+    if (value.lobby.id.isEmpty) {
       value = LobbyStateFailureNoLobby();
       return;
     }
-    LobbyEntity? lobby = await lobbyLoadSimpleIdDatasource(lobbyId);
+    LobbyEntity lobby = await _lobbyLoadSimpleIdDatasource(value.lobby.id);
     if (lobby.id.isEmpty) {
       value = LobbyStateFailureNoLobby();
       return;
     }
     if (lobby.isLoverInLobby(lover)) {
       value = LobbyStateSuccessNoReady(lobby);
+      _checkReady();
       return;
     }
+
     if (lobby.haveRoom()) {
       lobby.addLover(lover);
       lover.lobbyId = lobby.id;
-      await lobbyJoinUsecase(lobby, lover);
+      await _lobbyJoinUsecase(lobby, lover);
       value = LobbyStateSuccessNoReady(lobby);
     } else {
       if (lobby.lovers[0].id == lover.id || lobby.lovers[1].id == lover.id) {
         value = LobbyStateSuccessNoReady(lobby);
+        _checkReady();
       } else {
         value = LobbyStateFailureNoRoom(lobby);
       }
@@ -59,52 +65,49 @@ class LobbyController extends ValueNotifier<LobbyState> {
     value = LobbyStateLoading();
     lobby.removeLover(lover);
     if (lobby.isEmpty()) {
-      await lobbyDeleteDatasource(lobby);
+      await _lobbyDeleteDatasource(lobby);
     }
-    await lobbyLeaveUsecase(lobby, lover);
+    await _lobbyLeaveUsecase(lobby, lover);
 
     // new lobby
-    LobbyEntity newlobby = await createLobby(lover);
+    LobbyEntity newlobby = await _createLobby(lover);
     lover.lobbyId = newlobby.id;
-    await lobbyJoinUsecase(newlobby, lover);
+    await _lobbyJoinUsecase(newlobby, lover);
     streamLobby = const Stream.empty();
     value = LobbyStateSuccessNoReady(newlobby);
   }
 
   lobbyCreate(LoverEntity lover) async {
     value = LobbyStateLoading();
-    LobbyEntity lobby = await createLobby(lover);
+    LobbyEntity lobby = await _createLobby(lover);
     value = LobbyStateSuccessNoReady(lobby);
   }
 
-  lobbyLoad(LoverEntity lover) async {
+  _checkReady() {
+    value = value.lobby.isFull()
+        ? LobbyStateSuccessReady(value.lobby)
+        : LobbyStateSuccessNoReady(value.lobby);
+  }
+
+  _lobbyLoad(LoverEntity lover) async {
     value = LobbyStateLoading();
-    if (lobbyId.isEmpty) {
-      value = LobbyStateInitial();
-      LobbyEntity lobby = await createLobby(lover);
+    if (lover.lobbyId.isEmpty) {
+      LobbyEntity lobby = await _createLobby(lover);
       value = LobbyStateSuccessNoReady(lobby);
     } else {
-      if (lover.lobbyId.isEmpty) {
-        LobbyEntity lobby = await createLobby(lover);
-        value = LobbyStateSuccessNoReady(lobby);
-      } else {
-        LobbyEntity lobby = await lobbyLoadDatasource(lover.lobbyId);
-        value = LobbyStateSuccessNoReady(lobby);
-        if (lobby.id.isEmpty) {
-          lobby = await createLobby(lover);
-          value = LobbyStateSuccessNoReady(lobby);
-        }
-      }
+      LobbyEntity lobby = await _lobbyLoadDatasource(lover.lobbyId);
+      value = LobbyStateSuccessNoReady(lobby);
     }
+    _checkReady();
   }
 
   lobbyWatch(LobbyEntity lobby) async {
     if (lobby.id.isNotEmpty) {
-      streamLobby = lobbyWatchDatasource(lobby);
+      streamLobby = _lobbyWatchDatasource(lobby);
     }
   }
 
-  Future<LobbyEntity> createLobby(LoverEntity lover) async {
+  Future<LobbyEntity> _createLobby(LoverEntity lover) async {
     LobbyCreateDatasource lobbyCreateDatasource = LobbyCreateDatasource();
     LobbyEntity lobby = LobbyEntity.empty();
     lobby.addLover(lover);

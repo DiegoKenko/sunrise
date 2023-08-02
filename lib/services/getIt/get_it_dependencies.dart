@@ -18,5 +18,6 @@ void setup() {
     () => LobbyController(LobbyStateInitial()),
   );
   getIt.registerLazySingleton<FirebaseFirestore>(
-      () => FirebaseFirestore.instance);
+    () => FirebaseFirestore.instance,
+  );
 }

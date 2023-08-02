@@ -61,7 +61,7 @@ class _MoodMatchingSliderState extends State<MoodMatchingSlider> {
         lover: widget.lover,
         moodMatching: widget.moodMatch,
       ),
-      lobbyID: lobbyController.lobbyId,
+      lobbyID: lobbyController.value.lobby.id,
     );
 
     return StreamBuilder(

@@ -17,15 +17,15 @@ void main() async {
   await Stripe.instance.applySettings();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   setup();
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+  final authService = getIt<AuthController>();
 
   @override
   Widget build(BuildContext context) {
-    final authService = getIt<AuthController>();
     return ValueListenableBuilder(
       valueListenable: authService,
       builder: (context, state, child) {
@@ -45,7 +45,6 @@ class MyApp extends StatelessWidget {
             return null;
           },
           onGenerateInitialRoutes: (initialRoute) {
-            final AuthController authService = getIt<AuthController>();
             if (authService.isAuth()) {
               return [
                 AnimatedPageTransition(
