@@ -34,8 +34,10 @@ class AvatarChangeController extends ValueNotifier<String> {
     int index = avatarsAvailable.indexWhere((element) => element == value);
     if (index == 0) {
       return avatarsAvailable.last;
-    } else {
+    } else if (index > 0) {
       return avatarsAvailable[index - 1];
+    } else {
+      return avatarsAvailable.last;
     }
   }
 }

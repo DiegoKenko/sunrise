@@ -4,8 +4,8 @@ import 'package:sunrise/interface/components/animated_page_transition.dart';
 import 'package:sunrise/interface/controllers/auth/auth_controller.dart';
 import 'package:sunrise/interface/controllers/lobby/lobby_controller.dart';
 import 'package:sunrise/interface/screens/lobby/expandable_logout_leave.dart';
-import 'package:sunrise/interface/screens/lobby/lobby_lover_atual.dart';
-import 'package:sunrise/interface/screens/relationship/screen_relationship.dart';
+import 'package:sunrise/interface/screens/lobby/lobby_lover_widget.dart';
+import 'package:sunrise/interface/screens/relationship/relationship_page_view.dart';
 import 'package:sunrise/interface/states/lobby_state.dart';
 import 'package:sunrise/services/getIt/get_it_dependencies.dart';
 
@@ -42,33 +42,41 @@ class _LobbyRoomWidgetState extends State<LobbyRoomWidget> {
             children: [
               Row(
                 children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      decoration: kLobbyLeftBoxDecoration,
-                      width: MediaQuery.of(context).size.width * 0.6,
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          left: 20,
-                          top: 8,
-                          bottom: 8,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'LobbyEntity ID',
-                              style: kTextLobbyStyle.copyWith(
-                                letterSpacing: 1,
-                                fontSize: 12,
+                  Material(
+                    elevation: 10,
+                    shadowColor: Colors.white,
+                    borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(30),
+                      bottomRight: Radius.circular(30),
+                    ),
+                    color: Colors.white,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.6,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            left: 20,
+                            top: 8,
+                            bottom: 8,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'ID da sala',
+                                style: kTextLobbyStyle.copyWith(
+                                  letterSpacing: 1,
+                                  fontSize: 12,
+                                ),
                               ),
-                            ),
-                            Text(
-                              state.lobby.simpleId,
-                              style: kTextLobbyStyle,
-                            ),
-                          ],
+                              Text(
+                                state.lobby.simpleId,
+                                style: kTextLobbyStyle,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -90,7 +98,7 @@ class _LobbyRoomWidgetState extends State<LobbyRoomWidget> {
                   ),
                 ],
               ),
-              const LoversLobbyAtual(),
+              const LoversLobbyWidget(),
               Stack(
                 children: [
                   const ExpandableLogoutAndLeave(),
@@ -107,7 +115,7 @@ class _LobbyRoomWidgetState extends State<LobbyRoomWidget> {
                             Navigator.pushReplacement(
                               context,
                               AnimatedPageTransition(
-                                page: const ScreenRelationship(),
+                                page: const RelationshipPageView(),
                               ),
                             );
                           },

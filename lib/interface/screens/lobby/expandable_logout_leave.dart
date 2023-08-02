@@ -102,7 +102,7 @@ class _ExpandableLogoutAndLeaveState extends State<ExpandableLogoutAndLeave> {
                   Navigator.pushReplacement(
                     context,
                     AnimatedPageTransition(
-                      page: const LoginScreenView(),
+                      page: const LoginPageView(),
                     ),
                   );
                 },

@@ -16,7 +16,7 @@ class TabChat extends StatefulWidget {
 class _TabChatState extends State<TabChat> {
   final _textChatController = TextEditingController();
   final _listChatController = ScrollController();
-  late ChatController chatController;
+  final ChatController chatController = getIt<ChatController>();
 
   @override
   void initState() {

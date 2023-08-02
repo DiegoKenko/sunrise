@@ -6,14 +6,14 @@ import 'package:sunrise/constants/styles.dart';
 import 'package:sunrise/interface/controllers/lobby/lobby_controller.dart';
 import 'package:sunrise/services/getIt/get_it_dependencies.dart';
 
-class ScreenRelationship extends StatefulWidget {
-  const ScreenRelationship({Key? key}) : super(key: key);
+class RelationshipPageView extends StatefulWidget {
+  const RelationshipPageView({Key? key}) : super(key: key);
 
   @override
-  State<ScreenRelationship> createState() => _ScreenRelationshipState();
+  State<RelationshipPageView> createState() => _ScreenRelationshipState();
 }
 
-class _ScreenRelationshipState extends State<ScreenRelationship>
+class _ScreenRelationshipState extends State<RelationshipPageView>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final GlobalKey<ScaffoldState> _key = GlobalKey(); // Create a key

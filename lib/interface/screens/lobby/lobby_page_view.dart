@@ -8,13 +8,13 @@ import 'package:sunrise/constants/styles.dart';
 
 import 'package:sunrise/services/getIt/get_it_dependencies.dart';
 
-class ScreenLobby extends StatefulWidget {
-  const ScreenLobby({Key? key}) : super(key: key);
+class LobbyPageView extends StatefulWidget {
+  const LobbyPageView({Key? key}) : super(key: key);
   @override
-  State<ScreenLobby> createState() => _ScreenLobbyState();
+  State<LobbyPageView> createState() => _ScreenLobbyState();
 }
 
-class _ScreenLobbyState extends State<ScreenLobby>
+class _ScreenLobbyState extends State<LobbyPageView>
     with TickerProviderStateMixin {
   final _currentRoomExpandableController =
       ExpandableController(initialExpanded: true);

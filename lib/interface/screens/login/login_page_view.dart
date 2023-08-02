@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:sunrise/interface/controllers/auth/auth_controller.dart';
 import 'package:sunrise/interface/components/animated_page_transition.dart';
-import 'package:sunrise/interface/screens/lobby/screen_lobby.dart';
+import 'package:sunrise/interface/screens/lobby/lobby_page_view.dart';
 import 'package:sunrise/services/getIt/get_it_dependencies.dart';
 import 'package:sunrise/services/notification/firebase_messaging_service.dart';
 import 'package:sunrise/services/notification/notification_service.dart';
 
-class LoginScreenView extends StatefulWidget {
-  const LoginScreenView({Key? key}) : super(key: key);
+class LoginPageView extends StatefulWidget {
+  const LoginPageView({Key? key}) : super(key: key);
   @override
-  State<LoginScreenView> createState() => _LoginScreenViewState();
+  State<LoginPageView> createState() => _LoginScreenViewState();
 }
 
-class _LoginScreenViewState extends State<LoginScreenView> {
+class _LoginScreenViewState extends State<LoginPageView> {
   final AuthController authService = getIt<AuthController>();
 
   @override
@@ -83,7 +83,7 @@ class _LoginScreenViewState extends State<LoginScreenView> {
                     Navigator.pushReplacement(
                       context,
                       AnimatedPageTransition(
-                        page: const ScreenLobby(),
+                        page: const LobbyPageView(),
                       ),
                     );
                   },

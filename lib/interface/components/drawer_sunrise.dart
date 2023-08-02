@@ -108,7 +108,7 @@ class _SunriseDrawerState extends State<SunriseDrawer> {
                   Navigator.pushReplacement(
                     context,
                     AnimatedPageTransition(
-                      page: const LoginScreenView(),
+                      page: const LoginPageView(),
                     ),
                   );
                 },

@@ -4,16 +4,16 @@ import 'package:sunrise/interface/controllers/widgets/avatar_change_controller.d
 import 'package:sunrise/interface/screens/lobby/avatar_widget.dart';
 import 'package:sunrise/services/getIt/get_it_dependencies.dart';
 
-class LoversLobbyAtual extends StatefulWidget {
-  const LoversLobbyAtual({
+class LoversLobbyWidget extends StatefulWidget {
+  const LoversLobbyWidget({
     super.key,
   });
 
   @override
-  State<LoversLobbyAtual> createState() => _LoversLobbyAtualState();
+  State<LoversLobbyWidget> createState() => _LoversLobbyAtualState();
 }
 
-class _LoversLobbyAtualState extends State<LoversLobbyAtual> {
+class _LoversLobbyAtualState extends State<LoversLobbyWidget> {
   final AvatarChangeController _avatarChangeController =
       AvatarChangeController();
   final LobbyController lobbyController = getIt<LobbyController>();
