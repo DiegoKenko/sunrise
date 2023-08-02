@@ -4,7 +4,7 @@ import 'package:sunrise/services/getIt/get_it_dependencies.dart';
 
 class LobbyChatAddDataSource {
   Future<void> call(String lobbyId, ChatMessageEntity message) async {
-    await getIt<FirebaseFirestore>()
+    var test = await getIt<FirebaseFirestore>()
         .collection('lobby')
         .doc(lobbyId)
         .collection('chat')

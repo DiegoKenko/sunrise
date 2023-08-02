@@ -19,12 +19,11 @@ class LobbyRoomWidget extends StatefulWidget {
 
 class _LobbyRoomWidgetState extends State<LobbyRoomWidget> {
   final LobbyController lobbyController = getIt<LobbyController>();
-
   final AuthController authController = getIt<AuthController>();
 
   @override
   void initState() {
-    lobbyController.init(authController.lover);
+    lobbyController.lobbyInitAndWatch(authController.lover);
     super.initState();
   }
 
@@ -98,47 +97,53 @@ class _LobbyRoomWidgetState extends State<LobbyRoomWidget> {
                   ),
                 ],
               ),
-              const LoversLobbyWidget(),
-              Stack(
+              const Stack(
                 children: [
-                  const ExpandableLogoutAndLeave(),
-                  Visibility(
-                    visible: relationshipVisible,
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Container(
-                        width: 150,
-                        decoration: kLobbyRightBoxDecoration,
-                        padding: const EdgeInsets.all(8.0),
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.pushReplacement(
-                              context,
-                              AnimatedPageTransition(
-                                page: const RelationshipPageView(),
-                              ),
-                            );
-                          },
-                          child: const Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Próximo',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                ),
-                              ),
-                              Icon(
-                                Icons.chevron_right,
-                                color: Colors.black,
-                              ),
-                            ],
+                  Align(
+                    child: LoversLobbyWidget(),
+                  ),
+                  Positioned(
+                    bottom: 20,
+                    left: 0,
+                    child: ExpandableLogoutAndLeave(),
+                  ),
+                ],
+              ),
+              Visibility(
+                visible: relationshipVisible,
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Container(
+                    width: 150,
+                    decoration: kLobbyRightBoxDecoration,
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pushReplacement(
+                          context,
+                          AnimatedPageTransition(
+                            page: const RelationshipPageView(),
                           ),
-                        ),
+                        );
+                      },
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Próximo',
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          ),
+                          Icon(
+                            Icons.chevron_right,
+                            color: Colors.black,
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                ],
+                ),
               ),
             ],
           );

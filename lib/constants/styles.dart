@@ -51,7 +51,7 @@ const kTextFormFieldLobbyLabelStyle = TextStyle(
 );
 
 const kTextLeaveLobbyStyle = TextStyle(
-  fontSize: 12.0,
+  fontSize: 14.0,
   color: Colors.black,
 );
 

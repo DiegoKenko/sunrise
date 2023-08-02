@@ -22,110 +22,110 @@ class _ExpandableLogoutAndLeaveState extends State<ExpandableLogoutAndLeave> {
   Widget build(BuildContext context) {
     return Expandable(
       controller: _leaveLobbyController,
-      collapsed: Align(
-        alignment: Alignment.centerLeft,
-        child: SizedBox(
-          width: 50,
-          height: 50,
-          child: IconButton(
-            onPressed: () {
-              setState(() {
-                _leaveLobbyController.toggle();
-              });
-            },
-            icon: const Icon(
-              Icons.exit_to_app,
-              color: Colors.white,
-            ),
+      collapsed: Container(
+        padding: const EdgeInsets.all(8.0),
+        width: 50,
+        height: 50,
+        child: IconButton(
+          onPressed: () {
+            setState(() {
+              _leaveLobbyController.toggle();
+            });
+          },
+          icon: const Icon(
+            Icons.exit_to_app,
+            color: Colors.white,
           ),
         ),
       ),
-      expanded: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              onPressed: () {
-                setState(() {
-                  _leaveLobbyController.toggle();
-                });
-              },
-              icon: const Icon(
-                Icons.chevron_left,
-                color: Colors.white,
+      expanded: SizedBox(
+        width: 400,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: IconButton(
+                onPressed: () {
+                  setState(() {
+                    _leaveLobbyController.toggle();
+                  });
+                },
+                icon: const Icon(
+                  Icons.chevron_left,
+                  color: Colors.white,
+                ),
               ),
             ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              FilledButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                    kPrimaryColor,
-                  ),
-                ),
-                onPressed: () {},
-                child: const Row(
-                  children: [
-                    Icon(
-                      Icons.refresh_sharp,
-                      color: Colors.black,
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      'Recriar sala',
-                      style: kTextLeaveLobbyStyle,
-                    ),
-                  ],
-                ),
-              ),
-              FilledButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                    kPrimaryColor,
-                  ),
-                  side: MaterialStateProperty.all(
-                    const BorderSide(
-                      color: Colors.black,
-                      width: 1,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                FilledButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                      kPrimaryColor,
                     ),
                   ),
+                  onPressed: () {},
+                  child: const Row(
+                    children: [
+                      Icon(
+                        Icons.refresh_sharp,
+                        color: Colors.black,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        'Recriar sala',
+                        style: kTextLeaveLobbyStyle,
+                      ),
+                    ],
+                  ),
                 ),
-                onPressed: () {
-                  _authService.logout();
-                  Navigator.pushReplacement(
-                    context,
-                    AnimatedPageTransition(
-                      page: const LoginPageView(),
+                FilledButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                      kPrimaryColor,
                     ),
-                  );
-                },
-                child: const Row(
-                  children: [
-                    Icon(
-                      Icons.logout,
-                      color: Colors.black,
+                    side: MaterialStateProperty.all(
+                      const BorderSide(
+                        color: Colors.black,
+                        width: 1,
+                      ),
                     ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      'Logout',
-                      style: kTextLeaveLobbyStyle,
-                    ),
-                  ],
+                  ),
+                  onPressed: () {
+                    _authService.logout();
+                    Navigator.pushReplacement(
+                      context,
+                      AnimatedPageTransition(
+                        page: const LoginPageView(),
+                      ),
+                    );
+                  },
+                  child: const Row(
+                    children: [
+                      Icon(
+                        Icons.logout,
+                        color: Colors.black,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        'Logout',
+                        style: kTextLeaveLobbyStyle,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-          Expanded(child: Container())
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
