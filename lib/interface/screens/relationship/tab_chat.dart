@@ -3,7 +3,6 @@ import 'package:sunrise/constants/styles.dart';
 import 'package:sunrise/interface/controllers/auth/auth_controller.dart';
 import 'package:sunrise/interface/controllers/chat/chat_controller.dart';
 import 'package:sunrise/interface/controllers/lobby/lobby_controller.dart';
-import 'package:sunrise/interface/states/chat_state.dart';
 import 'package:sunrise/services/getIt/get_it_dependencies.dart';
 import 'package:sunrise/entity/chat_message_entity.dart';
 import 'package:intl/intl.dart';
@@ -25,6 +24,7 @@ class _TabChatState extends State<TabChat> {
   @override
   void initState() {
     chatController.watch(lobbyController.value.lobby, limit);
+
     _listChatController.addListener(() {
       if (_listChatController.position.pixels ==
           _listChatController.position.minScrollExtent) {}
@@ -92,6 +92,12 @@ class _TabChatState extends State<TabChat> {
                                   authService.lover.id,
                                   DateTime.now(),
                                 ),
+                              );
+                              _textChatController.clear();
+                              _listChatController.animateTo(
+                                _listChatController.position.maxScrollExtent,
+                                duration: Duration(seconds: 2),
+                                curve: Curves.fastOutSlowIn,
                               );
                             }
                           },

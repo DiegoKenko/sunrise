@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sunrise/datasource/lobby/chat/lobby_chat_add_datasource.dart';
 import 'package:sunrise/datasource/lobby/chat/lobby_chat_watch_datasource.dart';
-import 'package:sunrise/datasource/lobby/lobby_watch_datasource.dart';
 import 'package:sunrise/interface/controllers/auth/auth_controller.dart';
 import 'package:sunrise/interface/controllers/chat/chat_controller.dart';
 import 'package:sunrise/interface/controllers/lobby/lobby_controller.dart';
@@ -27,7 +26,7 @@ void setup() {
 
   getIt.registerLazySingleton<ChatController>(
     () => ChatController(
-        getIt<LobbyChatAddDataSource>(), getIt<LobbyChatWatchDatasource>()),
+        getIt<LobbyChatAddDataSource>(), getIt<LobbyChatWatchDatasource>(),),
   );
   getIt.registerLazySingleton<LobbyChatAddDataSource>(
     () => LobbyChatAddDataSource(),

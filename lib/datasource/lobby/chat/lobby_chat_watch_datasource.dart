@@ -20,6 +20,8 @@ class LobbyChatWatchDatasource {
             .limitToLast(limit)
             .snapshots();
 
+    stream.toString();
+
     yield* stream.map<List<ChatMessageEntity>>((event) {
       List<ChatMessageEntity> messages = [];
       for (var element in event.docs) {

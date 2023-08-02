@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:sunrise/datasource/data_provider_lover.dart';
 import 'package:sunrise/entity/lobby_entity.dart';
 import 'package:sunrise/services/getIt/get_it_dependencies.dart';
 

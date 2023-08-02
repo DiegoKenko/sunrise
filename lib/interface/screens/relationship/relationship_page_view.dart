@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sunrise/interface/components/drawer_sunrise.dart';
-import 'package:sunrise/interface/components/tab_chat.dart';
-import 'package:sunrise/interface/components/tab_mood.dart';
+import 'package:sunrise/interface/screens/relationship/tab_chat.dart';
+import 'package:sunrise/interface/screens/relationship/tab_mood.dart';
 import 'package:sunrise/constants/styles.dart';
 import 'package:sunrise/interface/controllers/lobby/lobby_controller.dart';
 import 'package:sunrise/services/getIt/get_it_dependencies.dart';
