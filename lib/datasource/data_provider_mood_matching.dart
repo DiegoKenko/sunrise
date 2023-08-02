@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:sunrise/model/model_mood_matching.dart';
+import 'package:sunrise/entity/mood_matching_entity.dart';
 
 class DataProviderMoodMatching {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<void> update({
-    required MoodMatching moodMatching,
+    required MoodMatchingEntity moodMatching,
     required String lobbyId,
     required String loverId,
   }) async {
@@ -25,7 +25,7 @@ class DataProviderMoodMatching {
     }
   }
 
-  Stream<MoodMatching> listenMood({
+  Stream<MoodMatchingEntity> listenMood({
     required String lobbyId,
     required String moodId,
     required String loverId,
@@ -39,7 +39,7 @@ class DataProviderMoodMatching {
         .doc(moodId)
         .snapshots()
         .map(
-          (event) => MoodMatching.fromJson(event.data()!),
+          (event) => MoodMatchingEntity.fromJson(event.data()!),
         );
   }
 }

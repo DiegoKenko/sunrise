@@ -1,7 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:sunrise/model/model_chat_notification.dart';
+import 'package:sunrise/entity/chat_notification_entity.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz;
 
@@ -46,7 +46,8 @@ class NotificationService {
     );
   }
 
-  showNotificationScheduled(ChatNotification notification, Duration duration) {
+  showNotificationScheduled(
+      ChatNotificationEntity notification, Duration duration,) {
     final date = DateTime.now().add(duration);
 
     localNotificationsPlugin.zonedSchedule(
@@ -63,7 +64,7 @@ class NotificationService {
     );
   }
 
-  showLocalNotification(ChatNotification notification) {
+  showLocalNotification(ChatNotificationEntity notification) {
     localNotificationsPlugin.show(
       notification.id,
       notification.title,

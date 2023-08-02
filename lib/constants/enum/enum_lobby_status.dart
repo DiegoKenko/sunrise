@@ -2,8 +2,8 @@ enum LobbyStatus {
   initial,
   loading,
   standBy,
-  sucessReady,
-  sucessNoReady,
+  successReady,
+  successNoReady,
   failureNoLobby,
   failureNoRoom,
 }
