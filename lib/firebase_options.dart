@@ -63,8 +63,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '337324865218',
     projectId: 'sunrise-a2153',
     storageBucket: 'sunrise-a2153.appspot.com',
-    androidClientId: '337324865218-725i6uq6bs7ohl85c110k706g673jsue.apps.googleusercontent.com',
-    iosClientId: '337324865218-vpm6oua6nn6nbslp2g52l2n0srn7i2gk.apps.googleusercontent.com',
-    iosBundleId: 'com.inora.sunrise',
+    androidClientId:
+        '337324865218-725i6uq6bs7ohl85c110k706g673jsue.apps.googleusercontent.com',
+    iosClientId:
+        '337324865218-vpm6oua6nn6nbslp2g52l2n0srn7i2gk.apps.googleusercontent.com',
+    iosBundleId: 'br.inora.sunrise',
   );
 }

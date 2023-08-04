@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:sunrise/constants/styles.dart';
 import 'package:sunrise/interface/controllers/auth/auth_controller.dart';
 import 'package:sunrise/interface/components/animated_page_transition.dart';
 import 'package:sunrise/interface/screens/lobby/lobby_page_view.dart';
+import 'package:sunrise/interface/states/auth_state.dart';
 import 'package:sunrise/services/getIt/get_it_dependencies.dart';
 import 'package:sunrise/services/notification/firebase_messaging_service.dart';
 import 'package:sunrise/services/notification/notification_service.dart';
@@ -54,15 +56,10 @@ class _LoginScreenViewState extends State<LoginPageView> {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                GestureDetector(
-                  child: Container(
-                    width: 140,
-                    height: 70,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    child: Row(
+                ValueListenableBuilder(
+                  valueListenable: authService,
+                  builder: (context, state, _) {
+                    Widget accountButton = Row(
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -74,17 +71,35 @@ class _LoginScreenViewState extends State<LoginPageView> {
                           ),
                         ),
                       ],
-                    ),
-                  ),
-                  onTap: () async {
-                    if (!authService.isAuth()) {
-                      await authService.authenticate();
+                    );
+
+                    if (state is AuthLoadingState) {
+                      accountButton = const Center(
+                        child: CircularProgressIndicator(
+                          color: kPrimaryColor,
+                          strokeWidth: 5,
+                        ),
+                      );
                     }
-                    Navigator.pushReplacement(
-                      context,
-                      AnimatedPageTransition(
-                        page: const LobbyPageView(),
+
+                    return GestureDetector(
+                      child: Container(
+                        width: 140,
+                        height: 70,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: accountButton,
                       ),
+                      onTap: () async {
+                        Navigator.pushReplacement(
+                          context,
+                          AnimatedPageTransition(
+                            page: const LobbyPageView(),
+                          ),
+                        );
+                      },
                     );
                   },
                 ),

@@ -6,9 +6,10 @@ import 'package:sunrise/interface/states/auth_state.dart';
 import 'package:sunrise/entity/lover_entity.dart';
 
 class AuthController extends ValueNotifier<AuthState> {
-  AuthController() : super(AuthUninitialized());
+  AuthController() : super(AuthUninitializedState());
 
   Future<void> authenticate() async {
+    value = AuthLoadingState();
     final UserCredential userCredencial =
         await FirebaseAuthController().signInWithGoogle();
 
@@ -17,16 +18,17 @@ class AuthController extends ValueNotifier<AuthState> {
         LoverEntity lover =
             await DataProviderLover().getUser(userCredencial.user!);
         await DataProviderLover().update(lover);
-        value = AuthAuthenticated(lover);
+        value = AuthAuthenticatedState(lover);
       } else {
         _register(userCredencial);
       }
     } catch (e) {
-      value = AuthError(e.toString());
+      value = AuthErrorState(e.toString());
     }
   }
 
   Future<void> _register(UserCredential userCredencial) async {
+    value = AuthLoadingState();
     try {
       LoverEntity lover = LoverEntity(
         email: userCredencial.user!.email!,
@@ -35,30 +37,31 @@ class AuthController extends ValueNotifier<AuthState> {
         photoURL: userCredencial.user!.photoURL!,
       );
       await DataProviderLover().create(lover);
-      value = AuthAuthenticated(lover);
+      value = AuthAuthenticatedState(lover);
     } catch (e) {
-      value = AuthError(e.toString());
+      value = AuthErrorState(e.toString());
     }
   }
 
   Future<void> logout() async {
+    value = AuthLoadingState();
     try {
       await FirebaseAuthController().signOut();
-      value = AuthUnauthenticated();
+      value = AuthUnauthenticatedState();
     } catch (e) {
-      value = AuthError(e.toString());
+      value = AuthErrorState(e.toString());
     }
   }
 
   LoverEntity get lover {
-    if (value is AuthAuthenticated) {
-      return (value as AuthAuthenticated).lover;
+    if (value is AuthAuthenticatedState) {
+      return (value as AuthAuthenticatedState).lover;
     } else {
       return LoverEntity.empty();
     }
   }
 
   bool isAuth() {
-    return value is AuthAuthenticated;
+    return value is AuthAuthenticatedState;
   }
 }

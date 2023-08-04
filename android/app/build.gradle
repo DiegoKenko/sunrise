@@ -39,6 +39,15 @@ android {
         jvmTarget = '1.8'
     }
 
+       signingConfigs {
+        release {
+            storeFile file("C:\\Users\\user\\.keystore\\upload-keystore.jks")
+            storePassword "123456"
+            keyAlias "sunrise"
+            keyPassword "123456"
+        }
+    }
+
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
@@ -50,14 +59,15 @@ android {
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion 23
         targetSdkVersion flutter.targetSdkVersion
-        versionCode 11
+        versionCode 1
         versionName flutterVersionName
     }
 
     buildTypes {
         release {
-            //signingConfig signingConfigs.debug
             signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //signingConfig signingConfigs.debug
         }
     }
 }

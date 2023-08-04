@@ -1,4 +1,4 @@
-package com.inora.sunrise
+package br.inora.sunrise
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 

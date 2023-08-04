@@ -24,7 +24,7 @@ class _SunriseDrawerState extends State<SunriseDrawer> {
     return ValueListenableBuilder(
       valueListenable: authService,
       builder: (context, state, _) {
-        if (state is AuthAuthenticated) {
+        if (state is AuthAuthenticatedState) {
           lover = state.lover;
         }
 

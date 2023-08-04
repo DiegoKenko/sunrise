@@ -2,18 +2,18 @@ import 'package:sunrise/entity/lover_entity.dart';
 
 abstract class AuthState {}
 
-class AuthUninitialized extends AuthState {}
+class AuthUninitializedState extends AuthState {}
 
-class AuthAuthenticated extends AuthState {
+class AuthAuthenticatedState extends AuthState {
   final LoverEntity lover;
-  AuthAuthenticated(this.lover);
+  AuthAuthenticatedState(this.lover);
 }
 
-class AuthUnauthenticated extends AuthState {}
+class AuthUnauthenticatedState extends AuthState {}
 
-class AuthLoading extends AuthState {}
+class AuthLoadingState extends AuthState {}
 
-class AuthError extends AuthState {
+class AuthErrorState extends AuthState {
   final String message;
-  AuthError(this.message);
+  AuthErrorState(this.message);
 }
