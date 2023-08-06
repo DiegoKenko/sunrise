@@ -82,6 +82,30 @@ class _LoginScreenViewState extends State<LoginPageView> {
                       );
                     }
 
+                    if (state is AuthAuthenticatedState) {
+                      return GestureDetector(
+                        child: Container(
+                          width: 140,
+                          height: 70,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          child: const Center(
+                            child: Text('Entrar'),
+                          ),
+                        ),
+                        onTap: () async {
+                          Navigator.pushReplacement(
+                            context,
+                            AnimatedPageTransition(
+                              page: const LobbyPageView(),
+                            ),
+                          );
+                        },
+                      );
+                    }
+
                     return GestureDetector(
                       child: Container(
                         width: 140,
@@ -92,14 +116,7 @@ class _LoginScreenViewState extends State<LoginPageView> {
                         ),
                         child: accountButton,
                       ),
-                      onTap: () async {
-                        Navigator.pushReplacement(
-                          context,
-                          AnimatedPageTransition(
-                            page: const LobbyPageView(),
-                          ),
-                        );
-                      },
+                      onTap: () async {},
                     );
                   },
                 ),

@@ -9,9 +9,9 @@ class AuthController extends ValueNotifier<AuthState> {
   AuthController() : super(AuthUninitializedState());
 
   Future<void> authenticate() async {
-    value = AuthLoadingState();
     final UserCredential userCredencial =
         await FirebaseAuthController().signInWithGoogle();
+    value = AuthLoadingState();
 
     try {
       if (userCredencial.user != null) {
