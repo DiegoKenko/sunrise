@@ -15,7 +15,7 @@ class LoginPageView extends StatefulWidget {
 }
 
 class _LoginScreenViewState extends State<LoginPageView> {
-  final AuthController authService = getIt<AuthController>();
+  final AuthController authController = getIt<AuthController>();
 
   @override
   void initState() {
@@ -56,7 +56,7 @@ class _LoginScreenViewState extends State<LoginPageView> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 ValueListenableBuilder(
-                  valueListenable: authService,
+                  valueListenable: authController,
                   builder: (context, state, _) {
                     Widget accountButton = Row(
                       children: [
@@ -115,7 +115,9 @@ class _LoginScreenViewState extends State<LoginPageView> {
                         ),
                         child: accountButton,
                       ),
-                      onTap: () async {},
+                      onTap: () async {
+                        authController.login();
+                      },
                     );
                   },
                 ),

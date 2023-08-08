@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:result_dart/result_dart.dart';
 import 'package:sunrise/datasource/lobby/lobby_create_datasource.dart';
-import 'package:sunrise/datasource/lobby/lobby_load_simpleid_datasource.dart';
 import 'package:sunrise/interface/states/lobby_state.dart';
 import 'package:sunrise/entity/lobby_entity.dart';
 import 'package:sunrise/entity/lover_entity.dart';
@@ -16,10 +16,10 @@ import 'package:sunrise/usecase/lobby/lobby_watch_usecase.dart';
 class LobbyController extends ValueNotifier<LobbyState> {
   final LobbyLoadSimpleIdUsecase _lobbyLoadSimpleIdDatasource =
       LobbyLoadSimpleIdUsecase();
+  final LobbyLoverJoinUsecase _lobbyJoinUsecase = LobbyLoverJoinUsecase();
   final LobbyDeleteUsecase _lobbyDeleteUsecase = LobbyDeleteUsecase();
   final LobbyCreateUsecase _lobbyCreateUsecase = LobbyCreateUsecase();
   final LobbyLoadUsecase _lobbyLoadUsecase = LobbyLoadUsecase();
-  final LobbyLoverJoinUsecase _lobbyJoinUsecase = LobbyLoverJoinUsecase();
   final LobbyLoverLeaveUsecase _lobbyLeaveUsecase = LobbyLoverLeaveUsecase();
   final LobbyWatchUsecase _lobbyWatchUsecase = LobbyWatchUsecase();
 
@@ -27,56 +27,20 @@ class LobbyController extends ValueNotifier<LobbyState> {
 
   Future<void> lobbyJoin(LoverEntity lover, String lobbyId) async {
     value = LobbyStateLoading();
-    if (lobbyId.isEmpty) {
-      value = LobbyStateFailureNoLobby();
-      return;
-    }
-    LobbyEntity lobby = await _lobbyLoadSimpleIdDatasource(lobbyId);
-    if (lobby.id.isEmpty) {
-      value = LobbyStateFailureNoLobby();
-      return;
-    }
-    if (lobby.isLoverInLobby(lover)) {
-      value = LobbyStateSuccessNoReady(lobby);
-      _checkReady();
-      return;
-    }
-
-    if (lobby.haveRoom()) {
-      lobby.addLover(lover);
-      lover.lobbyId = lobby.id;
-      await _lobbyJoinUsecase(lobby, lover);
-      value = LobbyStateSuccessNoReady(lobby);
-      _checkReady();
-    } else {
-      if (lobby.lovers[0].id == lover.id || lobby.lovers[1].id == lover.id) {
-        value = LobbyStateSuccessNoReady(lobby);
-        _checkReady();
-      } else {
-        value = LobbyStateFailureNoRoom(lobby);
-      }
-    }
+    LobbyEntity lobby = await _lobbyJoinUsecase(lover, lobbyId)
+        .fold((success) => success, (error) => LobbyEntity.empty());
+    value = LobbyStateSuccessNoReady(lobby);
+    _checkReady();
   }
 
   Future<void> lobbyLeave(LobbyEntity lobby, LoverEntity lover) async {
-    // previous lobby
     value = LobbyStateLoading();
-    lobby.removeLover(lover);
-    if (lobby.isEmpty()) {
-      await _lobbyDeleteUsecase(lobby);
-    }
-    await _lobbyLeaveUsecase(lobby, lover);
-
-    LobbyEntity newlobby = await _createLobby(lover);
-    lover.lobbyId = newlobby.id;
-    await _lobbyJoinUsecase(newlobby, lover);
-    value = LobbyStateSuccessNoReady(newlobby);
-  }
-
-  lobbyCreate(LoverEntity lover) async {
-    value = LobbyStateLoading();
-    LobbyEntity lobby = await _createLobby(lover);
-    value = LobbyStateSuccessNoReady(lobby);
+    LobbyEntity lobbyEntity = await _lobbyLeaveUsecase(lobby, lover).fold(
+      (success) => success,
+      (error) => LobbyEntity.empty(),
+    );
+    value = LobbyStateSuccessNoReady(lobbyEntity);
+    _checkReady();
   }
 
   void _checkReady() {
@@ -90,8 +54,12 @@ class LobbyController extends ValueNotifier<LobbyState> {
   Future<void> _lobbyLoad(LoverEntity lover) async {
     value = LobbyStateLoading();
     if (lover.lobbyId.isEmpty) {
-      LobbyEntity lobby = await _createLobby(lover);
-      value = LobbyStateSuccessNoReady(lobby);
+      await _createLobby(lover).fold(
+        (success) => value = LobbyStateSuccessNoReady(success),
+        (error) {
+          value = LobbyStateFailureNoLobby();
+        },
+      );
     } else {
       LobbyEntity lobby = await _lobbyLoadUsecase(lover.lobbyId);
       value = LobbyStateSuccessNoReady(lobby);
@@ -109,12 +77,7 @@ class LobbyController extends ValueNotifier<LobbyState> {
     }
   }
 
-  Future<LobbyEntity> _createLobby(LoverEntity lover) async {
-    LobbyCreateDatasource lobbyCreateDatasource = LobbyCreateDatasource();
-    LobbyEntity lobby = LobbyEntity.empty();
-    lobby.addLover(lover);
-    lobby = await _lobbyCreateUsecase(lobby);
-    lover.lobbyId = lobby.id;
-    return lobby;
+  Future<Result<LobbyEntity, Exception>> _createLobby(LoverEntity lover) async {
+    return await _lobbyCreateUsecase(lover);
   }
 }

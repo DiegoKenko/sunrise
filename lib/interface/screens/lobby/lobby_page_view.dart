@@ -65,7 +65,7 @@ class _ScreenLobbyState extends State<LobbyPageView>
                         Expandable(
                           controller: _searchRoomExpandableController,
                           expanded: LobbyJoinWidget(
-                              controller: isCurrentLobbyActiveController),
+                              controller: isCurrentLobbyActiveController,),
                           collapsed: Container(
                             color: Colors.transparent,
                           ),

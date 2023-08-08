@@ -5,29 +5,36 @@ import 'package:sunrise/datasource/lover/lover_load_datasource.dart';
 import 'package:sunrise/entity/lover_entity.dart';
 import 'package:sunrise/interface/controllers/auth/firebase_auth_controller.dart';
 import 'package:sunrise/interface/states/auth_state.dart';
-import 'package:sunrise/usecase/lover/lover_load_usecase.dart';
+import 'package:sunrise/usecase/lobby/lobby_create_usecase.dart';
+import 'package:sunrise/usecase/lover/lover_create_usecase.dart';
 
 class AuthUsecase {
-  final LoverLoadDatasource loverLoadUsecase = LoverLoadDatasource();
-  final LoverCreateDatasource loverCreateDatasource = LoverCreateDatasource();
-  Future<AuthState> authenticate() async {
+  final LoverLoadDatasource _loverLoadUsecase = LoverLoadDatasource();
+  final LobbyCreateUsecase _lobbyCreateUsecase = LobbyCreateUsecase();
+
+  Future<Result<LoverEntity, Exception>> authenticate() async {
     final UserCredential userCredencial =
         await FirebaseAuthController().signInWithGoogle();
 
     try {
       if (userCredencial.user != null) {
-        LoverEntity lover = await loverLoadUsecase(userCredencial.user!.uid)
-            .fold((success) => success, (error) => LoverEntity.empty());
-        return AuthAuthenticatedState(lover);
+        Result<LoverEntity, Exception> result =
+            await _loverLoadUsecase(userCredencial.user!.uid);
+        if (result.isSuccess()) {
+          return result;
+        } else {
+          return await _register(userCredencial);
+        }
       } else {
         return await _register(userCredencial);
       }
-    } catch (e) {
-      return AuthErrorState(e.toString());
+    } on Exception catch (e) {
+      return Failure(e);
     }
   }
 
-  Future<AuthState> _register(UserCredential userCredencial) async {
+  Future<Result<LoverEntity, Exception>> _register(
+      UserCredential userCredencial) async {
     try {
       LoverEntity lover = LoverEntity(
         email: userCredencial.user!.email!,
@@ -35,10 +42,10 @@ class AuthUsecase {
         id: userCredencial.user!.uid,
         photoURL: userCredencial.user!.photoURL!,
       );
-      await loverCreateDatasource(lover);
-      return AuthAuthenticatedState(lover);
-    } catch (e) {
-      return AuthErrorState(e.toString());
+      await _lobbyCreateUsecase(lover);
+      return lover.toSuccess();
+    } on Exception catch (e) {
+      return Failure(e);
     }
   }
 }

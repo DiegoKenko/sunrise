@@ -51,4 +51,14 @@ class LoverEntity {
   set token(String token) {
     notificationToken = token;
   }
+
+  get isValid => name.isNotEmpty && id.isNotEmpty;
+
+  void removeLobby() {
+    lobbyId = '';
+  }
+
+  void addLobby(String lobbyId) {
+    this.lobbyId = lobbyId;
+  }
 }

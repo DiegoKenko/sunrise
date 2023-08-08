@@ -99,7 +99,7 @@ class LobbyEntity {
 
   LoverEntity mySelf(String myId) {
     return lovers.firstWhere((element) => element.id == myId,
-        orElse: LoverEntity.empty);
+        orElse: LoverEntity.empty,);
   }
 
   LobbyEntity.fromJson(Map<String, dynamic> json)

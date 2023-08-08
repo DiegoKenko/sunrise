@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:sunrise/constants/styles.dart';
 import 'package:sunrise/interface/components/animated_page_transition.dart';
-import 'package:sunrise/interface/controllers/auth/auth_controller.dart';
-import 'package:sunrise/interface/controllers/lobby/lobby_controller.dart';
 import 'package:sunrise/interface/screens/lobby/expandable_logout_leave.dart';
 import 'package:sunrise/interface/screens/lobby/lobby_lover_widget.dart';
 import 'package:sunrise/interface/screens/relationship/relationship_page_view.dart';
 import 'package:sunrise/interface/states/lobby_state.dart';
-import 'package:sunrise/services/getIt/get_it_dependencies.dart';
 
 class LobbyRoomWidget extends StatelessWidget {
   const LobbyRoomWidget(
-      {super.key, required this.controller, required this.lobbyState});
+      {super.key, required this.controller, required this.lobbyState,});
   final ValueNotifier<bool> controller;
   final LobbyState lobbyState;
 

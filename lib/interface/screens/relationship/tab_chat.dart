@@ -96,7 +96,7 @@ class _TabChatState extends State<TabChat> {
                               _textChatController.clear();
                               _listChatController.animateTo(
                                 _listChatController.position.maxScrollExtent,
-                                duration: Duration(seconds: 2),
+                                duration: const Duration(seconds: 2),
                                 curve: Curves.fastOutSlowIn,
                               );
                             }
