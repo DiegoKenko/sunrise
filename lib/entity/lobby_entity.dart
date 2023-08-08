@@ -97,6 +97,11 @@ class LobbyEntity {
     return LoverEntity();
   }
 
+  LoverEntity mySelf(String myId) {
+    return lovers.firstWhere((element) => element.id == myId,
+        orElse: LoverEntity.empty);
+  }
+
   LobbyEntity.fromJson(Map<String, dynamic> json)
       : lovers = [
           LoverEntity(

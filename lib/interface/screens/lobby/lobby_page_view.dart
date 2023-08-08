@@ -25,6 +25,12 @@ class _ScreenLobbyState extends State<LobbyPageView>
   final isCurrentLobbyActiveController = ValueNotifier<bool>(true);
 
   @override
+  void initState() {
+    lobbyController.lobbyInitAndWatch(authController.lover);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => false,
@@ -34,40 +40,39 @@ class _ScreenLobbyState extends State<LobbyPageView>
           padding: const EdgeInsets.symmetric(vertical: 30),
           child: SafeArea(
             child: ValueListenableBuilder(
-              valueListenable: isCurrentLobbyActiveController,
-              builder: (context, isCurrentLobbyActive, _) {
-                _currentRoomExpandableController.expanded =
-                    isCurrentLobbyActive;
-                _searchRoomExpandableController.expanded =
-                    !_currentRoomExpandableController.expanded;
+              valueListenable: lobbyController,
+              builder: (context, lobbyState, _) {
+                return ValueListenableBuilder(
+                  valueListenable: isCurrentLobbyActiveController,
+                  builder: (context, isCurrentLobbyActive, _) {
+                    _currentRoomExpandableController.expanded =
+                        isCurrentLobbyActive;
+                    _searchRoomExpandableController.expanded =
+                        !_currentRoomExpandableController.expanded;
 
-                return Column(
-                  children: [
-                    Expandable(
-                      controller: _currentRoomExpandableController,
-                      expanded: LobbyRoomWidget(
-                        onPop: () {
-                          isCurrentLobbyActiveController.value =
-                              !isCurrentLobbyActive;
-                        },
-                      ),
-                      collapsed: Container(
-                        color: Colors.transparent,
-                      ),
-                    ),
-                    Expandable(
-                      controller: _searchRoomExpandableController,
-                      expanded: LobbyJoinWidget(
-                        onPop: () {
-                          isCurrentLobbyActiveController.value =
-                              !isCurrentLobbyActive;
-                        },
-                      ),
-                      collapsed: Container(
-                        color: Colors.transparent,
-                      ),
-                    ),
-                  ],
+                    return Column(
+                      children: [
+                        Expandable(
+                          controller: _currentRoomExpandableController,
+                          expanded: LobbyRoomWidget(
+                            lobbyState: lobbyState,
+                            controller: isCurrentLobbyActiveController,
+                          ),
+                          collapsed: Container(
+                            color: Colors.transparent,
+                          ),
+                        ),
+                        Expandable(
+                          controller: _searchRoomExpandableController,
+                          expanded: LobbyJoinWidget(
+                              controller: isCurrentLobbyActiveController),
+                          collapsed: Container(
+                            color: Colors.transparent,
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 );
               },
             ),

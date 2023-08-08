@@ -2,10 +2,13 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:sunrise/datasource/data_provider_lover.dart';
+import 'package:result_dart/result_dart.dart';
+import 'package:sunrise/datasource/lover/lover_load_datasource.dart';
 import 'package:sunrise/entity/lover_entity.dart';
 
 class FirebaseAuthController {
+  FirebaseAuthController();
+  final LoverLoadDatasource loadDatasource = LoverLoadDatasource();
   final FirebaseAuth _instance = FirebaseAuth.instance;
 
   Stream<LoverEntity?> authStateChanges() async* {
@@ -13,7 +16,9 @@ class FirebaseAuthController {
 
     await for (final user in _instance.userChanges()) {
       if (user != null) {
-        lover = await DataProviderLover().get(user.uid);
+        lover = await loadDatasource(user.uid)
+            .fold((success) => success, (failure) => null);
+
         yield lover;
       }
     }

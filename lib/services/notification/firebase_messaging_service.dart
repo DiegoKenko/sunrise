@@ -2,14 +2,15 @@ import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
-import 'package:sunrise/datasource/data_provider_lover.dart';
 import 'package:sunrise/services/notification/notification_service.dart';
 import 'package:sunrise/entity/chat_message_entity.dart';
 import 'package:sunrise/entity/chat_notification_entity.dart';
 import 'package:sunrise/entity/lover_entity.dart';
 import 'package:http/http.dart' as http;
+import 'package:sunrise/usecase/lover/lover_update_usecase.dart';
 
 class FirebaseMessagingService {
+  final LoverUpdateUsecase loverUpdateUsecase = LoverUpdateUsecase();
   final NotificationService _notificationService;
   String? token;
 
@@ -66,7 +67,7 @@ class FirebaseMessagingService {
       return;
     }
     lover.token = token!;
-    await DataProviderLover().update(lover);
+    await loverUpdateUsecase(lover);
   }
 
   Future<void> sendMessage(String token, ChatMessageEntity chatMessage) async {

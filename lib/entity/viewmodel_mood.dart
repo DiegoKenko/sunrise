@@ -1,4 +1,5 @@
-import 'package:sunrise/datasource/data_provider_mood_matching.dart';
+import 'package:sunrise/datasource/lobby/moodMatching/lobby_mood_matching_listen.dart';
+import 'package:sunrise/datasource/lobby/moodMatching/lobby_mood_matching_update.dart';
 import 'package:sunrise/entity/lover_entity.dart';
 import 'package:sunrise/entity/mood_matching_entity.dart';
 
@@ -16,9 +17,12 @@ class ViewModelMood {
   final MoodState state;
   final String lobbyID;
   ViewModelMood({required this.state, required this.lobbyID});
-
+  final LobbyMoodMatchingListenDatasource lobbyMoodMatchingListen =
+      LobbyMoodMatchingListenDatasource();
+  final LobbyMoodMatchingDatasource lobbyMoodMatchingDatasource =
+      LobbyMoodMatchingDatasource();
   Stream<MoodMatchingEntity> listenMood() {
-    return DataProviderMoodMatching().listenMood(
+    return lobbyMoodMatchingListen(
       lobbyId: lobbyID,
       moodId: state.moodMatching.matchId,
       loverId: state.lover.id,
@@ -35,7 +39,7 @@ class ViewModelMood {
       moodMatching.matching = match;
     }
 
-    DataProviderMoodMatching().update(
+    lobbyMoodMatchingDatasource(
       moodMatching: moodMatching,
       lobbyId: lobbyID,
       loverId: state.lover.id,

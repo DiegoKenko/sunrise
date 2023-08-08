@@ -1,35 +1,37 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:sunrise/datasource/data_provider_lover.dart';
 import 'package:sunrise/datasource/lobby/lobby_create_datasource.dart';
-import 'package:sunrise/datasource/lobby/lobby_delete_datasource.dart';
-import 'package:sunrise/datasource/lobby/lobby_load_datasource.dart';
 import 'package:sunrise/datasource/lobby/lobby_load_simpleid_datasource.dart';
-import 'package:sunrise/datasource/lobby/lobby_watch_datasource.dart';
 import 'package:sunrise/interface/states/lobby_state.dart';
 import 'package:sunrise/entity/lobby_entity.dart';
 import 'package:sunrise/entity/lover_entity.dart';
-import 'package:sunrise/usecase/lobby/lover_join_lobby_usecase.dart';
-import 'package:sunrise/usecase/lobby/lover_leave_lobby_usecase.dart';
+import 'package:sunrise/usecase/lobby/lobby_create_usecase.dart';
+import 'package:sunrise/usecase/lobby/lobby_delete_usecase.dart';
+import 'package:sunrise/usecase/lobby/lobby_load_simpleid_usecase.dart';
+import 'package:sunrise/usecase/lobby/lobby_load_usecase.dart';
+import 'package:sunrise/usecase/lobby/lobby_lover_join_usecase.dart';
+import 'package:sunrise/usecase/lobby/lobby_lover_leave_usecase.dart';
+import 'package:sunrise/usecase/lobby/lobby_watch_usecase.dart';
 
 class LobbyController extends ValueNotifier<LobbyState> {
-  final LobbyLoadSimpleIdDatasource _lobbyLoadSimpleIdDatasource =
-      LobbyLoadSimpleIdDatasource();
-  final LobbyLoadDatasource _lobbyLoadDatasource = LobbyLoadDatasource();
-  final LobbyWatchDatasource _lobbyWatchDatasource = LobbyWatchDatasource();
-  final LobbyDeleteDatasource _lobbyDeleteDatasource = LobbyDeleteDatasource();
-  final LoverJoinLobbyUsecase _lobbyJoinUsecase = LoverJoinLobbyUsecase();
-  final LoverLeaveLobbyUsecase _lobbyLeaveUsecase = LoverLeaveLobbyUsecase();
+  final LobbyLoadSimpleIdUsecase _lobbyLoadSimpleIdDatasource =
+      LobbyLoadSimpleIdUsecase();
+  final LobbyDeleteUsecase _lobbyDeleteUsecase = LobbyDeleteUsecase();
+  final LobbyCreateUsecase _lobbyCreateUsecase = LobbyCreateUsecase();
+  final LobbyLoadUsecase _lobbyLoadUsecase = LobbyLoadUsecase();
+  final LobbyLoverJoinUsecase _lobbyJoinUsecase = LobbyLoverJoinUsecase();
+  final LobbyLoverLeaveUsecase _lobbyLeaveUsecase = LobbyLoverLeaveUsecase();
+  final LobbyWatchUsecase _lobbyWatchUsecase = LobbyWatchUsecase();
 
   LobbyController(super.value);
 
-  Future<void> lobbyJoin(LoverEntity lover) async {
+  Future<void> lobbyJoin(LoverEntity lover, String lobbyId) async {
     value = LobbyStateLoading();
-    if (value.lobby.id.isEmpty) {
+    if (lobbyId.isEmpty) {
       value = LobbyStateFailureNoLobby();
       return;
     }
-    LobbyEntity lobby = await _lobbyLoadSimpleIdDatasource(value.lobby.id);
+    LobbyEntity lobby = await _lobbyLoadSimpleIdDatasource(lobbyId);
     if (lobby.id.isEmpty) {
       value = LobbyStateFailureNoLobby();
       return;
@@ -45,6 +47,7 @@ class LobbyController extends ValueNotifier<LobbyState> {
       lover.lobbyId = lobby.id;
       await _lobbyJoinUsecase(lobby, lover);
       value = LobbyStateSuccessNoReady(lobby);
+      _checkReady();
     } else {
       if (lobby.lovers[0].id == lover.id || lobby.lovers[1].id == lover.id) {
         value = LobbyStateSuccessNoReady(lobby);
@@ -60,7 +63,7 @@ class LobbyController extends ValueNotifier<LobbyState> {
     value = LobbyStateLoading();
     lobby.removeLover(lover);
     if (lobby.isEmpty()) {
-      await _lobbyDeleteDatasource(lobby);
+      await _lobbyDeleteUsecase(lobby);
     }
     await _lobbyLeaveUsecase(lobby, lover);
 
@@ -90,7 +93,7 @@ class LobbyController extends ValueNotifier<LobbyState> {
       LobbyEntity lobby = await _createLobby(lover);
       value = LobbyStateSuccessNoReady(lobby);
     } else {
-      LobbyEntity lobby = await _lobbyLoadDatasource(lover.lobbyId);
+      LobbyEntity lobby = await _lobbyLoadUsecase(lover.lobbyId);
       value = LobbyStateSuccessNoReady(lobby);
     }
     _checkReady();
@@ -99,7 +102,7 @@ class LobbyController extends ValueNotifier<LobbyState> {
   Future<void> lobbyInitAndWatch(LoverEntity lover) async {
     await _lobbyLoad(lover);
     if (value.lobby.id.isNotEmpty) {
-      _lobbyWatchDatasource(value.lobby).listen((event) {
+      _lobbyWatchUsecase(value.lobby).listen((event) {
         value = LobbyStateSuccessReady(event);
         _checkReady();
       });
@@ -110,9 +113,8 @@ class LobbyController extends ValueNotifier<LobbyState> {
     LobbyCreateDatasource lobbyCreateDatasource = LobbyCreateDatasource();
     LobbyEntity lobby = LobbyEntity.empty();
     lobby.addLover(lover);
-    lobby = await lobbyCreateDatasource(lobby);
+    lobby = await _lobbyCreateUsecase(lobby);
     lover.lobbyId = lobby.id;
-    DataProviderLover().set(lover);
     return lobby;
   }
 }

@@ -19,7 +19,6 @@ class _LoginScreenViewState extends State<LoginPageView> {
 
   @override
   void initState() {
-    authService.authenticate();
     initilizeFirebaseMessaging();
     checkNotifications();
     super.initState();

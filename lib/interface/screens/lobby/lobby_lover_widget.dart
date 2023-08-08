@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sunrise/interface/controllers/auth/auth_controller.dart';
 import 'package:sunrise/interface/controllers/lobby/lobby_controller.dart';
 import 'package:sunrise/interface/controllers/widgets/avatar_change_controller.dart';
 import 'package:sunrise/interface/screens/lobby/avatar_widget.dart';
@@ -17,6 +18,7 @@ class _LoversLobbyAtualState extends State<LoversLobbyWidget> {
   final AvatarChangeController _avatarChangeController =
       AvatarChangeController();
   final LobbyController lobbyController = getIt<LobbyController>();
+  final AuthController authController = getIt<AuthController>();
 
   @override
   Widget build(BuildContext context) {
@@ -36,13 +38,17 @@ class _LoversLobbyAtualState extends State<LoversLobbyWidget> {
                     height: 10,
                   ),
                   AvatarWidget(
-                    lover: state.lobby.lovers[0],
+                    lover: authController.lover,
                     edit: true,
                   ),
                   const SizedBox(
                     height: 30,
                   ),
-                  AvatarWidget(lover: state.lobby.lovers[1])
+                  AvatarWidget(
+                    lover: state.lobby.couple(
+                      authController.lover.id,
+                    ),
+                  )
                 ],
               );
             },
