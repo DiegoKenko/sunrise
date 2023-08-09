@@ -9,7 +9,7 @@ class LoverUpdateDatasource {
       await getIt<FirebaseFirestore>()
           .collection('lovers')
           .doc(lover.id)
-          .update(lover.toJson());
+          .set(lover.toJson());
       return Success(lover);
     } on Exception catch (e) {
       return Failure(e);

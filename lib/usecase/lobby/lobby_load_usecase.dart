@@ -9,11 +9,22 @@ class LobbyLoadUsecase {
   final LoverLoadDatasource loverLoadDatasource = LoverLoadDatasource();
   LobbyLoadUsecase();
 
-  Future<LobbyEntity> call(String lobbyId) async {
-    LobbyEntity lobby = await lobbyLoadDatasource(lobbyId).fold((success) => success, (error) => LobbyEntity.empty());
-    for (var element in lobby.lovers) {
-      element = await loverLoadDatasource(element.id).fold((success) => success, (error) => LoverEntity.empty());
+  Future<Result<LobbyEntity, Exception>> call(String lobbyId) async {
+    Result<LobbyEntity, Exception> result = await lobbyLoadDatasource(lobbyId);
+    LobbyEntity lobby = LobbyEntity.empty();
+    result.fold((success) {
+      return lobby = success;
+    }, (failure) => null);
+    if (lobby.isEmpty()) {
+      return result;
+    } else {
+      for (var element in lobby.lovers) {
+        if (element.id.isNotEmpty) {
+          element = await loverLoadDatasource(element.id)
+              .fold((success) => success, (error) => LoverEntity.empty());
+        }
+      }
+      return lobby.toSuccess();
     }
-    return lobby;
   }
 }

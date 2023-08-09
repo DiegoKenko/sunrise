@@ -61,8 +61,11 @@ class LobbyController extends ValueNotifier<LobbyState> {
         },
       );
     } else {
-      LobbyEntity lobby = await _lobbyLoadUsecase(lover.lobbyId);
-      value = LobbyStateSuccessNoReady(lobby);
+      await _lobbyLoadUsecase(lover.lobbyId).fold((success) {
+        value = LobbyStateSuccessNoReady(success);
+      }, (error) {
+        value = LobbyStateFailureNoLobby();
+      });
     }
     _checkReady();
   }

@@ -17,9 +17,12 @@ class LobbyCreateUsecase {
         return Failure(Exception('Lobby não criado'));
       }
       lover.addLobby(lobby.id);
-      lover = await loverUpdateDatasource(lover)
-          .fold((success) => success, (error) => LoverEntity.empty());
-      if (lover.isValid()) {
+      await loverUpdateDatasource(lover).fold((success) {
+        lover = success;
+      }, (error) {
+        null;
+      });
+      if (lover.isValid) {
         return lobby.toSuccess();
       } else {
         return Failure(Exception('Lover não atualizado'));
