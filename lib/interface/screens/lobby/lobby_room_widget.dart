@@ -7,8 +7,11 @@ import 'package:sunrise/interface/screens/relationship/relationship_page_view.da
 import 'package:sunrise/interface/states/lobby_state.dart';
 
 class LobbyRoomWidget extends StatelessWidget {
-  const LobbyRoomWidget(
-      {super.key, required this.controller, required this.lobbyState,});
+  const LobbyRoomWidget({
+    super.key,
+    required this.controller,
+    required this.lobbyState,
+  });
   final ValueNotifier<bool> controller;
   final LobbyState lobbyState;
 
@@ -99,10 +102,23 @@ class LobbyRoomWidget extends StatelessWidget {
               alignment: Alignment.centerRight,
               child: Container(
                 width: 150,
+                height: 50,
                 decoration: kLobbyRightBoxDecoration,
-                padding: const EdgeInsets.all(8.0),
-                child: InkWell(
-                  onTap: () {
+                padding: const EdgeInsets.all(2.0),
+                child: TextButton(
+                  style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all(
+                      kPrimaryColor,
+                    ),
+                    elevation: MaterialStateProperty.all(10),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                    ),
+                    animationDuration: const Duration(milliseconds: 500),
+                  ),
+                  onPressed: () {
                     Navigator.pushReplacement(
                       context,
                       AnimatedPageTransition(
@@ -111,7 +127,8 @@ class LobbyRoomWidget extends StatelessWidget {
                     );
                   },
                   child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Text(
                         'Próximo',
@@ -122,6 +139,7 @@ class LobbyRoomWidget extends StatelessWidget {
                       Icon(
                         Icons.chevron_right,
                         color: Colors.black,
+                        size: 25,
                       ),
                     ],
                   ),

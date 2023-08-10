@@ -30,7 +30,7 @@ class _LobbyJoinWidgetState extends State<LobbyJoinWidget> {
           alignment: Alignment.bottomLeft,
           child: Container(
             decoration: kLobbyLeftBoxDecoration.copyWith(
-              color: kPrimaryColor,
+              color: kPrimaryColor.withOpacity(0.6),
             ),
             width: MediaQuery.of(context).size.width * 0.3,
             child: IconButton(

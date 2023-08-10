@@ -82,19 +82,26 @@ class _LoginScreenViewState extends State<LoginPageView> {
                     }
 
                     if (state is AuthAuthenticatedState) {
-                      return GestureDetector(
-                        child: Container(
-                          width: 140,
-                          height: 70,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(50),
+                      accountButton = TextButton(
+                        style: ButtonStyle(
+                          overlayColor: MaterialStateProperty.all(
+                            kPrimaryColor,
                           ),
-                          child: const Center(
-                            child: Text('Entrar'),
+                          elevation: MaterialStateProperty.all(10),
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                          ),
+                          animationDuration: const Duration(milliseconds: 500),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'Entrar',
+                            style: TextStyle(fontSize: 16),
                           ),
                         ),
-                        onTap: () async {
+                        onPressed: () async {
                           Navigator.pushReplacement(
                             context,
                             AnimatedPageTransition(
@@ -105,19 +112,31 @@ class _LoginScreenViewState extends State<LoginPageView> {
                       );
                     }
 
-                    return GestureDetector(
-                      child: Container(
-                        width: 140,
-                        height: 70,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(50),
+                    return Container(
+                      width: 140,
+                      height: 70,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        color: Colors.white.withOpacity(0.1),
+                      ),
+                      child: TextButton(
+                        style: ButtonStyle(
+                          overlayColor: MaterialStateProperty.all(
+                            kPrimaryColor,
+                          ),
+                          elevation: MaterialStateProperty.all(10),
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                          ),
+                          animationDuration: const Duration(milliseconds: 500),
                         ),
                         child: accountButton,
+                        onPressed: () async {
+                          authController.login();
+                        },
                       ),
-                      onTap: () async {
-                        authController.login();
-                      },
                     );
                   },
                 ),
