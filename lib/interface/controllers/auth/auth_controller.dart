@@ -9,13 +9,16 @@ class AuthController extends ValueNotifier<AuthState> {
   final AuthUsecase authUsecase = AuthUsecase();
   AuthController() : super(AuthUninitializedState());
 
-  Future<void> login() async {
+  Future<bool> login() async {
     value = AuthLoadingState();
-    value = await authUsecase.authenticate().fold((success) {
-      return AuthAuthenticatedState(success);
+    bool ret = await authUsecase.authenticate().fold((success) {
+      value = AuthAuthenticatedState(success);
+      return true;
     }, (error) {
-      return AuthErrorState(error.toString());
+      value = AuthErrorState(error.toString());
+      return false;
     });
+    return ret;
   }
 
   Future<void> logout() async {

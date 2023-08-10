@@ -1,21 +1,16 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:result_dart/result_dart.dart';
-import 'package:sunrise/datasource/lobby/lobby_create_datasource.dart';
 import 'package:sunrise/interface/states/lobby_state.dart';
 import 'package:sunrise/entity/lobby_entity.dart';
 import 'package:sunrise/entity/lover_entity.dart';
 import 'package:sunrise/usecase/lobby/lobby_create_usecase.dart';
-import 'package:sunrise/usecase/lobby/lobby_delete_usecase.dart';
-import 'package:sunrise/usecase/lobby/lobby_load_simpleid_usecase.dart';
 import 'package:sunrise/usecase/lobby/lobby_load_usecase.dart';
 import 'package:sunrise/usecase/lobby/lobby_lover_join_usecase.dart';
 import 'package:sunrise/usecase/lobby/lobby_lover_leave_usecase.dart';
 import 'package:sunrise/usecase/lobby/lobby_watch_usecase.dart';
 
 class LobbyController extends ValueNotifier<LobbyState> {
-  final LobbyLoadSimpleIdUsecase _lobbyLoadSimpleIdDatasource =
-      LobbyLoadSimpleIdUsecase();
   final LobbyLoverJoinUsecase _lobbyJoinUsecase = LobbyLoverJoinUsecase();
   final LobbyCreateUsecase _lobbyCreateUsecase = LobbyCreateUsecase();
   final LobbyLoadUsecase _lobbyLoadUsecase = LobbyLoadUsecase();

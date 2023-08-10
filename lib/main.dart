@@ -17,48 +17,64 @@ void main() async {
   await Stripe.instance.applySettings();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   setup();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({super.key});
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   final authService = getIt<AuthController>();
+  final logged = ValueNotifier<bool>(false);
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: authService,
-      builder: (context, state, child) {
-        return MaterialApp(
-          routes: {
-            '/login': (context) => const LoginPageView(),
-            '/lobby': (context) => const LobbyPageView(),
-            '/relationship': (context) => const RelationshipPageView(),
-          },
-          home: const LoginPageView(),
-          theme: ThemeData(
-            pageTransitionsTheme: const PageTransitionsTheme(
-              builders: {
-                TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-                TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-              },
-            ),
-            splashColor: kPrimaryColor,
-            useMaterial3: true,
-            primarySwatch: kPrimarySwatch,
-            colorScheme: const ColorScheme.light(
-              primary: kPrimaryColor,
-              secondary: Colors.black,
-            ),
-            fontFamily: GoogleFonts.sono().fontFamily,
-            tabBarTheme: const TabBarTheme(
-              labelColor: Colors.black,
-              unselectedLabelColor: Colors.grey,
-              labelStyle: TextStyle(color: Colors.white),
-            ),
-          ),
-        );
+    return MaterialApp(
+      routes: {
+        '/login': (context) => const LoginPageView(),
+        '/lobby': (context) => const LobbyPageView(),
+        '/relationship': (context) => const RelationshipPageView(),
       },
+      home: FutureBuilder(
+        future: authService.login(),
+        builder: (context, snapshot) {
+          Widget page = const LoginPageView();
+          if (authService.isAuth()) {
+            page = const LobbyPageView();
+          }
+          return page;
+        },
+      ),
+      theme: ThemeData(
+        pageTransitionsTheme: const PageTransitionsTheme(
+          builders: {
+            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+          },
+        ),
+        splashColor: kPrimaryColor,
+        useMaterial3: true,
+        primarySwatch: kPrimarySwatch,
+        colorScheme: const ColorScheme.light(
+          primary: kPrimaryColor,
+          secondary: Colors.black,
+        ),
+        fontFamily: GoogleFonts.sono().fontFamily,
+        tabBarTheme: const TabBarTheme(
+          labelColor: Colors.black,
+          unselectedLabelColor: Colors.grey,
+          labelStyle: TextStyle(color: Colors.white),
+        ),
+      ),
     );
   }
 }

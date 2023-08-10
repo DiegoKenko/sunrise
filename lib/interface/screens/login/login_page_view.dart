@@ -97,7 +97,7 @@ class _LoginScreenViewState extends State<LoginPageView> {
                         ),
                         child: const Center(
                           child: Text(
-                            'Entrar',
+                            'Iniciar',
                             style: TextStyle(fontSize: 16),
                           ),
                         ),
