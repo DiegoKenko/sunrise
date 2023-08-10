@@ -17,7 +17,7 @@ class LobbyLoverLeaveUsecase {
       await _lobbyUpdateDatasource(lobby);
       await _loverUpdateDatasource(lover);
       if (lobby.isEmpty()) {
-        await _lobbyDeleteDatasource(lobby);
+        await _lobbyDeleteDatasource(lobby.id);
       }
       return lobby.toSuccess();
     } on Exception catch (e) {

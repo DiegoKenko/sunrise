@@ -17,7 +17,6 @@ class LobbyController extends ValueNotifier<LobbyState> {
   final LobbyLoadSimpleIdUsecase _lobbyLoadSimpleIdDatasource =
       LobbyLoadSimpleIdUsecase();
   final LobbyLoverJoinUsecase _lobbyJoinUsecase = LobbyLoverJoinUsecase();
-  final LobbyDeleteUsecase _lobbyDeleteUsecase = LobbyDeleteUsecase();
   final LobbyCreateUsecase _lobbyCreateUsecase = LobbyCreateUsecase();
   final LobbyLoadUsecase _lobbyLoadUsecase = LobbyLoadUsecase();
   final LobbyLoverLeaveUsecase _lobbyLeaveUsecase = LobbyLoverLeaveUsecase();
@@ -27,10 +26,12 @@ class LobbyController extends ValueNotifier<LobbyState> {
 
   Future<void> lobbyJoin(LoverEntity lover, String lobbyId) async {
     value = LobbyStateLoading();
-    LobbyEntity lobby = await _lobbyJoinUsecase(lover, lobbyId)
-        .fold((success) => success, (error) => LobbyEntity.empty());
-    value = LobbyStateSuccessNoReady(lobby);
-    _checkReady();
+    await _lobbyJoinUsecase(lover, lobbyId).fold((success) {
+      value = LobbyStateSuccessNoReady(success);
+      _checkReady();
+    }, (error) {
+      value = LobbyStateFailureNoLobby();
+    });
   }
 
   Future<void> lobbyLeave(LobbyEntity lobby, LoverEntity lover) async {

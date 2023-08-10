@@ -5,6 +5,6 @@ class LobbyDeleteUsecase {
   final LobbyDeleteDatasource lobbyDeleteDatasource = LobbyDeleteDatasource();
   LobbyDeleteUsecase();
   Future<void> call(LobbyEntity lobbyEntity) async {
-    await lobbyDeleteDatasource(lobbyEntity);
+    await lobbyDeleteDatasource(lobbyEntity.id);
   }
 }

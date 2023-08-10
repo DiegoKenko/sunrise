@@ -13,10 +13,9 @@ class AuthUsecase {
   final LobbyCreateUsecase _lobbyCreateUsecase = LobbyCreateUsecase();
 
   Future<Result<LoverEntity, Exception>> authenticate() async {
-    final UserCredential userCredencial =
-        await FirebaseAuthController().signInWithGoogle();
-
     try {
+      final UserCredential userCredencial =
+          await FirebaseAuthController().signInWithGoogle();
       if (userCredencial.user != null) {
         Result<LoverEntity, Exception> result =
             await _loverLoadUsecase(userCredencial.user!.uid);
