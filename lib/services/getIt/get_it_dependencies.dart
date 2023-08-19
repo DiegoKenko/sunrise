@@ -8,17 +8,17 @@ import 'package:sunrise/interface/controllers/chat/chat_controller.dart';
 import 'package:sunrise/interface/controllers/lobby/lobby_controller.dart';
 import 'package:sunrise/interface/states/lobby_state.dart';
 import 'package:sunrise/services/notification/firebase_messaging_service.dart';
-import 'package:sunrise/services/notification/notification_service.dart';
+import 'package:sunrise/services/notification/local_notification_service.dart';
 
 final getIt = GetIt.instance;
 
 void setup() {
-  getIt.registerLazySingleton<NotificationService>(() => NotificationService());
+  getIt.registerLazySingleton<LocalNotificationService>(() => LocalNotificationService());
   getIt.registerLazySingleton<FirebaseMessagingService>(
-    () => FirebaseMessagingService(getIt.get<NotificationService>()),
+    () => FirebaseMessagingService(getIt.get<LocalNotificationService>()),
   );
   getIt.registerLazySingleton<FirebaseAuthController>(
-      () => FirebaseAuthController());
+      () => FirebaseAuthController(),);
   getIt.registerLazySingleton<AuthController>(() => AuthController());
   getIt.registerLazySingleton<LobbyController>(
     () => LobbyController(LobbyStateInitial()),

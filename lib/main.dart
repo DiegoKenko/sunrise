@@ -15,7 +15,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Stripe.publishableKey = stripePublicKeyLive;
   await Stripe.instance.applySettings();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   setup();
   runApp(const MyApp());
 }

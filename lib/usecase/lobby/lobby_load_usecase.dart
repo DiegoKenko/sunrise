@@ -14,7 +14,7 @@ class LobbyLoadUsecase {
     LobbyEntity lobby = LobbyEntity.empty();
     result.fold((success) {
       return lobby = success;
-    }, (failure) => null);
+    }, (failure) => null,);
     if (lobby.isEmpty()) {
       return result;
     } else {

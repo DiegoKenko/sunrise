@@ -6,7 +6,7 @@ import 'package:sunrise/interface/screens/lobby/lobby_page_view.dart';
 import 'package:sunrise/interface/states/auth_state.dart';
 import 'package:sunrise/services/getIt/get_it_dependencies.dart';
 import 'package:sunrise/services/notification/firebase_messaging_service.dart';
-import 'package:sunrise/services/notification/notification_service.dart';
+import 'package:sunrise/services/notification/local_notification_service.dart';
 
 class LoginPageView extends StatefulWidget {
   const LoginPageView({Key? key}) : super(key: key);
@@ -31,7 +31,8 @@ class _LoginScreenViewState extends State<LoginPageView> {
   }
 
   checkNotifications() async {
-    NotificationService notificationService = getIt<NotificationService>();
+    LocalNotificationService notificationService =
+        getIt<LocalNotificationService>();
     notificationService.checkForNotifications();
   }
 

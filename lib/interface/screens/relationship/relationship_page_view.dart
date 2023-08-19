@@ -148,23 +148,24 @@ class _MoodRelationshipState extends State<MoodRelationship>
           decoration: kBackgroundDecorationDark,
           child: Column(
             children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 4.0, horizontal: 10),
+              SizedBox(
+                height: 80,
                 child: TabBar(
                   isScrollable: true,
                   labelColor: Colors.white,
                   labelStyle: const TextStyle(
                     fontSize: 15,
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  labelPadding: const EdgeInsets.symmetric(horizontal: 10),
                   indicator: BoxDecoration(
                     color: Colors.orange,
                     borderRadius: BorderRadius.circular(15),
                   ),
+                  indicatorPadding: const EdgeInsets.symmetric(vertical: 5),
                   tabs: [
                     Tab(
-                      child: Padding(
+                      child: Container(
+                        alignment: Alignment.center,
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           state.lobby.lovers[0].name,
@@ -173,7 +174,8 @@ class _MoodRelationshipState extends State<MoodRelationship>
                       ),
                     ),
                     Tab(
-                      child: Padding(
+                      child: Container(
+                        alignment: Alignment.center,
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           state.lobby.lovers[1].name,

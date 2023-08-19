@@ -34,11 +34,11 @@ class AuthUsecase {
       });
       if (user != null) {
         Result<LoverEntity, Exception> result =
-            await _loverLoadUsecase(user!.uid);
+            await _loverLoadUsecase(user.uid);
         if (result.isSuccess()) {
           return result;
         } else {
-          return await _register(user!);
+          return await _register(user);
         }
       } else {
         return Failure(Exception('Usuário não identificado'));

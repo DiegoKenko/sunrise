@@ -48,8 +48,8 @@ class LoverEntity {
         'notificationToken': notificationToken,
       };
 
-  set token(String token) {
-    notificationToken = token;
+  set token(String? token) {
+    notificationToken = token ?? '';
   }
 
   get isValid => name.isNotEmpty && id.isNotEmpty;

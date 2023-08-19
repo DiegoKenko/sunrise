@@ -10,7 +10,7 @@ class LobbyLoverLeaveUsecase {
   final LobbyUpdateDatasource _lobbyUpdateDatasource = LobbyUpdateDatasource();
   final LoverUpdateDatasource _loverUpdateDatasource = LoverUpdateDatasource();
   Future<Result<LobbyEntity, Exception>> call(
-      LobbyEntity lobby, LoverEntity lover) async {
+      LobbyEntity lobby, LoverEntity lover,) async {
     try {
       lobby.removeLover(lover);
       lover.removeLobby();
