@@ -1,7 +1,7 @@
 name: sunrise
 description: A new Flutter project.
 publish_to: "none"
-version: 1.0.5
+version: 1.0.6
 environment:
   sdk: "3.0.5"
 dependencies:
@@ -14,7 +14,7 @@ dependencies:
   firebase_auth: ^4.2.6
   google_sign_in: ^6.1.4
   expandable: ^5.0.1
-  firebase_messaging: ^14.2.5
+  firebase_messaging: ^14.6.6
   flutter_local_notifications: ^15.1.0
   http: ^1.1.0
   google_fonts: ^4.0.3

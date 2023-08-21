@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:sunrise/services/getIt/get_it_dependencies.dart';
 import 'package:sunrise/services/notification/local_notification_service.dart';
 import 'package:sunrise/entity/chat_message_entity.dart';
 import 'package:sunrise/entity/chat_notification_entity.dart';
@@ -15,7 +16,7 @@ class FirebaseMessagingService {
   FirebaseMessagingService(this._notificationService);
 
   Future<void> initialize() async {
-    await FirebaseMessaging.instance
+    await getIt<FirebaseMessaging>()
         .setForegroundNotificationPresentationOptions(
       badge: true,
       sound: true,
@@ -27,7 +28,7 @@ class FirebaseMessagingService {
   }
 
   Future<String?> getDeviceFirebaseToken() async {
-    return await FirebaseMessaging.instance.getToken();
+    return await getIt<FirebaseMessaging>().getToken();
   }
 
   _onMessage() {
@@ -66,12 +67,12 @@ class FirebaseMessagingService {
             'key=AAAAToog9sI:APA91bFEH9AYqRGClyyAjVb-1jUA9yIzGfF47SkYdRooq3i2oAvon8r33EXkr9OMGsnwpo9NgGgwLkiInjj7OAorKvLINf0XljZaJPiZk-6ClisUCrHkKnwUMeDoHCgGWjYsTfGq-mTq',
       },
       body: jsonEncode({
-        'to': token,
+        'to': chatMessage.sentById,
         'data': {
           'message': chatMessage.message,
         },
         'notification': {
-          'title': chatMessage.sentBy,
+          'title': chatMessage.sentByName,
           'body': chatMessage.message,
         },
         'content_available': true

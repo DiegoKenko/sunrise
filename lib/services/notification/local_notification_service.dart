@@ -30,6 +30,14 @@ class LocalNotificationService {
     localNotificationsPlugin = FlutterLocalNotificationsPlugin();
     _setupAndroidDetails();
     _setupNotifications();
+    _requestPermission();
+  }
+
+  Future<void> _requestPermission() async {
+    await localNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()!
+        .requestPermission();
   }
 
   _setupAndroidDetails() {
@@ -60,8 +68,6 @@ class LocalNotificationService {
       const InitializationSettings(
         android: android,
       ),
-      onDidReceiveBackgroundNotificationResponse: (x) => _onSelectNotification,
-      onDidReceiveNotificationResponse: (x) => _onSelectNotification,
     );
   }
 
@@ -70,7 +76,9 @@ class LocalNotificationService {
   }
 
   showNotificationScheduled(
-      ChatNotificationEntity notification, Duration duration) {
+    ChatNotificationEntity notification,
+    Duration duration,
+  ) {
     final date = DateTime.now().add(duration);
 
     localNotificationsPlugin.zonedSchedule(

@@ -50,7 +50,7 @@ class _TabChatState extends State<TabChat> {
                     itemCount: state.messages.length,
                     itemBuilder: (context, index) {
                       if (authService.lover.id ==
-                          state.messages[index].sentBy) {
+                          state.messages[index].sentById) {
                         return ChatBaloonRight(
                           message: state.messages[index],
                         );
@@ -90,6 +90,7 @@ class _TabChatState extends State<TabChat> {
                                 ChatMessageEntity(
                                   _textChatController.text,
                                   authService.lover.id,
+                                  authService.lover.name,
                                   DateTime.now(),
                                 ),
                               );

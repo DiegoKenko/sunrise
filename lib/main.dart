@@ -34,11 +34,6 @@ class _MyAppState extends State<MyApp> {
   final logged = ValueNotifier<bool>(false);
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {

@@ -1,22 +1,26 @@
 class ChatMessageEntity {
   final String message;
-  final String sentBy;
+  final String sentById;
+  final String sentByName;
   final DateTime dateTime;
 
   const ChatMessageEntity(
     this.message,
-    this.sentBy,
+    this.sentById,
+    this.sentByName,
     this.dateTime,
   );
 
   ChatMessageEntity.fromJson(Map<String, dynamic> json)
       : message = json['message'],
-        sentBy = json['sentBy'],
+        sentById = json['sentById'],
+        sentByName = json['sentByName'],
         dateTime = DateTime.parse(json['dateTime']);
 
   Map<String, dynamic> toJson() => {
         'message': message,
-        'sentBy': sentBy,
+        'sentById': sentById,
+        'sentByName': sentByName,
         'dateTime': DateTime.now().toIso8601String(),
       };
 }

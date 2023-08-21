@@ -16,7 +16,7 @@ class ChatController extends ValueNotifier<ChatState> {
 
   sendMessage(LobbyEntity lobby, ChatMessageEntity message) async {
     getIt<FirebaseMessagingService>()
-        .sendMessage(lobby.couple(message.sentBy).notificationToken, message);
+        .sendMessage(lobby.couple(message.sentById).notificationToken, message);
     await lobbyChatAddDataSource(lobby.id, message);
   }
 
