@@ -15,7 +15,8 @@ final getIt = GetIt.instance;
 
 void setup() {
   getIt.registerLazySingleton<LocalNotificationService>(
-      () => LocalNotificationService());
+    () => LocalNotificationService(),
+  );
   getIt.registerLazySingleton<FirebaseMessaging>(
     () => FirebaseMessaging.instance,
   );
