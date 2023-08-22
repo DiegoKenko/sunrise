@@ -67,6 +67,12 @@ class _ExpandableLogoutAndLeaveState extends State<ExpandableLogoutAndLeave> {
                     backgroundColor: MaterialStateProperty.all(
                       kPrimaryColor,
                     ),
+                    side: MaterialStateProperty.all(
+                      const BorderSide(
+                        color: Colors.black,
+                        width: 1,
+                      ),
+                    ),
                   ),
                   onPressed: () {},
                   child: const Row(

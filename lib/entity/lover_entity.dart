@@ -26,12 +26,7 @@ class LoverEntity {
     photoURL = user.photoURL ?? '';
   }
 
-  LoverEntity.empty({
-    this.name = '',
-    this.id = '',
-    this.email = '',
-    this.photoURL = '',
-  });
+  factory LoverEntity.empty() => LoverEntity();
 
   LoverEntity.fromJson(Map<String, dynamic> json)
       : name = json['name'],

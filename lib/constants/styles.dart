@@ -69,12 +69,12 @@ const kLobbyLeftBoxDecoration = BoxDecoration(
   color: Colors.white,
 );
 
-final kLobbyRightBoxDecoration = BoxDecoration(
-  borderRadius: const BorderRadius.only(
+const kLobbyRightBoxDecoration = BoxDecoration(
+  borderRadius: BorderRadius.only(
     topLeft: Radius.circular(30),
     bottomLeft: Radius.circular(30),
   ),
-  color: kPrimaryColor.withOpacity(0.8),
+  color: kPrimaryColor,
 );
 
 const List<Color> sliderGradientColors = <Color>[

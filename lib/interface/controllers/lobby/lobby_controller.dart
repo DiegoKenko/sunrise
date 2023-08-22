@@ -17,7 +17,7 @@ class LobbyController extends ValueNotifier<LobbyState> {
   final LobbyLoverLeaveUsecase _lobbyLeaveUsecase = LobbyLoverLeaveUsecase();
   final LobbyWatchUsecase _lobbyWatchUsecase = LobbyWatchUsecase();
 
-  LobbyController(super.value);
+  LobbyController() : super(LobbyStateInitial());
 
   Future<void> lobbyJoin(LoverEntity lover, String lobbyId) async {
     value = LobbyStateLoading();

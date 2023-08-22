@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sunrise/interface/controllers/auth/auth_controller.dart';
 import 'package:sunrise/interface/controllers/lobby/lobby_controller.dart';
-import 'package:sunrise/interface/controllers/widgets/avatar_change_controller.dart';
+import 'package:sunrise/interface/controllers/lobby/lobby_avatar_change_controller.dart';
 import 'package:sunrise/interface/screens/lobby/avatar_widget.dart';
 import 'package:sunrise/services/getIt/get_it_dependencies.dart';
 
@@ -15,8 +15,8 @@ class LoversLobbyWidget extends StatefulWidget {
 }
 
 class _LoversLobbyAtualState extends State<LoversLobbyWidget> {
-  final AvatarChangeController _avatarChangeController =
-      AvatarChangeController();
+  final LobbyAvatarChangeController _avatarChangeController =
+      LobbyAvatarChangeController('');
   final LobbyController lobbyController = getIt<LobbyController>();
   final AuthController authController = getIt<AuthController>();
 

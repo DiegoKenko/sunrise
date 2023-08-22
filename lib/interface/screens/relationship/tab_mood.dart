@@ -77,10 +77,37 @@ class _MoodMatchingSliderState extends State<MoodMatchingSlider> {
         } else {
           viewModelMoodMatching.state.moodMatching = snap.data!;
         }
+        double leftOpacity =
+            viewModelMoodMatching.state.moodMatching.matching.toInt() >=
+                    viewModelMoodMatching.state.moodMatching.max / 2
+                ? 1
+                : 0.1;
+        double rightOpacity =
+            viewModelMoodMatching.state.moodMatching.matching.toInt() <=
+                    viewModelMoodMatching.state.moodMatching.max / 2
+                ? 1
+                : 0.1;
+        Color thumbColor = sliderGradientColors[
+            viewModelMoodMatching.state.moodMatching.matching.toInt()];
+        Color slideLeftColor = sliderGradientColors[
+                viewModelMoodMatching.state.moodMatching.matching.toInt()]
+            .withOpacity(leftOpacity);
+        Color slideRightColor = sliderGradientColors[
+                viewModelMoodMatching.state.moodMatching.matching.toInt()]
+            .withOpacity(rightOpacity);
         return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          alignment: Alignment.center,
+          height: 120,
+          decoration: BoxDecoration(
+            border: Border.symmetric(
+              horizontal: BorderSide(
+                color: Colors.white.withOpacity(0.3),
+                width: 0.5,
+              ),
+            ),
+          ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 1),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -91,6 +118,9 @@ class _MoodMatchingSliderState extends State<MoodMatchingSlider> {
                     padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(60),
+                      border: Border.all(
+                        color: sliderGradientColors.first.withOpacity(0.5),
+                      ),
                       color: Colors.white.withOpacity(0.1),
                     ),
                     child: Image.asset(
@@ -112,11 +142,9 @@ class _MoodMatchingSliderState extends State<MoodMatchingSlider> {
                       ),
                       Expanded(
                         child: Slider(
-                          inactiveColor: Colors.transparent,
-                          activeColor: Colors.transparent,
-                          thumbColor: sliderGradientColors[viewModelMoodMatching
-                              .state.moodMatching.matching
-                              .toInt()],
+                          inactiveColor: slideLeftColor,
+                          activeColor: slideRightColor,
+                          thumbColor: thumbColor,
                           label: viewModelMoodMatching
                               .state.moodMatching.matching
                               .toString(),
@@ -152,6 +180,9 @@ class _MoodMatchingSliderState extends State<MoodMatchingSlider> {
                     padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(60),
+                      border: Border.all(
+                        color: sliderGradientColors.last.withOpacity(0.5),
+                      ),
                       color: Colors.white.withOpacity(0.1),
                     ),
                     child: Image.asset(

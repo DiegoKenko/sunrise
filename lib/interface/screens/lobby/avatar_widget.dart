@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sunrise/interface/controllers/widgets/avatar_change_controller.dart';
+import 'package:sunrise/interface/controllers/lobby/lobby_avatar_change_controller.dart';
 import 'package:sunrise/constants/styles.dart';
 import 'package:sunrise/entity/lover_entity.dart';
 
@@ -60,8 +60,13 @@ class AvatarWidgetEdit extends StatefulWidget {
 }
 
 class _AvatarWidgetEditState extends State<AvatarWidgetEdit> {
-  final AvatarChangeController avatarChangeController =
-      AvatarChangeController();
+  late LobbyAvatarChangeController avatarChangeController;
+
+  @override
+  void initState() {
+    avatarChangeController = LobbyAvatarChangeController(widget.lover.photoURL);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +74,7 @@ class _AvatarWidgetEditState extends State<AvatarWidgetEdit> {
       children: [
         IconButton(
           onPressed: () {
-            avatarChangeController.toLeft();
+            avatarChangeController.toLeft(widget.lover);
           },
           icon: Icon(
             Icons.chevron_left,
@@ -85,7 +90,7 @@ class _AvatarWidgetEditState extends State<AvatarWidgetEdit> {
                 borderRadius: BorderRadius.circular(50),
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: widget.lover.id.isEmpty
+                  child: widget.lover.photoURL.isEmpty
                       ? Image.asset('assets/avatar.png')
                       : Image.asset(state),
                 ),
@@ -95,7 +100,7 @@ class _AvatarWidgetEditState extends State<AvatarWidgetEdit> {
         ),
         IconButton(
           onPressed: () {
-            avatarChangeController.toRight();
+            avatarChangeController.toRight(widget.lover);
           },
           icon: Icon(
             Icons.chevron_right,

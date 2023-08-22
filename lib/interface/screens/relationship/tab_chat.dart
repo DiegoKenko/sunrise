@@ -24,13 +24,12 @@ class _TabChatState extends State<TabChat> {
   @override
   void initState() {
     chatController.watch(lobbyController.value.lobby, limit);
-
     super.initState();
   }
 
   void _animateToBottom() {
     _listChatController.animateTo(
-      _listChatController.position.maxScrollExtent,
+      _listChatController.position.minScrollExtent,
       duration: const Duration(seconds: 2),
       curve: Curves.fastOutSlowIn,
     );
@@ -49,18 +48,20 @@ class _TabChatState extends State<TabChat> {
               children: [
                 Expanded(
                   child: ListView.builder(
+                    reverse: true,
                     controller: _listChatController,
                     shrinkWrap: true,
                     itemCount: state.messages.length,
                     itemBuilder: (context, index) {
+                      int reversedIndex = state.messages.length - index - 1;
                       if (authService.lover.id ==
-                          state.messages[index].sentById) {
+                          state.messages[reversedIndex].sentById) {
                         return ChatBaloonRight(
-                          message: state.messages[index],
+                          message: state.messages[reversedIndex],
                         );
                       } else {
                         return ChatBaloonLeft(
-                          message: state.messages[index],
+                          message: state.messages[reversedIndex],
                         );
                       }
                     },

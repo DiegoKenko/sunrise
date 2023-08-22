@@ -98,8 +98,10 @@ class LobbyEntity {
   }
 
   LoverEntity mySelf(String myId) {
-    return lovers.firstWhere((element) => element.id == myId,
-        orElse: LoverEntity.empty,);
+    return lovers.firstWhere(
+      (element) => element.id == myId,
+      orElse: LoverEntity.empty,
+    );
   }
 
   LobbyEntity.fromJson(Map<String, dynamic> json)
@@ -107,13 +109,11 @@ class LobbyEntity {
           LoverEntity(
             id: json['lover1'] ?? '',
             name: json['lover1name'] ?? '',
-            photoURL: json['lover1photoURL'] ?? '',
             email: json['lover1email'] ?? '',
           ),
           LoverEntity(
             id: json['lover2'] ?? '',
             name: json['lover2name'] ?? '',
-            photoURL: json['lover2photoURL'] ?? '',
             email: json['lover2email'] ?? '',
           ),
         ];

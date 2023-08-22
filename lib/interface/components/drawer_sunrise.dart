@@ -29,13 +29,14 @@ class _SunriseDrawerState extends State<SunriseDrawer> {
         }
 
         return Drawer(
+          width: MediaQuery.of(context).size.width * 0.8,
           backgroundColor: Colors.black.withOpacity(0.7),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               ListTile(
                 tileColor: Colors.black,
-                leading: Image.network(
+                leading: Image.asset(
                   lover.photoURL,
                   width: 50,
                   height: 50,

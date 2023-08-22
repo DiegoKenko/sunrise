@@ -5,6 +5,7 @@ class MoodMatchingEntity {
   MoodEntity mood1;
   MoodEntity mood2;
   double matching; // minimun of 1 to maximun of 10
+
   String get matchId => mood1.name.toLowerCase() + mood2.name.toLowerCase();
 
   double get max => 10;
