@@ -59,6 +59,7 @@ class FirebaseMessagingService {
   }
 
   Future<void> sendMessage(String token, ChatMessageEntity chatMessage) async {
+    if (token.isEmpty) return;
     await http.post(
       Uri.parse('https://fcm.googleapis.com/fcm/send'),
       headers: {
@@ -67,7 +68,7 @@ class FirebaseMessagingService {
             'key=AAAAToog9sI:APA91bFEH9AYqRGClyyAjVb-1jUA9yIzGfF47SkYdRooq3i2oAvon8r33EXkr9OMGsnwpo9NgGgwLkiInjj7OAorKvLINf0XljZaJPiZk-6ClisUCrHkKnwUMeDoHCgGWjYsTfGq-mTq',
       },
       body: jsonEncode({
-        'to': chatMessage.sentById,
+        'to': token,
         'data': {
           'message': chatMessage.message,
         },

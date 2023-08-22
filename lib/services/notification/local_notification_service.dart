@@ -1,8 +1,14 @@
 // ignore_for_file: depend_on_referenced_packages
 
+import 'dart:io';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:sunrise/entity/chat_notification_entity.dart';
+import 'package:sunrise/routes.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz;
 
@@ -40,6 +46,15 @@ class LocalNotificationService {
         .requestPermission();
   }
 
+  Future<void> _configureLocalTimeZone() async {
+    if (kIsWeb || Platform.isLinux) {
+      return;
+    }
+    tz.initializeTimeZones();
+    final String timeZoneName = await FlutterTimezone.getLocalTimezone();
+    tz.setLocalLocation(tz.getLocation(timeZoneName));
+  }
+
   _setupAndroidDetails() {
     androidDetails = const AndroidNotificationDetails(
       'lembretes_notifications_details',
@@ -52,13 +67,8 @@ class LocalNotificationService {
   }
 
   _setupNotifications() async {
-    await _setupTimezone();
+    await _configureLocalTimeZone();
     await _initializeNotifications();
-  }
-
-  Future<void> _setupTimezone() async {
-    tz.initializeTimeZones();
-    tz.setLocalLocation(tz.getLocation('America/Detroit'));
   }
 
   _initializeNotifications() async {
@@ -72,27 +82,9 @@ class LocalNotificationService {
   }
 
   _onSelectNotification(String? payload) {
-    if (payload != null && payload.isNotEmpty) {}
-  }
-
-  showNotificationScheduled(
-    ChatNotificationEntity notification,
-    Duration duration,
-  ) {
-    final date = DateTime.now().add(duration);
-
-    localNotificationsPlugin.zonedSchedule(
-      notification.id,
-      notification.title,
-      notification.body,
-      tz.TZDateTime.from(date, tz.local),
-      NotificationDetails(
-        android: androidDetails,
-      ),
-      payload: notification.payload,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-    );
+    if (payload != null && payload.isNotEmpty) {
+      Navigator.of(Routes.navigatorKey!.currentContext!).pushNamed(payload);
+    }
   }
 
   showLocalNotification(ChatNotificationEntity notification) {
@@ -108,12 +100,10 @@ class LocalNotificationService {
   }
 
   checkForNotifications() async {
-    NotificationAppLaunchDetails? details =
+    final details =
         await localNotificationsPlugin.getNotificationAppLaunchDetails();
     if (details != null && details.didNotificationLaunchApp) {
-      if (details.notificationResponse != null) {
-        _onSelectNotification(details.notificationResponse!.payload);
-      }
+      _onSelectNotification(details.notificationResponse!.payload);
     }
   }
 }

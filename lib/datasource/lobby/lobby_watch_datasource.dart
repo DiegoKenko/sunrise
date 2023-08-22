@@ -6,7 +6,6 @@ import 'package:sunrise/services/getIt/get_it_dependencies.dart';
 
 class LobbyWatchDatasource {
   Stream<LobbyEntity> call(LobbyEntity lobby) async* {
-    StreamController<LobbyEntity> lobbyStream = StreamController<LobbyEntity>();
     Stream<DocumentSnapshot<Map<String, dynamic>>> stream =
         getIt<FirebaseFirestore>()
             .collection('lobby')
@@ -16,7 +15,6 @@ class LobbyWatchDatasource {
     yield* stream.map<LobbyEntity>((event) {
       lobby = LobbyEntity.fromJson(event.data()!);
       lobby.id = event.id;
-      lobbyStream.add(lobby);
       return lobby;
     });
   }

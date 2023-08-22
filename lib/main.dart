@@ -8,7 +8,7 @@ import 'package:sunrise/interface/controllers/auth/auth_controller.dart';
 import 'package:sunrise/interface/screens/login/login_page_view.dart';
 import 'package:sunrise/firebase_options.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:sunrise/interface/screens/relationship/relationship_page_view.dart';
+import 'package:sunrise/routes.dart';
 import 'package:sunrise/services/getIt/get_it_dependencies.dart';
 
 void main() async {
@@ -36,11 +36,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      routes: {
-        '/login': (context) => const LoginPageView(),
-        '/lobby': (context) => const LobbyPageView(),
-        '/relationship': (context) => const RelationshipPageView(),
-      },
+      routes: Routes.list,
       home: FutureBuilder(
         future: authService.login(),
         builder: (context, snapshot) {

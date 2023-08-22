@@ -25,11 +25,15 @@ class _TabChatState extends State<TabChat> {
   void initState() {
     chatController.watch(lobbyController.value.lobby, limit);
 
-    _listChatController.addListener(() {
-      if (_listChatController.position.pixels ==
-          _listChatController.position.minScrollExtent) {}
-    });
     super.initState();
+  }
+
+  void _animateToBottom() {
+    _listChatController.animateTo(
+      _listChatController.position.maxScrollExtent,
+      duration: const Duration(seconds: 2),
+      curve: Curves.fastOutSlowIn,
+    );
   }
 
   @override
@@ -95,11 +99,7 @@ class _TabChatState extends State<TabChat> {
                                 ),
                               );
                               _textChatController.clear();
-                              _listChatController.animateTo(
-                                _listChatController.position.maxScrollExtent,
-                                duration: const Duration(seconds: 2),
-                                curve: Curves.fastOutSlowIn,
-                              );
+                              _animateToBottom();
                             }
                           },
                           icon: const Icon(

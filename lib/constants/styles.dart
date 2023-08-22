@@ -74,7 +74,7 @@ final kLobbyRightBoxDecoration = BoxDecoration(
     topLeft: Radius.circular(30),
     bottomLeft: Radius.circular(30),
   ),
-  color: kPrimaryColor.withOpacity(0.6),
+  color: kPrimaryColor.withOpacity(0.8),
 );
 
 const List<Color> sliderGradientColors = <Color>[
