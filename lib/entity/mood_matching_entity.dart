@@ -5,6 +5,7 @@ class MoodMatchingEntity {
   MoodEntity mood1;
   MoodEntity mood2;
   double matching; // minimun of 1 to maximun of 10
+  bool favorite;
 
   String get matchId => mood1.name.toLowerCase() + mood2.name.toLowerCase();
 
@@ -32,6 +33,7 @@ class MoodMatchingEntity {
     required this.mood1,
     required this.mood2,
     this.matching = 5,
+    this.favorite = false,
     required this.pack,
   });
 
@@ -42,6 +44,7 @@ class MoodMatchingEntity {
       'mood2': mood2.name,
       'mood2Icon': mood2.iconName,
       'matching': matching,
+      'favorite': favorite
     };
   }
 
@@ -55,7 +58,8 @@ class MoodMatchingEntity {
           iconName: json['mood2Icon'],
         ),
         pack = MoodMatchingPack.defaultPack,
-        matching = json['matching'];
+        matching = json['matching'],
+        favorite = json['favorite'] ?? false;
 
   @override
   String toString() {

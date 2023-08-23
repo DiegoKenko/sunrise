@@ -3,6 +3,7 @@ import 'package:sunrise/constants/styles.dart';
 import 'package:sunrise/interface/controllers/auth/auth_controller.dart';
 import 'package:sunrise/interface/controllers/chat/chat_controller.dart';
 import 'package:sunrise/interface/controllers/lobby/lobby_controller.dart';
+import 'package:sunrise/interface/extensions/string_capitalize.dart';
 import 'package:sunrise/services/getIt/get_it_dependencies.dart';
 import 'package:sunrise/entity/chat_message_entity.dart';
 import 'package:intl/intl.dart';
@@ -128,14 +129,11 @@ class ChatBaloonLeft extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(
-        left: 10,
-        right: MediaQuery.of(context).size.width * 0.5,
-      ),
-      child: Align(
+      padding: const EdgeInsets.all(10),
+      child: FractionallySizedBox(
         alignment: Alignment.centerLeft,
+        widthFactor: 0.8,
         child: Container(
-          margin: const EdgeInsets.all(10),
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: k2LevelColor,
@@ -154,10 +152,14 @@ class ChatBaloonLeft extends StatelessWidget {
                 height: 15,
               ),
               Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  message.message,
-                  style: kTextChatMessageStyle,
+                alignment: Alignment.bottomLeft,
+                child: Column(
+                  children: [
+                    Text(
+                      message.message.capitalize(),
+                      style: kTextChatMessageStyle,
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -174,15 +176,13 @@ class ChatBaloonRight extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.centerRight,
-      child: Padding(
-        padding: EdgeInsets.only(
-          left: MediaQuery.of(context).size.width * 0.5,
-          right: 10,
-        ),
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: FractionallySizedBox(
+        alignment: Alignment.centerRight,
+        widthFactor: 0.8,
         child: Container(
-          margin: const EdgeInsets.all(10),
+          alignment: Alignment.topRight,
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: kPrimaryColor.withOpacity(0.8),
@@ -201,10 +201,15 @@ class ChatBaloonRight extends StatelessWidget {
                 height: 15,
               ),
               Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  message.message,
-                  style: kTextChatMessageStyle,
+                alignment: Alignment.bottomRight,
+                child: Column(
+                  children: [
+                    Text(
+                      message.message.capitalize(),
+                      softWrap: true,
+                      style: kTextChatMessageStyle,
+                    ),
+                  ],
                 ),
               ),
             ],

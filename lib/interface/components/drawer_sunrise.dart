@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sunrise/constants/styles.dart';
 import 'package:sunrise/interface/components/animated_page_transition.dart';
 import 'package:sunrise/interface/controllers/auth/auth_controller.dart';
 import 'package:sunrise/interface/states/auth_state.dart';
@@ -16,9 +17,10 @@ class SunriseDrawer extends StatefulWidget {
 }
 
 class _SunriseDrawerState extends State<SunriseDrawer> {
+  final AuthController authService = getIt<AuthController>();
+  final ValueNotifier<bool> _favoriteNotifier = ValueNotifier<bool>(true);
   @override
   Widget build(BuildContext context) {
-    final AuthController authService = getIt<AuthController>();
     LoverEntity lover = LoverEntity.empty();
 
     return ValueListenableBuilder(
@@ -88,6 +90,34 @@ class _SunriseDrawerState extends State<SunriseDrawer> {
                 ),
               ),
               Expanded(child: Container()),
+              ListTile(
+                title: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Text(
+                    'Enviar notificação dos humores favoritos:',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+                trailing: ValueListenableBuilder(
+                  valueListenable: _favoriteNotifier,
+                  builder: (context, state, value) {
+                    return Switch(
+                      activeColor: kPrimaryColor,
+                      activeTrackColor: Colors.blueGrey.shade600,
+                      inactiveThumbColor: Colors.blueGrey.shade600,
+                      inactiveTrackColor: Colors.grey.shade400,
+                      splashRadius: 50.0,
+
+                      value: state,
+                      onChanged: (value) => _favoriteNotifier.value = value,
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 20),
               ListTile(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5),

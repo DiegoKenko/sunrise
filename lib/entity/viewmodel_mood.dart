@@ -45,4 +45,15 @@ class ViewModelMood {
       loverId: state.lover.id,
     );
   }
+
+  void updateFavorite(bool favorite) {
+    MoodMatchingEntity moodMatching = state.moodMatching;
+    moodMatching.favorite = favorite;
+
+    lobbyMoodMatchingDatasource(
+      moodMatching: moodMatching,
+      lobbyId: lobbyID,
+      loverId: state.lover.id,
+    );
+  }
 }

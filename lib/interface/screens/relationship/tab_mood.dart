@@ -97,101 +97,138 @@ class _MoodMatchingSliderState extends State<MoodMatchingSlider> {
             .withOpacity(rightOpacity);
         return Container(
           alignment: Alignment.center,
-          height: 120,
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          height: 160,
           decoration: BoxDecoration(
+            color: viewModelMoodMatching.state.moodMatching.favorite
+                ? Colors.amber.withOpacity(0.05)
+                : Colors.grey.withOpacity(0.1),
             border: Border.symmetric(
               horizontal: BorderSide(
-                color: Colors.white.withOpacity(0.3),
-                width: 0.5,
+                color: Colors.white.withOpacity(0.1),
+                width: 1,
               ),
             ),
           ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(60),
-                      border: Border.all(
-                        color: sliderGradientColors.first.withOpacity(0.5),
-                      ),
-                      color: Colors.white.withOpacity(0.1),
-                    ),
-                    child: Image.asset(
-                      viewModelMoodMatching.state.moodMatching.mood1.icon,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 6,
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15.0),
-                        child: Icon(
-                          Icons.circle,
-                          color: sliderGradientColors.first,
-                          size: 4,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(60),
+                          border: Border.all(
+                            color: sliderGradientColors.first.withOpacity(0.5),
+                          ),
+                          color: Colors.white.withOpacity(0.1),
+                        ),
+                        child: Image.asset(
+                          viewModelMoodMatching.state.moodMatching.mood1.icon,
                         ),
                       ),
-                      Expanded(
-                        child: Slider(
-                          inactiveColor: slideLeftColor,
-                          activeColor: slideRightColor,
-                          thumbColor: thumbColor,
-                          label: viewModelMoodMatching
-                              .state.moodMatching.matching
-                              .toString(),
-                          value:
-                              viewModelMoodMatching.state.moodMatching.matching,
-                          min: viewModelMoodMatching.state.moodMatching.min,
-                          max: viewModelMoodMatching.state.moodMatching.max,
-                          divisions: (viewModelMoodMatching
-                                      .state.moodMatching.max -
-                                  viewModelMoodMatching.state.moodMatching.min)
-                              .toInt(),
-                          onChanged: (double value) {
-                            if (widget.edit) {
-                              viewModelMoodMatching.updateMatching(value);
-                            }
-                          },
+                    ),
+                    Expanded(
+                      flex: 6,
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 15.0),
+                            child: Icon(
+                              Icons.circle,
+                              color: sliderGradientColors.first,
+                              size: 4,
+                            ),
+                          ),
+                          Expanded(
+                            child: Slider(
+                              inactiveColor: slideLeftColor,
+                              activeColor: slideRightColor,
+                              thumbColor: thumbColor,
+                              label: viewModelMoodMatching
+                                  .state.moodMatching.matching
+                                  .toString(),
+                              value: viewModelMoodMatching
+                                  .state.moodMatching.matching,
+                              min: viewModelMoodMatching.state.moodMatching.min,
+                              max: viewModelMoodMatching.state.moodMatching.max,
+                              divisions: (viewModelMoodMatching
+                                          .state.moodMatching.max -
+                                      viewModelMoodMatching
+                                          .state.moodMatching.min)
+                                  .toInt(),
+                              onChanged: (double value) {
+                                if (widget.edit) {
+                                  viewModelMoodMatching.updateMatching(value);
+                                }
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 15.0),
+                            child: Icon(
+                              Icons.circle,
+                              color: sliderGradientColors.last,
+                              size: 4,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(60),
+                          border: Border.all(
+                            color: sliderGradientColors.last.withOpacity(0.5),
+                          ),
+                          color: Colors.white.withOpacity(0.1),
+                        ),
+                        child: Image.asset(
+                          viewModelMoodMatching.state.moodMatching.mood2.icon,
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 15.0),
-                        child: Icon(
-                          Icons.circle,
-                          color: sliderGradientColors.last,
-                          size: 4,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(60),
-                      border: Border.all(
-                        color: sliderGradientColors.last.withOpacity(0.5),
-                      ),
-                      color: Colors.white.withOpacity(0.1),
                     ),
-                    child: Image.asset(
-                      viewModelMoodMatching.state.moodMatching.mood2.icon,
+                  ],
+                ),
+              ),
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    color: viewModelMoodMatching.state.moodMatching.favorite
+                        ? Colors.amber.withOpacity(0.4)
+                        : Colors.grey.withOpacity(0.1),
+                    height: 1,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      if (widget.edit) {
+                        viewModelMoodMatching.updateFavorite(
+                          !viewModelMoodMatching.state.moodMatching.favorite,
+                        );
+                      }
+                    },
+                    child: Icon(
+                      Icons.star,
+                      color: viewModelMoodMatching.state.moodMatching.favorite
+                          ? Colors.amber
+                          : Colors.grey,
+                      size: 20,
                     ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
+            ],
           ),
         );
       },
