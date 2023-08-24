@@ -7,6 +7,7 @@ import 'package:sunrise/interface/controllers/auth/auth_controller.dart';
 import 'package:sunrise/interface/controllers/auth/firebase_auth_controller.dart';
 import 'package:sunrise/interface/controllers/chat/chat_controller.dart';
 import 'package:sunrise/interface/controllers/lobby/lobby_controller.dart';
+import 'package:sunrise/interface/controllers/notification/notification_controller.dart';
 
 import 'package:sunrise/services/notification/firebase_messaging_service.dart';
 import 'package:sunrise/services/notification/local_notification_service.dart';
@@ -45,5 +46,8 @@ void setup() {
   );
   getIt.registerLazySingleton<LobbyChatWatchDatasource>(
     () => LobbyChatWatchDatasource(),
+  );
+  getIt.registerLazySingleton<NotificationController>(
+    () => NotificationController(),
   );
 }

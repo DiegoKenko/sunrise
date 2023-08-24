@@ -25,7 +25,7 @@ class AuthController extends ValueNotifier<AuthState> {
       value = AuthErrorState(error.toString());
     });
     if (lover != null) {
-      lover!.token = await notificationService.getDeviceFirebaseToken();
+      lover!.setToken = await notificationService.getDeviceFirebaseToken();
       value = AuthAuthenticatedState(lover!);
       loverUpdateUsecase(lover!);
       return true;

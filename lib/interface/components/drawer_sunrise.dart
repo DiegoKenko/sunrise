@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:sunrise/constants/styles.dart';
+import 'package:sunrise/entity/chat_message_entity.dart';
 import 'package:sunrise/interface/components/animated_page_transition.dart';
 import 'package:sunrise/interface/controllers/auth/auth_controller.dart';
+import 'package:sunrise/interface/controllers/lobby/lobby_controller.dart';
+import 'package:sunrise/interface/controllers/notification/notification_controller.dart';
 import 'package:sunrise/interface/states/auth_state.dart';
 import 'package:sunrise/interface/screens/login/login_page_view.dart';
 import 'package:sunrise/entity/lover_entity.dart';
 import 'package:sunrise/services/getIt/get_it_dependencies.dart';
+import 'package:sunrise/services/notification/firebase_messaging_service.dart';
 
 class SunriseDrawer extends StatefulWidget {
   const SunriseDrawer({
@@ -18,7 +21,12 @@ class SunriseDrawer extends StatefulWidget {
 
 class _SunriseDrawerState extends State<SunriseDrawer> {
   final AuthController authService = getIt<AuthController>();
-  final ValueNotifier<bool> _favoriteNotifier = ValueNotifier<bool>(true);
+  final NotificationController _favoriteNotificationNotifier =
+      getIt<NotificationController>();
+  final FirebaseMessagingService _firebaseMessagingService =
+      getIt<FirebaseMessagingService>();
+  final LobbyController lobbyController = getIt<LobbyController>();
+
   @override
   Widget build(BuildContext context) {
     LoverEntity lover = LoverEntity.empty();
@@ -90,32 +98,47 @@ class _SunriseDrawerState extends State<SunriseDrawer> {
                 ),
               ),
               Expanded(child: Container()),
-              ListTile(
-                title: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: Text(
-                    'Enviar notificação dos humores favoritos:',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
+              ValueListenableBuilder(
+                valueListenable: _favoriteNotificationNotifier,
+                builder: (context, state, value) {
+                  return ListTile(
+                    title: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        state
+                            ? 'Notificação enviada'
+                            : 'Enviar notificação com novos humores',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                trailing: ValueListenableBuilder(
-                  valueListenable: _favoriteNotifier,
-                  builder: (context, state, value) {
-                    return Switch(
-                      activeColor: kPrimaryColor,
-                      activeTrackColor: Colors.blueGrey.shade600,
-                      inactiveThumbColor: Colors.blueGrey.shade600,
-                      inactiveTrackColor: Colors.grey.shade400,
-                      splashRadius: 50.0,
-
-                      value: state,
-                      onChanged: (value) => _favoriteNotifier.value = value,
-                    );
-                  },
-                ),
+                    trailing: IconButton(
+                      onPressed: () {
+                        if (!state) {
+                          _firebaseMessagingService.sendMessage(
+                            lobbyController.value.lobby
+                                .couple(authService.lover.id)
+                                .notificationToken,
+                            ChatMessageEntity(
+                              'Atualizou o humor!!',
+                              authService.lover.id,
+                              authService.lover.name,
+                              DateTime.now(),
+                            ),
+                          );
+                          _favoriteNotificationNotifier.value = true;
+                        }
+                      },
+                      icon: Icon(
+                        state ? Icons.done_all : Icons.send,
+                        size: 30,
+                        color: Colors.white,
+                      ),
+                    ),
+                  );
+                },
               ),
               const SizedBox(height: 20),
               ListTile(

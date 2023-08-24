@@ -43,7 +43,7 @@ class LoverEntity {
         'notificationToken': notificationToken,
       };
 
-  set token(String? token) {
+  set setToken(String? token) {
     notificationToken = token ?? '';
   }
 
