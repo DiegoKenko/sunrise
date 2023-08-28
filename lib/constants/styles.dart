@@ -56,7 +56,7 @@ const kTextLeaveLobbyStyle = TextStyle(
 );
 
 const kTextChatMessageStyle = TextStyle(
-  fontSize: 17,
+  fontSize: 14,
   letterSpacing: 1,
   color: Colors.white,
 );
@@ -121,6 +121,6 @@ final kOutlineInputBorder = OutlineInputBorder(
 );
 
 const kDateTimeChatTextStyle = TextStyle(
-  fontSize: 12,
+  fontSize: 11,
   color: Colors.white,
 );

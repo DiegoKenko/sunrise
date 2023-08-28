@@ -19,17 +19,20 @@ dependencies:
   http: ^1.1.0
   google_fonts: ^4.0.3
   firebase_crashlytics: ^3.0.15
-  flutter_stripe: ^9.0.0
+  flutter_stripe: ^9.3.0
   equatable: ^2.0.5
   flutter_credit_card: ^3.0.6
-  intl: ^0.18.1
+  intl: ^0.18.0
   get_it: ^7.3.0
   result_dart: ^1.1.0
   flutter_timezone: ^1.0.7
+  flutter_localization: ^0.1.13
+  pay: ^1.1.2
 dev_dependencies:
   flutter_lints: ^2.0.0
 flutter:
   uses-material-design: true
   assets:
     - assets/moods/
+    - assets/config/
     - assets/

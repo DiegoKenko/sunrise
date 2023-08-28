@@ -3,10 +3,9 @@ import 'package:sunrise/constants/styles.dart';
 import 'package:sunrise/interface/controllers/auth/auth_controller.dart';
 import 'package:sunrise/interface/controllers/chat/chat_controller.dart';
 import 'package:sunrise/interface/controllers/lobby/lobby_controller.dart';
-import 'package:sunrise/interface/extensions/string_capitalize.dart';
+import 'package:sunrise/interface/screens/relationship/chat_baloon.dart';
 import 'package:sunrise/services/getIt/get_it_dependencies.dart';
 import 'package:sunrise/entity/chat_message_entity.dart';
-import 'package:intl/intl.dart';
 
 class TabChat extends StatefulWidget {
   const TabChat({Key? key}) : super(key: key);
@@ -57,11 +56,13 @@ class _TabChatState extends State<TabChat> {
                       int reversedIndex = state.messages.length - index - 1;
                       if (authService.lover.id ==
                           state.messages[reversedIndex].sentById) {
-                        return ChatBaloonRight(
+                        return ChatBaloon(
+                          position: EnumPosition.right,
                           message: state.messages[reversedIndex],
                         );
                       } else {
-                        return ChatBaloonLeft(
+                        return ChatBaloon(
+                          position: EnumPosition.left,
                           message: state.messages[reversedIndex],
                         );
                       }
@@ -118,104 +119,6 @@ class _TabChatState extends State<TabChat> {
           ),
         );
       },
-    );
-  }
-}
-
-class ChatBaloonLeft extends StatelessWidget {
-  const ChatBaloonLeft({Key? key, required this.message}) : super(key: key);
-  final ChatMessageEntity message;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: FractionallySizedBox(
-        alignment: Alignment.centerLeft,
-        widthFactor: 0.8,
-        child: Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: k2LevelColor,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  DateFormat('dd/MM HH:mm').format(message.dateTime),
-                  style: kDateTimeChatTextStyle,
-                ),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              Align(
-                alignment: Alignment.bottomLeft,
-                child: Column(
-                  children: [
-                    Text(
-                      message.message.capitalize(),
-                      style: kTextChatMessageStyle,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class ChatBaloonRight extends StatelessWidget {
-  const ChatBaloonRight({Key? key, required this.message}) : super(key: key);
-  final ChatMessageEntity message;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: FractionallySizedBox(
-        alignment: Alignment.centerRight,
-        widthFactor: 0.8,
-        child: Container(
-          alignment: Alignment.topRight,
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: kPrimaryColor.withOpacity(0.8),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.topRight,
-                child: Text(
-                  DateFormat('dd/MM HH:mm').format(message.dateTime),
-                  style: kDateTimeChatTextStyle,
-                ),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: Column(
-                  children: [
-                    Text(
-                      message.message.capitalize(),
-                      softWrap: true,
-                      style: kTextChatMessageStyle,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

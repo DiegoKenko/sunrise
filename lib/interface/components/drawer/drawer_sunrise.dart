@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:sunrise/constants/icons.dart';
 import 'package:sunrise/entity/chat_message_entity.dart';
 import 'package:sunrise/interface/components/animated_page_transition.dart';
+import 'package:sunrise/interface/components/drawer/payment_bottom_sheet.dart';
 import 'package:sunrise/interface/controllers/auth/auth_controller.dart';
 import 'package:sunrise/interface/controllers/lobby/lobby_controller.dart';
 import 'package:sunrise/interface/controllers/notification/notification_controller.dart';
@@ -51,13 +53,6 @@ class _SunriseDrawerState extends State<SunriseDrawer> {
                   width: 50,
                   height: 50,
                 ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  side: const BorderSide(
-                    color: Colors.white,
-                    width: 0.5,
-                  ),
-                ),
                 title: Text(
                   lover.name,
                   style: const TextStyle(
@@ -73,13 +68,14 @@ class _SunriseDrawerState extends State<SunriseDrawer> {
                   ),
                 ),
               ),
+              Container(
+                height: 1,
+                color: Colors.white,
+              ),
               ListTile(
                 title: Row(
                   children: [
-                    const Icon(
-                      Icons.wb_sunny,
-                      color: Colors.white,
-                    ),
+                    sunIcon,
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Text(
@@ -93,7 +89,20 @@ class _SunriseDrawerState extends State<SunriseDrawer> {
                   ],
                 ),
                 trailing: FilledButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pop(context);
+                    showBottomSheet(
+                      constraints: BoxConstraints(
+                        maxHeight: MediaQuery.of(context).size.height * 0.4,
+                      ),
+                      context: context,
+                      builder: (
+                        context,
+                      ) {
+                        return PaymentBottomSheet();
+                      },
+                    );
+                  },
                   child: const Text('Adicionar'),
                 ),
               ),
@@ -141,14 +150,11 @@ class _SunriseDrawerState extends State<SunriseDrawer> {
                 },
               ),
               const SizedBox(height: 20),
+              Container(
+                height: 1,
+                color: Colors.white,
+              ),
               ListTile(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  side: const BorderSide(
-                    color: Colors.white,
-                    width: 0.5,
-                  ),
-                ),
                 tileColor: Colors.black,
                 title: const Text(
                   'Sair',

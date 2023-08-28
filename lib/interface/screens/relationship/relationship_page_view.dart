@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sunrise/interface/components/drawer_sunrise.dart';
+import 'package:sunrise/interface/components/drawer/drawer_sunrise.dart';
 import 'package:sunrise/interface/screens/relationship/tab_chat.dart';
 import 'package:sunrise/interface/screens/relationship/tab_mood.dart';
 import 'package:sunrise/constants/styles.dart';
