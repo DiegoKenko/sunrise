@@ -76,7 +76,7 @@ class FirebaseMessagingService {
           'title': chatMessage.sentByName,
           'body': chatMessage.message,
         },
-        'content_available': true
+        'content_available': true,
       }),
     );
   }

@@ -48,7 +48,7 @@ class _LoversLobbyAtualState extends State<LoversLobbyWidget> {
                     lover: state.lobby.couple(
                       authController.lover.id,
                     ),
-                  )
+                  ),
                 ],
               );
             },

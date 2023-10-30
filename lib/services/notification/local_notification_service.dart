@@ -43,7 +43,7 @@ class LocalNotificationService {
     await localNotificationsPlugin
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()!
-        .requestPermission();
+        .requestNotificationsPermission();
   }
 
   Future<void> _configureLocalTimeZone() async {

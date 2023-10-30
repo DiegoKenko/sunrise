@@ -44,7 +44,7 @@ class MoodMatchingEntity {
       'mood2': mood2.name,
       'mood2Icon': mood2.iconName,
       'matching': matching,
-      'favorite': favorite
+      'favorite': favorite,
     };
   }
 

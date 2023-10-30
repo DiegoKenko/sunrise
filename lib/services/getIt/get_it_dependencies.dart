@@ -11,6 +11,7 @@ import 'package:sunrise/interface/controllers/notification/notification_controll
 
 import 'package:sunrise/services/notification/firebase_messaging_service.dart';
 import 'package:sunrise/services/notification/local_notification_service.dart';
+import 'package:sunrise/services/revenuecat/revenuecat_service.dart';
 
 final getIt = GetIt.instance;
 
@@ -49,5 +50,8 @@ void setup() {
   );
   getIt.registerLazySingleton<NotificationController>(
     () => NotificationController(),
+  );
+  getIt.registerLazySingleton<RevenueCatService>(
+    () => RevenueCatService(),
   );
 }

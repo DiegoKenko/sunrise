@@ -99,6 +99,7 @@ class _SunriseDrawerState extends State<SunriseDrawer> {
                       builder: (
                         context,
                       ) {
+                        // ignore: prefer_const_constructors
                         return PaymentBottomSheet();
                       },
                     );

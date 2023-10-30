@@ -182,7 +182,7 @@ class _MoodRelationshipState extends State<MoodRelationship>
                           style: kTextLoverRelationshipStyle,
                         ),
                       ),
-                    )
+                    ),
                   ],
                   controller: _tabController,
                 ),
@@ -196,7 +196,7 @@ class _MoodRelationshipState extends State<MoodRelationship>
                     ),
                     Tab(
                       child: TabMood(lover: state.lobby.lovers[1]),
-                    )
+                    ),
                   ],
                 ),
               ),
