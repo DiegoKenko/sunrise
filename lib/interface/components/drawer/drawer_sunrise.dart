@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sunrise/constants/icons.dart';
 import 'package:sunrise/entity/chat_message_entity.dart';
 import 'package:sunrise/interface/components/animated_page_transition.dart';
-import 'package:sunrise/interface/components/drawer/payment_bottom_sheet.dart';
+import 'package:sunrise/interface/components/payment/payment_bottom_sheet.dart';
 import 'package:sunrise/interface/controllers/auth/auth_controller.dart';
 import 'package:sunrise/interface/controllers/lobby/lobby_controller.dart';
 import 'package:sunrise/interface/controllers/notification/notification_controller.dart';
@@ -34,7 +34,7 @@ class _SunriseDrawerState extends State<SunriseDrawer> {
     LoverEntity lover = LoverEntity.empty();
 
     return ValueListenableBuilder(
-      valueListenable: authService,
+      valueListenable: authService..reload(),
       builder: (context, state, _) {
         if (state is AuthAuthenticatedState) {
           lover = state.lover;
@@ -79,7 +79,7 @@ class _SunriseDrawerState extends State<SunriseDrawer> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Text(
-                        '${lover.suns} ',
+                        lover.suns.toStringAsFixed(2),
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 18,
@@ -92,9 +92,8 @@ class _SunriseDrawerState extends State<SunriseDrawer> {
                   onPressed: () {
                     Navigator.pop(context);
                     showBottomSheet(
-                      constraints: BoxConstraints(
-                        maxHeight: MediaQuery.of(context).size.height * 0.4,
-                      ),
+                      enableDrag: true,
+                      elevation: 20,
                       context: context,
                       builder: (
                         context,

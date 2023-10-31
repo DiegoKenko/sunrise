@@ -6,6 +6,7 @@ class MoodMatchingEntity {
   MoodEntity mood2;
   double matching; // minimun of 1 to maximun of 10
   bool favorite;
+  String comment;
 
   String get matchId => mood1.name.toLowerCase() + mood2.name.toLowerCase();
 
@@ -32,6 +33,7 @@ class MoodMatchingEntity {
   MoodMatchingEntity({
     required this.mood1,
     required this.mood2,
+    this.comment = '',
     this.matching = 5,
     this.favorite = false,
     required this.pack,
@@ -40,23 +42,29 @@ class MoodMatchingEntity {
   Map<String, dynamic> toJson() {
     return {
       'mood1': mood1.name,
+      'mood1Title': mood1.title,
       'mood1Icon': mood1.iconName,
       'mood2': mood2.name,
+      'mood2Title': mood2.title,
       'mood2Icon': mood2.iconName,
       'matching': matching,
       'favorite': favorite,
+      'comment': comment,
     };
   }
 
   MoodMatchingEntity.fromJson(Map<String, dynamic> json)
       : mood1 = MoodEntity(
+          title: json['mood1Title'],
           name: json['mood1'],
           iconName: json['mood1Icon'],
         ),
         mood2 = MoodEntity(
+          title: json['mood2Title'],
           name: json['mood2'],
           iconName: json['mood2Icon'],
         ),
+        comment = json['comment'] ?? '',
         pack = MoodMatchingPack.defaultPack,
         matching = json['matching'],
         favorite = json['favorite'] ?? false;

@@ -7,10 +7,10 @@ class LoverEntity {
   String email = '';
   String photoURL = '';
   String notificationToken = '';
-  int suns = 0;
+  double suns = 0;
 
-  int get sunsCount => suns;
-  set sunsCount(int suns) => this.suns = suns;
+  double get sunsCount => suns;
+  set sunsCount(double suns) => this.suns = suns;
 
   LoverEntity({
     this.name = '',
@@ -33,6 +33,7 @@ class LoverEntity {
         email = json['email'],
         photoURL = json['photoURL'],
         lobbyId = json['lobbyId'],
+        suns = json['suns'] ?? 0,
         notificationToken = json['notificationToken'];
 
   Map<String, dynamic> toJson() => {
@@ -41,6 +42,7 @@ class LoverEntity {
         'photoURL': photoURL,
         'lobbyId': lobbyId,
         'notificationToken': notificationToken,
+        'suns': suns,
       };
 
   set setToken(String? token) {

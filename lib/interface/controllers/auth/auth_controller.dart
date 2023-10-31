@@ -33,6 +33,19 @@ class AuthController extends ValueNotifier<AuthState> {
     return false;
   }
 
+  Future<void> reload() async {
+    LoverEntity? lover;
+    value = AuthLoadingState();
+    await authUsecase.authenticate().fold((success) {
+      lover = success;
+    }, (error) {
+      value = AuthErrorState(error.toString());
+    });
+    if (lover != null) {
+      value = AuthAuthenticatedState(lover!);
+    }
+  }
+
   Future<void> logout() async {
     value = AuthLoadingState();
     try {

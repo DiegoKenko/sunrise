@@ -36,10 +36,6 @@ android {
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
-    defaultConfig {
-        multiDexEnabled true
-    }
-
 
     compileOptions {
         coreLibraryDesugaringEnabled true
@@ -61,9 +57,10 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion 28
-        compileSdkVersion 33
+        compileSdkVersion flutter.compileSdkVersion
         targetSdkVersion flutter.targetSdkVersion
-        versionCode 18
+        multiDexEnabled true
+        versionCode 21
         versionName flutterVersionName
     }
 
@@ -76,11 +73,11 @@ android {
         }
     }
 
-    buildTypes {
+    buildTypes { 
         release {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
-            //signingConfig signingConfigs.debug
+            //signingConfig signingConfigs.release
+            signingConfig signingConfigs.debug
         }
     }
 }
@@ -96,5 +93,6 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:32.2.2')
     implementation 'androidx.window:window:1.0.0'
     implementation 'androidx.window:window-java:1.0.0'
+    implementation 'com.google.android.play:integrity:1.1.0'
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 }

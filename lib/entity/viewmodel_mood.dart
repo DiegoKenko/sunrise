@@ -16,7 +16,9 @@ class MoodState {
 class ViewModelMood {
   final MoodState state;
   final String lobbyID;
+
   ViewModelMood({required this.state, required this.lobbyID});
+
   final LobbyMoodMatchingListenDatasource lobbyMoodMatchingListen =
       LobbyMoodMatchingListenDatasource();
   final LobbyMoodMatchingDatasource lobbyMoodMatchingDatasource =
@@ -49,6 +51,17 @@ class ViewModelMood {
   void updateFavorite(bool favorite) {
     MoodMatchingEntity moodMatching = state.moodMatching;
     moodMatching.favorite = favorite;
+
+    lobbyMoodMatchingDatasource(
+      moodMatching: moodMatching,
+      lobbyId: lobbyID,
+      loverId: state.lover.id,
+    );
+  }
+
+  void updateComment(String comment) {
+    MoodMatchingEntity moodMatching = state.moodMatching;
+    moodMatching.comment = comment.toUpperCase();
 
     lobbyMoodMatchingDatasource(
       moodMatching: moodMatching,
